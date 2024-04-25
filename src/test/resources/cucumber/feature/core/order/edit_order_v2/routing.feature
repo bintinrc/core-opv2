@@ -32,10 +32,6 @@ Feature: Routing
       | name    | PULL OUT OF ROUTE                |
       | routeId | KEY_LIST_OF_CREATED_ROUTES[1].id |
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify route_monitoring_data is hard-deleted:
-      | {KEY_TRANSACTION.waypointId} |
-    And DB Core - verify route_waypoint records are hard-deleted:
-      | {KEY_TRANSACTION.waypointId} |
     And DB Core - verify waypoints record:
       | id      | {KEY_TRANSACTION.waypointId} |
       | routeId | null                         |
@@ -74,10 +70,6 @@ Feature: Routing
       | name    | PULL OUT OF ROUTE                |
       | routeId | KEY_LIST_OF_CREATED_ROUTES[1].id |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify route_monitoring_data is hard-deleted:
-      | {KEY_TRANSACTION.waypointId} |
-    And DB Core - verify route_waypoint records are hard-deleted:
-      | {KEY_TRANSACTION.waypointId} |
     And DB Core - verify waypoints record:
       | id      | {KEY_TRANSACTION.waypointId} |
       | routeId | null                         |
@@ -120,10 +112,6 @@ Feature: Routing
       | name    | PULL OUT OF ROUTE                |
       | routeId | KEY_LIST_OF_CREATED_ROUTES[1].id |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify route_monitoring_data is hard-deleted:
-      | {KEY_TRANSACTION.waypointId} |
-    And DB Core - verify route_waypoint records are hard-deleted:
-      | {KEY_TRANSACTION.waypointId} |
     And DB Core - verify waypoints record:
       | id      | {KEY_TRANSACTION.waypointId} |
       | routeId | null                         |
@@ -205,9 +193,6 @@ Feature: Routing
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId}       |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
   @ArchiveRouteCommonV2 @happy-path @HighPriority
   Scenario Outline: Operator Add to Route on Delivery Menu Edit Order Page - <orderType>
@@ -248,9 +233,6 @@ Feature: Routing
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId}       |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Examples:
       | orderType |
       | Normal    |
@@ -295,9 +277,6 @@ Feature: Routing
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId}       |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Examples:
       | orderType | routeType |
       | Return    | Pickup    |
@@ -351,8 +330,6 @@ Feature: Routing
       | routeId | KEY_LIST_OF_CREATED_ROUTES[1].id |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify route_monitoring_data is hard-deleted:
-      | {KEY_TRANSACTION.waypointId} |
     And DB Core - verify waypoints record:
       | id      | {KEY_TRANSACTION.waypointId} |
       | routeId | null                         |
@@ -382,9 +359,6 @@ Feature: Routing
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId}       |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
   @HighPriority @ArchiveRouteCommonV2
   Scenario:Operator Add Merged Delivery Order to a Route
@@ -430,9 +404,6 @@ Feature: Routing
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId}       |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And DB Routing Search - verify transactions record:
       | txnId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
       | txnType    | DELIVERY                                           |

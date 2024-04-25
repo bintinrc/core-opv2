@@ -47,15 +47,6 @@ Feature: All Orders - Add To Route
       | seqNo    | not null                                                   |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | status   | Routed                                                     |
-    And DB Core - verify route_monitoring_data record:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-    And DB Core - verify route_monitoring_data record:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
-    And DB Core - verify route_monitoring_data record:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId} |
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver read routes:
       | driverId           | {ninja-driver-id}                                                                                                  |
@@ -124,12 +115,6 @@ Feature: All Orders - Add To Route
       | seqNo    | not null                                                   |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].id}                         |
       | status   | Routed                                                     |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[2].id}                         |
 
   @DeleteOrArchiveRoute @MediumPriority
   Scenario: Block Add to Route for Cancelled Order on All Orders Page

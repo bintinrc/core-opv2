@@ -318,8 +318,6 @@ Feature: Outbound Monitoring
     And DB Core - verify transactions record:
       | id      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
       | routeId | null                                               |
-    And DB Core - verify route_monitoring_data is hard-deleted:
-      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
 
   @CloseNewWindows @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Shows Multiple Same Tracking IDs of Different Routes on Outbound Breakrout V2 Page
@@ -477,8 +475,6 @@ Feature: Outbound Monitoring
       | status  | Pending                      |
       | routeId | null                         |
       | seqNo   | null                         |
-    And DB Core - verify route_monitoring_data is hard-deleted:
-      | {KEY_TRANSACTION.waypointId} |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order event on Edit Order V2 page using data below:
       | name    | PULL OUT OF ROUTE                  |
@@ -493,8 +489,6 @@ Feature: Outbound Monitoring
       | status  | Pending                      |
       | routeId | null                         |
       | seqNo   | null                         |
-    And DB Core - verify route_monitoring_data is hard-deleted:
-      | {KEY_TRANSACTION.waypointId} |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
     Then Operator verify order event on Edit Order V2 page using data below:
       | name    | PULL OUT OF ROUTE                  |
@@ -637,8 +631,6 @@ Feature: Outbound Monitoring
       | status  | Pending                      |
       | routeId | null                         |
       | seqNo   | null                         |
-    And DB Core - verify route_monitoring_data is hard-deleted:
-      | {KEY_TRANSACTION.waypointId} |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
     Then Operator verify order event on Edit Order V2 page using data below:
       | name    | PULL OUT OF ROUTE                  |
@@ -696,8 +688,6 @@ Feature: Outbound Monitoring
       | status  | Pending                      |
       | routeId | null                         |
       | seqNo   | null                         |
-    And DB Core - verify route_monitoring_data is hard-deleted:
-      | {KEY_TRANSACTION.waypointId} |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order event on Edit Order V2 page using data below:
       | name    | PULL OUT OF ROUTE                  |

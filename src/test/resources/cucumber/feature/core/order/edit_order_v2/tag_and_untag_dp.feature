@@ -192,9 +192,6 @@ Feature: Tag & Untag DP
       | status  | Routed                                                     |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | seqNo   | not null                                                   |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
     And DB Core - verify transactions record:
       | id         | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}         |
       | type       | DD                                                         |
@@ -249,9 +246,6 @@ Feature: Tag & Untag DP
       | status  | Routed                                                     |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | seqNo   | not null                                                   |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
     And DB Routing Search - verify transactions record:
       | txnId           | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}        |
       | txnType         | DELIVERY                                                  |

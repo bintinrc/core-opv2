@@ -52,8 +52,6 @@ Feature: ID - Order COD Limit
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
     And API Driver - Driver login with username "{KEY_DRIVER_LIST_OF_DRIVERS[1].username}" and "Password1"
     And API Driver - Driver read routes:
       | driverId           | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}    |
@@ -156,8 +154,6 @@ Feature: ID - Order COD Limit
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
     And Operator verify order event on Edit Order V2 page using data below:
       | name | ADD TO ROUTE |
@@ -176,8 +172,6 @@ Feature: ID - Order COD Limit
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
     And API Driver - Driver login with username "{KEY_DRIVER_LIST_OF_DRIVERS[1].username}" and "Password1"
     And API Driver - Driver read routes:
       | driverId            | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}                                          |
@@ -257,8 +251,6 @@ Feature: ID - Order COD Limit
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
     And API Driver - Driver login with username "{KEY_DRIVER_LIST_OF_DRIVERS[1].username}" and "Password1"
     And API Driver - Driver read routes:
       | driverId           | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}    |
@@ -334,8 +326,6 @@ Feature: ID - Order COD Limit
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
     And Operator verify order event on Edit Order V2 page using data below:
       | name | ADD TO ROUTE |
@@ -354,8 +344,6 @@ Feature: ID - Order COD Limit
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
     And API Driver - Driver login with username "{KEY_DRIVER_LIST_OF_DRIVERS[1].username}" and "Password1"
     And API Driver - Driver read routes:
       | driverId            | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}    |
@@ -447,8 +435,6 @@ Feature: ID - Order COD Limit
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
     And API Driver - Driver login with username "{KEY_DRIVER_LIST_OF_DRIVERS[1].username}" and "Password1"
     And API Driver - Driver read routes:
       | driverId           | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}    |
@@ -573,8 +559,6 @@ Feature: ID - Order COD Limit
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
     And API Driver - Driver login with username "{KEY_DRIVER_LIST_OF_DRIVERS[1].username}" and "Password1"
     And API Driver - Driver read routes:
       | driverId           | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}    |

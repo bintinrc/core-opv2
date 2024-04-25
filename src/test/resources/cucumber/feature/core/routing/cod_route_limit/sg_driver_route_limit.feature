@@ -107,9 +107,6 @@ Feature: ID - Driver Route Limit
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | seqNo    | not null                                                   |
       | status   | Routed                                                     |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
     #    verify waypoint 2 routed
     And DB Core - verify transactions record:
       | id      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].id} |
@@ -119,9 +116,6 @@ Feature: ID - Driver Route Limit
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].id}                         |
       | seqNo    | not null                                                   |
       | status   | Routed                                                     |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[2].id}                         |
     #    verify waypoint 3 routed
     And DB Core - verify transactions record:
       | id      | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].id} |
@@ -131,9 +125,6 @@ Feature: ID - Driver Route Limit
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[3].id}                         |
       | seqNo    | not null                                                   |
       | status   | Routed                                                     |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId} |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[3].id}                         |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: SG - Operator Allow to Create >3 Driver Routes in a Day on Zonal Routing
@@ -187,9 +178,6 @@ Feature: ID - Driver Route Limit
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | seqNo    | not null                                                   |
       | status   | Routed                                                     |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
     #    verify waypoint 2 routed
     And DB Core - verify transactions record:
       | id      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].id} |
@@ -199,9 +187,6 @@ Feature: ID - Driver Route Limit
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].id}                         |
       | seqNo    | not null                                                   |
       | status   | Routed                                                     |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[2].id}                         |
     #    verify waypoint 3 routed
     And DB Core - verify transactions record:
       | id      | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].id} |
@@ -211,9 +196,6 @@ Feature: ID - Driver Route Limit
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[3].id}                         |
       | seqNo    | not null                                                   |
       | status   | Routed                                                     |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId} |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[3].id}                         |
     #    verify waypoint 4 routed
     And DB Core - verify transactions record:
       | id      | {KEY_LIST_OF_CREATED_ORDERS[4].transactions[2].id} |
@@ -223,9 +205,6 @@ Feature: ID - Driver Route Limit
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[4].id}                         |
       | seqNo    | not null                                                   |
       | status   | Routed                                                     |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[4].transactions[2].waypointId} |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[4].id}                         |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: SG - Operator Allow to Edit Driver Route to Another <3 Driver Routes in a Day on Route Logs

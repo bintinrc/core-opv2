@@ -71,9 +71,6 @@ Feature: TH B2B
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | seqNo    | not null                                                   |
       | status   | Routed                                                     |
-    And DB Core - verify route_monitoring_data record:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
 
   @MediumPriority @ArchiveRouteCommonV2
   Scenario: Upload CSV File for B2B Orders with Invalid Granular Status

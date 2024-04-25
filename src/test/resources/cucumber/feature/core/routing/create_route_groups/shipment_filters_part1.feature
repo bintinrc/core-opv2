@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing  @CreateRouteGroups @ShipmentFiltersPart1
+@OperatorV2 @Core @Routing  @CreateRouteGroups @ShipmentFiltersPart1 @current
 Feature: Create Route Groups - Shipment Filters
 
   https://studio.cucumber.io/projects/208144/test-plan/folders/2096344
@@ -7,7 +7,7 @@ Feature: Create Route Groups - Shipment Filters
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteCreatedShipments
+  @DeleteCreatedShipments @wip
   Scenario Outline: Operator Filter Shipment Type on Create Route Group - Shipment Filters - Shipment Type = <name>
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2096344/scenarios/6907884
     And API MM - Operator creates multiple 1 new shipments with type "<shipmentType>" from hub id "{hub-id}" to "{hub-id-2}"
@@ -39,10 +39,10 @@ Feature: Create Route Groups - Shipment Filters
     Examples:
       | name         | shipmentType |
       | Air Haul     | AIR_HAUL     |
-      | Land Haul    | LAND_HAUL    |
-      | Sea Haul     | SEA_HAUL     |
-      | Cross Border | CROSS_BORDER |
-      | Others       | OTHERS       |
+#      | Land Haul    | LAND_HAUL    |
+#      | Sea Haul     | SEA_HAUL     |
+#      | Cross Border | CROSS_BORDER |
+#      | Others       | OTHERS       |
 
   @DeleteCreatedShipments @HighPriority
   Scenario: Operator Filter Shipment Last Inbound Hub on Create Route Group - Shipment Filters

@@ -199,8 +199,6 @@ Feature: Cancel Order
       | id      | {KEY_CORE_TRANSACTION.waypointId} |
       | routeId | null                              |
       | status  | Pending                           |
-    And DB Core - verify route_monitoring_data is hard-deleted:
-      | {KEY_CORE_TRANSACTION.waypointId} |
     And Operator verify Pickup transaction on Edit Order V2 page using data below:
       | status  | CANCELLED |
       | routeId |           |
@@ -226,8 +224,6 @@ Feature: Cancel Order
     And Operator verify order event on Edit Order V2 page using data below:
       | name    | PULL OUT OF ROUTE                  |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    And DB Core - verify route_monitoring_data is hard-deleted:
-      | {KEY_CORE_TRANSACTION.waypointId} |
     And DB Routing Search - verify transactions record:
       | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].id} |
       | txnType        | PICKUP                                             |

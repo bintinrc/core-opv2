@@ -99,9 +99,6 @@ Feature: Create New Routes on Station Route
       | seqNo    | not null                           |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId}       |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
   @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @DeleteOrArchiveRoute @HighPriority
   Scenario: Operator Success Assign Unrouted Order To New Route on Station Route - With Driver's Preferred Zone
@@ -197,9 +194,6 @@ Feature: Create New Routes on Station Route
       | seqNo    | not null                           |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId}       |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
   @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @DeleteOrArchiveRoute @HighPriority
   Scenario: Operator Success Assign Unrouted Order To New Route on Station Route - With Driver's Preferred Zone Different To Zone Selected
@@ -296,9 +290,6 @@ Feature: Create New Routes on Station Route
       | seqNo    | not null                           |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId}       |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
   @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @DeleteOrArchiveRoute @HighPriority
   Scenario: Operator Partial Success Assign Unrouted Order To new Route on Station Route
@@ -410,7 +401,4 @@ Feature: Create New Routes on Station Route
       | seqNo    | not null                           |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId}       |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 

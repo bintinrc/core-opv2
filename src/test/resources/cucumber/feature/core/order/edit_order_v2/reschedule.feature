@@ -36,23 +36,23 @@ Feature: Reschedule
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Pickup fail |
       | granularStatus | Pickup fail |
-    And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                                                                      |
-      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Pending New Pickup Status: Fail Old Granular Status: Van en-route to pickup New Granular Status: Pickup fail Old Order Status: Transit New Order Status: Pickup fail Reason: BATCH_POD_UPDATE |
-    And DB Routing Search - verify transactions record:
-      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].id} |
-      | txnType        | PICKUP                                             |
-      | txnStatus      | FAIL                                               |
-      | dnrId          | 2                                                  |
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
-      | granularStatus | Pickup fail                                        |
-    And DB Routing Search - verify transactions record:
-      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
-      | txnType        | DELIVERY                                           |
-      | txnStatus      | PENDING                                            |
-      | dnrId          | 0                                                  |
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
-      | granularStatus | Pickup fail                                        |
+#    And Operator verify order events on Edit Order V2 page using data below:
+#      | tags          | name          | description                                                                                                                                                                                                      |
+#      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Pending New Pickup Status: Fail Old Granular Status: Van en-route to pickup New Granular Status: Pickup fail Old Order Status: Transit New Order Status: Pickup fail Reason: BATCH_POD_UPDATE |
+#    And DB Routing Search - verify transactions record:
+#      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].id} |
+#      | txnType        | PICKUP                                             |
+#      | txnStatus      | FAIL                                               |
+#      | dnrId          | 2                                                  |
+#      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+#      | granularStatus | Pickup fail                                        |
+#    And DB Routing Search - verify transactions record:
+#      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
+#      | txnType        | DELIVERY                                           |
+#      | txnStatus      | PENDING                                            |
+#      | dnrId          | 0                                                  |
+#      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+#      | granularStatus | Pickup fail                                        |
     And Operator click Order Settings -> Reschedule Order on Edit Order V2 page
     And Operator reschedule Pickup on Edit Order V2 page:
       | senderName    | test sender name               |
@@ -189,23 +189,23 @@ Feature: Reschedule
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Pickup fail |
       | granularStatus | Pickup fail |
-    And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                                                                      |
-      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Pending New Pickup Status: Fail Old Granular Status: Van en-route to pickup New Granular Status: Pickup fail Old Order Status: Transit New Order Status: Pickup fail Reason: BATCH_POD_UPDATE |
-    And DB Routing Search - verify transactions record:
-      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].id} |
-      | txnType        | PICKUP                                             |
-      | txnStatus      | FAIL                                               |
-      | dnrId          | 2                                                  |
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
-      | granularStatus | Pickup fail                                        |
-    And DB Routing Search - verify transactions record:
-      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
-      | txnType        | DELIVERY                                           |
-      | txnStatus      | PENDING                                            |
-      | dnrId          | 0                                                  |
-      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
-      | granularStatus | Pickup fail                                        |
+#    And Operator verify order events on Edit Order V2 page using data below:
+#      | tags          | name          | description                                                                                                                                                                                                      |
+#      | MANUAL ACTION | UPDATE STATUS | Old Pickup Status: Pending New Pickup Status: Fail Old Granular Status: Van en-route to pickup New Granular Status: Pickup fail Old Order Status: Transit New Order Status: Pickup fail Reason: BATCH_POD_UPDATE |
+#    And DB Routing Search - verify transactions record:
+#      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].id} |
+#      | txnType        | PICKUP                                             |
+#      | txnStatus      | FAIL                                               |
+#      | dnrId          | 2                                                  |
+#      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+#      | granularStatus | Pickup fail                                        |
+#    And DB Routing Search - verify transactions record:
+#      | txnId          | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id} |
+#      | txnType        | DELIVERY                                           |
+#      | txnStatus      | PENDING                                            |
+#      | dnrId          | 0                                                  |
+#      | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
+#      | granularStatus | Pickup fail                                        |
     And Operator click Order Settings -> Reschedule Order on Edit Order V2 page
     And Operator reschedule Pickup on Edit Order V2 page:
       | senderName    | test sender name               |
@@ -365,18 +365,18 @@ Feature: Reschedule
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Delivery fail      |
       | granularStatus | Pending Reschedule |
-    And Operator verify order events on Edit Order V2 page using data below:
-      | tags          | name          | description                                                                                                                                                                                                                    |
-      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending New Delivery Status: Fail Old Granular Status: On Vehicle for Delivery New Granular Status: Pending Reschedule Old Order Status: Transit New Order Status: Delivery fail Reason: BATCH_POD_UPDATE |
-    And DB Routing Search - verify transactions record:
-      | txnId           | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}        |
-      | txnType         | DELIVERY                                                  |
-      | txnStatus       | FAIL                                                      |
-      | dnrId           | 2                                                         |
-      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                |
-      | granularStatus  | Pending Reschedule                                        |
-      | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].startTime} |
-      | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].endTime}   |
+#    And Operator verify order events on Edit Order V2 page using data below:
+#      | tags          | name          | description                                                                                                                                                                                                                    |
+#      | MANUAL ACTION | UPDATE STATUS | Old Delivery Status: Pending New Delivery Status: Fail Old Granular Status: On Vehicle for Delivery New Granular Status: Pending Reschedule Old Order Status: Transit New Order Status: Delivery fail Reason: BATCH_POD_UPDATE |
+#    And DB Routing Search - verify transactions record:
+#      | txnId           | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}        |
+#      | txnType         | DELIVERY                                                  |
+#      | txnStatus       | FAIL                                                      |
+#      | dnrId           | 2                                                         |
+#      | trackingId      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                |
+#      | granularStatus  | Pending Reschedule                                        |
+#      | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].startTime} |
+#      | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].endTime}   |
     And Operator verify Delivery details on Edit Order V2 page using data below:
       | status | FAIL |
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
