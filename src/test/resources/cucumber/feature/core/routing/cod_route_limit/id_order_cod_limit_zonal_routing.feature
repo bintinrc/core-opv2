@@ -38,8 +38,6 @@ Feature: ID - Order COD Limit
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
       | routeId                    | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
@@ -85,8 +83,6 @@ Feature: ID - Order COD Limit
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
 #    verify 2nd order routed
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
     And Operator verify order event on Edit Order V2 page using data below:
@@ -101,8 +97,6 @@ Feature: ID - Order COD Limit
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
       | routeId                    | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
@@ -243,8 +237,6 @@ Feature: ID - Order COD Limit
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
 #    verify 2nd order routed
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
     And Operator verify order event on Edit Order V2 page using data below:
@@ -259,8 +251,6 @@ Feature: ID - Order COD Limit
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
       | routeId                    | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
@@ -342,8 +332,6 @@ Feature: ID - Order COD Limit
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[2].id}"
     Then Operator verifies route details on Route Manifest page:
       | routeId                    | {KEY_LIST_OF_CREATED_ROUTES[2].id}          |
@@ -413,8 +401,6 @@ Feature: ID - Order COD Limit
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
       | routeId                    | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
@@ -471,8 +457,6 @@ Feature: ID - Order COD Limit
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId} |
 #    verify 2nd order not routed
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[2].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"

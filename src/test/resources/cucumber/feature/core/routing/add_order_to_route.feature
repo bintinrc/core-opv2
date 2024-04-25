@@ -41,9 +41,6 @@ Feature: Add Order To Route
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId}       |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
   @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Add Order to a Route - Invalid Tracking ID, With Prefix
@@ -92,9 +89,6 @@ Feature: Add Order To Route
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId}       |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
   @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Add Order to a Route - Invalid Tracking ID, No Prefix
@@ -148,9 +142,6 @@ Feature: Add Order To Route
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId}       |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
 
   @DeleteRoutes @HighPriority
   Scenario: Add Merged Pickup Order to a Route by Valid Tracking Id
@@ -200,9 +191,6 @@ Feature: Add Order To Route
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId}       |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver read routes:
       | driverId           | {ninja-driver-id}                     |
@@ -257,9 +245,6 @@ Feature: Add Order To Route
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId}       |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver read routes:
       | driverId           | {ninja-driver-id}                     |

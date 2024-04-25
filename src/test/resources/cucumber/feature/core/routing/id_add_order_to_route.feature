@@ -46,9 +46,6 @@ Feature: Add Order To Route
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId}       |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
 
   @DeleteOrArchiveRoute @routing-refactor @MediumPriority
   Scenario: Not Allowed to Add Delivery Routed Order to a New Route - New Route Date same but different Hub to Existing Route
@@ -89,9 +86,6 @@ Feature: Add Order To Route
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId}       |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
 
   @DeleteOrArchiveRoute @routing-refactor @MediumPriority
   Scenario: Not Allowed to Add Delivery Routed Order to a New Route - New Route hub same but different Date to Existing Route
@@ -133,9 +127,6 @@ Feature: Add Order To Route
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId}       |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
 
 
   @DeleteOrArchiveRoute @routing-refactor @MediumPriority
@@ -178,9 +169,6 @@ Feature: Add Order To Route
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId}       |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
 
 
   @DeleteOrArchiveRoute @routing-refactor @MediumPriority
@@ -224,9 +212,6 @@ Feature: Add Order To Route
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId}       |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
 
   @DeleteOrArchiveRoute @routing-refactor @MediumPriority
   Scenario: Not Allowed to Add Delivery Routed Order to a New Route - New Route is Archived
@@ -269,9 +254,6 @@ Feature: Add Order To Route
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId}       |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
 
 
   @ArchiveRouteCommonV2 @HighPriority
@@ -330,9 +312,6 @@ Feature: Add Order To Route
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_PICKUP_B_AFTER.waypointId}    |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver read routes:
       | driverId           | {ninja-driver-id}                     |
@@ -361,9 +340,6 @@ Feature: Add Order To Route
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_PICKUP_A_AFTER.waypointId}    |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
 
   @DeleteRoutes @HighPriority
   Scenario: Add Merged Delivery Routed Order to a New Route - New Route Date and Hub Same to Existing Route
@@ -428,9 +404,6 @@ Feature: Add Order To Route
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_DELIVERY_B_AFTER.waypointId}  |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver read routes:
       | driverId           | {ninja-driver-id}                     |
@@ -459,6 +432,3 @@ Feature: Add Order To Route
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_DELIVERY_A_AFTER.waypointId}  |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[2].id} |

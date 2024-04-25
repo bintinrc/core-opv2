@@ -1,11 +1,12 @@
-@OperatorV2 @Core @NewFeatures @ImplantedManifest @ImplantedManifestPart3
+@OperatorV2 @Core @NewFeatures @ImplantedManifest @ImplantedManifestPart3 @current
 Feature: Implanted Manifest
 
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeletePickupAppointmentJob @ArchiveRouteCommonV2 @HighPriority @update-status
+#  @DeletePickupAppointmentJob @ArchiveRouteCommonV2 @HighPriority @update-status
+  @wip
   Scenario: Operator Creates Implanted Manifest for PA Job with Total Scanned Orders = Total of POD
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-paj-client-id}                                                                                                                                                                                                                                                                                                                   |

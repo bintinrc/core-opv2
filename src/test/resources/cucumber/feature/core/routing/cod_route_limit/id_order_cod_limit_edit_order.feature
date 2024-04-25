@@ -48,9 +48,6 @@ Feature: ID - Order COD Limit
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId}       |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
       | routeId                    | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |

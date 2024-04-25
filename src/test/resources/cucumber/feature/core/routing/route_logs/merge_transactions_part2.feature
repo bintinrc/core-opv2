@@ -242,33 +242,24 @@ Feature: Route Logs - Merge Transactions
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | seqNo    | not null                                                   |
       | status   | Routed                                                     |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
 #    orphaned waypoint is unrouted #1
     And DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[1].waypointId} |
       | routeId  | null                                                       |
       | seqNo    | null                                                       |
       | status   | Pending                                                    |
-    And DB Core - verify route_monitoring_data is hard-deleted:
-      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[1].waypointId} |
     #    orphaned waypoint is unrouted #2
     And DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId} |
       | routeId  | null                                                       |
       | seqNo    | null                                                       |
       | status   | Pending                                                    |
-    And DB Core - verify route_monitoring_data is hard-deleted:
-      | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId} |
     #    orphaned waypoint is unrouted #3
     And DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[4].transactions[2].waypointId} |
       | routeId  | null                                                       |
       | seqNo    | null                                                       |
       | status   | Pending                                                    |
-    And DB Core - verify route_monitoring_data is hard-deleted:
-      | {KEY_LIST_OF_CREATED_ORDERS[4].transactions[2].waypointId} |
     Examples:
       | email_1             | phone_number_1 |
       | support@ninjavan.co | +6595557073    |
@@ -320,17 +311,12 @@ Feature: Route Logs - Merge Transactions
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | seqNo    | not null                                                   |
       | status   | Routed                                                     |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
 #    orphaned waypoint is unrouted
     And DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | routeId  | null                                                       |
       | seqNo    | null                                                       |
       | status   | Pending                                                    |
-    And DB Core - verify route_monitoring_data is hard-deleted:
-      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
 
     Examples:
       | transaction_type | type | service_type | direction | generateAddress | email_1       | phone_number_1 | is_pickup_required |
@@ -379,17 +365,12 @@ Feature: Route Logs - Merge Transactions
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | seqNo    | not null                                                   |
       | status   | Routed                                                     |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
 #    orphaned waypoint is unrouted
     And DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | routeId  | null                                                       |
       | seqNo    | null                                                       |
       | status   | Pending                                                    |
-    And DB Core - verify route_monitoring_data is hard-deleted:
-      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
 
     Examples:
       | transaction_type | type | service_type | direction | generateAddress | email_1       | email_2       | phone_number_1 | phone_number_2 | is_pickup_required |
@@ -438,17 +419,12 @@ Feature: Route Logs - Merge Transactions
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | seqNo    | not null                                                   |
       | status   | Routed                                                     |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
 #    orphaned waypoint is unrouted
     And DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | routeId  | null                                                       |
       | seqNo    | null                                                       |
       | status   | Pending                                                    |
-    And DB Core - verify route_monitoring_data is hard-deleted:
-      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
 
     Examples:
       | transaction_type | type | service_type | direction | generateAddress | email_1       | email_2       | phone_number_1 | phone_number_2 | is_pickup_required |

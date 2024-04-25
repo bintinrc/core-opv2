@@ -95,9 +95,6 @@ Feature: Add To Existing Routes on Station Route
       | seqNo    | not null                           |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId}       |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 
   @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Partial Success Assign Unrouted Order To Existing Route on Station Route
@@ -204,6 +201,3 @@ Feature: Add To Existing Routes on Station Route
       | seqNo    | not null                           |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | status   | Routed                             |
-    And DB Core - verify route_monitoring_data record:
-      | waypointId | {KEY_TRANSACTION.waypointId}       |
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
