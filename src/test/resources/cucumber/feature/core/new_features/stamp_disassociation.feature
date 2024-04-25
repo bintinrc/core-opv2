@@ -42,12 +42,11 @@ Feature: Stamp Disassociation
       | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id}         |
       | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     When Operator click on the Disassociate Stamp button
-#    disable it first due COREV2-1963, fix will be in NVQA-14891
-#    And Operator go to menu Order -> All Orders
-#    Then Operator can't find order on All Orders page using this criteria below:
-#      | category    | Tracking / Stamp ID |
-#      | searchLogic | contains            |
-#      | searchTerm  | KEY_CORE_STAMP_ID   |
+    And Operator go to menu Order -> All Orders
+    Then Operator can't find order on All Orders page using this criteria below:
+      | category    | Tracking / Stamp ID |
+      | searchLogic | contains            |
+      | searchTerm  | KEY_CORE_STAMP_ID   |
 
   @MediumPriority
   Scenario: Stamp Disassociation of Order by Stamp Id - Invalid Tracking Id
