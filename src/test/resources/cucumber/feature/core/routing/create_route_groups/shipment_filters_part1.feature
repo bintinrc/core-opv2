@@ -7,7 +7,7 @@ Feature: Create Route Groups - Shipment Filters
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteCreatedShipments @wip
+  @DeleteCreatedShipments
   Scenario Outline: Operator Filter Shipment Type on Create Route Group - Shipment Filters - Shipment Type = <name>
     # https://studio.cucumber.io/projects/208144/test-plan/folders/2096344/scenarios/6907884
     And API MM - Operator creates multiple 1 new shipments with type "<shipmentType>" from hub id "{hub-id}" to "{hub-id-2}"
