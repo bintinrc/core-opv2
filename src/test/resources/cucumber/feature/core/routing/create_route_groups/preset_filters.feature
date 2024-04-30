@@ -62,7 +62,7 @@ Feature: Create Route Groups - Preset Filters
       | ETA (Date Time): {gradle-next-0-day-yyyy-MM-dd} to {gradle-next-1-day-yyyy-MM-dd}               |
       | Granular Order Status: (1) Arrived at Sorting Hub                                               |
       | Last Inbound Hub: (1) JKB                                                                       |
-      | Master Shipper: (1) 188091 - OPV2-Core-Marketplace-Shipper                                      |
+      | Master Shipper: (1) {shipper-v4-marketplace-legacy-id} - OPV2-Core-Marketplace-Shipper          |
       | Order Service Type: (1) Corporate Document                                                      |
       | Order Type: (1) Normal                                                                          |
       | Parcel Size: (1) Extra Large                                                                    |

@@ -86,7 +86,7 @@ Feature: Create Route Groups - Transaction Filters
     And Operator set General Filters on Create Route Groups page:
       | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd}             |
       | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd}             |
-      | shipper          | {filter-shipper-name-corporate-subshipper} |
+      | shipper          | {shipper-v4-corporate-subshipper-legacy-id} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
     And Operator add following filters on Transactions Filters section on Create Route Groups page:
       | orderServiceType | <serviceType> |
@@ -117,7 +117,7 @@ Feature: Create Route Groups - Transaction Filters
     And Operator set General Filters on Create Route Groups page:
       | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd}             |
       | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd}             |
-      | Shipper          | {filter-shipper-name-corporate-subshipper} |
+      | Shipper          | {shipper-v4-corporate-subshipper-legacy-id} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
     And Operator add following filters on Transactions Filters section on Create Route Groups page:
       | orderServiceType | <serviceType> |
@@ -148,7 +148,7 @@ Feature: Create Route Groups - Transaction Filters
     And Operator set General Filters on Create Route Groups page:
       | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd}             |
       | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd}             |
-      | Shipper          | {filter-shipper-name-corporate-subshipper} |
+      | Shipper          | {shipper-v4-corporate-subshipper-legacy-id} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
     And Operator add following filters on Transactions Filters section on Create Route Groups page:
       | orderServiceType | <serviceType> |
@@ -186,7 +186,7 @@ Feature: Create Route Groups - Transaction Filters
     And Operator set General Filters on Create Route Groups page:
       | creationTimeFrom | {gradle-next-0-day-yyyy-MM-dd}             |
       | creationTimeTo   | {gradle-next-1-day-yyyy-MM-dd}             |
-      | Shipper          | {filter-shipper-name-corporate-subshipper} |
+      | Shipper          | {shipper-v4-corporate-subshipper-legacy-id} |
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
     And Operator add following filters on Transactions Filters section on Create Route Groups page:
       | orderServiceType | Corporate AWB |

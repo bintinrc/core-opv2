@@ -48,7 +48,7 @@ Feature: TH B2B
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | HUB INBOUND SCAN                                                   |
       | hubName     | {hub-name}                                                         |
-      | description | ^.*Inbounded at hub {hub-id} from Shipper {shipper-v4-legacy-id}.* |
+      | description | ^.*Inbounded at hub {hub-id} from Global Shipper {shipper-v4-id}.* |
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | DRIVER INBOUND SCAN                                                                                                |
       | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                 |
