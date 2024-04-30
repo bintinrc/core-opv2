@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing  @CreateRouteGroups @ShipmentFiltersPart1 @current
+@OperatorV2 @Core @Routing  @CreateRouteGroups @ShipmentFiltersPart1
 Feature: Create Route Groups - Shipment Filters
 
   https://studio.cucumber.io/projects/208144/test-plan/folders/2096344
