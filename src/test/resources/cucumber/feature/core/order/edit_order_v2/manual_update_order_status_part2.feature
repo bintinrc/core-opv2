@@ -294,8 +294,8 @@ Feature: Manual Update Order Status
       | granularStatus | Pickup fail                         |
       | changeReason   | Status updated for testing purposes |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                                              |
-      | bottom | ^.*Error Message: Pickup fail status is only for return orders.* |
+      | top    | Status 400: Unknown                                                |
+      | bottom | ^.*Error Message: "Pickup fail status is only for return orders".* |
     When Operator refresh page
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Pending        |
