@@ -68,6 +68,7 @@ Feature: Implanted Manifest
     And API Driver - Driver read routes:
       | driverId        | {ninja-driver-id}                  |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}      |
     And API Driver - Driver submit POD:
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                               |
       | waypointId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}                                 |
@@ -153,6 +154,7 @@ Feature: Implanted Manifest
     And API Driver - Driver read routes:
       | driverId        | {ninja-driver-id}                  |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}     |
     And API Driver - Driver submit POD:
       | routeId                  | {KEY_LIST_OF_CREATED_ROUTES[1].id}               |
       | waypointId               | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId} |

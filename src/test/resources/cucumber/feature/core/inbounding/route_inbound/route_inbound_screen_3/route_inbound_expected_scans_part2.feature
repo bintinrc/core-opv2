@@ -21,8 +21,9 @@ Feature: Route Inbound Expected Scans
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} |
     And API Driver - Driver submit POD:
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                      |
@@ -111,8 +112,9 @@ Feature: Route Inbound Expected Scans
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}               |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId} |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                               |
       | waypointId      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}                                 |
@@ -203,6 +205,7 @@ Feature: Route Inbound Expected Scans
     And API Driver - Driver read routes:
       | driverId        | {ninja-driver-id}                  |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | expectedWaypointIds |{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}  |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                  |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                          |
@@ -299,6 +302,7 @@ Feature: Route Inbound Expected Scans
     And API Driver - Driver read routes:
       | driverId        | {ninja-driver-id}                  |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | expectedWaypointIds |{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}  |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                  |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                          |
@@ -388,6 +392,7 @@ Feature: Route Inbound Expected Scans
     And API Driver - Driver read routes:
       | driverId        | {ninja-driver-id}                  |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | expectedWaypointIds |{KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}  |
     And API Driver - Driver submit POD:
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                      |
@@ -470,6 +475,7 @@ Feature: Route Inbound Expected Scans
     And API Driver - Driver read routes:
       | driverId        | {ninja-driver-id}                  |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
+      | expectedWaypointIds |{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}  |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[2].id}                                                                  |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                          |

@@ -221,7 +221,7 @@ Feature: RTS
     Then Operator verifies order details on Edit Order V2 page:
       | zone | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
     And DB Route - verify waypoints record:
-      | legacyId            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
+      | legacyId      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
@@ -341,7 +341,7 @@ Feature: RTS
     Then Operator verifies order details on Edit Order V2 page:
       | zone | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
     And DB Route - verify waypoints record:
-      | legacyId            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
+      | legacyId      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
@@ -379,8 +379,9 @@ Feature: RTS
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                  |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                          |
@@ -483,7 +484,7 @@ Feature: RTS
     Then Operator verifies order details on Edit Order V2 page:
       | zone | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
     And DB Route - verify waypoints record:
-      | legacyId            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
+      | legacyId      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
@@ -521,8 +522,9 @@ Feature: RTS
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                  |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                          |
@@ -629,7 +631,7 @@ Feature: RTS
     Then Operator verifies order details on Edit Order V2 page:
       | zone | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
     And DB Route - verify waypoints record:
-      | legacyId            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
+      | legacyId      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
@@ -755,7 +757,7 @@ Feature: RTS
     Then Operator verifies order details on Edit Order V2 page:
       | zone | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
     And DB Route - verify waypoints record:
-      | legacyId            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
+      | legacyId      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
@@ -843,7 +845,7 @@ Feature: RTS
     And API Sort - Operator get Addressing Zone with details:
       | request | {"type": "RTS", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
     And DB Route - verify waypoints record:
-      | legacyId            | {KEY_TRANSACTION.waypointId}                 |
+      | legacyId      | {KEY_TRANSACTION.waypointId}                 |
       | status        | Pending                                      |
       | routeId       | null                                         |
       | seqNo         | null                                         |

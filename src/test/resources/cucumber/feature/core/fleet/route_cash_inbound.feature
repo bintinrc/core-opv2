@@ -24,8 +24,9 @@ Feature: Route Cash Inbound
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver van inbound:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
@@ -66,6 +67,7 @@ Feature: Route Cash Inbound
     And API Driver - Driver read routes:
       | driverId        | {ninja-driver-id}                  |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver van inbound:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
@@ -104,6 +106,7 @@ Feature: Route Cash Inbound
     And API Driver - Driver read routes:
       | driverId        | {ninja-driver-id}                  |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}       |
     And API Driver - Driver van inbound:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
@@ -145,13 +148,14 @@ Feature: Route Cash Inbound
     And API Driver - Driver read routes:
       | driverId        | {ninja-driver-id}                  |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}       |
     And API Driver - Driver van inbound:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver submit POD:
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                     |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                             |
+      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                       |
       | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "SUCCESS" }] |
       | routes     | KEY_DRIVER_ROUTES                                                                      |
     When Operator go to menu Fleet -> Route Cash Inbound
@@ -184,6 +188,7 @@ Feature: Route Cash Inbound
     And API Driver - Driver read routes:
       | driverId        | {ninja-driver-id}                  |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}       |
     And API Driver - Driver van inbound:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |

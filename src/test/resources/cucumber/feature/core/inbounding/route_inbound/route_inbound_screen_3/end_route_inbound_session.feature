@@ -29,8 +29,9 @@ Feature: End Route Inbound Session
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                      |
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                              |
@@ -106,8 +107,9 @@ Feature: End Route Inbound Session
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId           | {ninja-driver-id}                                          |
+      | expectedRouteId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                      |
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                              |

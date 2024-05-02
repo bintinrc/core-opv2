@@ -27,8 +27,9 @@ Feature: Implanted Manifest
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     When API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                  |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | expectedWaypointIds | {KEY_WAYPOINT_ID}                  |
     And API Driver - Driver submit POD:
       | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | waypointId  | {KEY_WAYPOINT_ID}                  |
@@ -156,6 +157,7 @@ Feature: Implanted Manifest
     And API Driver - Driver read routes:
       | driverId        | {ninja-driver-id}                  |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | expectedWaypointIds | {KEY_WAYPOINT_ID}                  |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | waypointId      | {KEY_WAYPOINT_ID}                  |
@@ -209,6 +211,7 @@ Feature: Implanted Manifest
     And API Driver - Driver read routes:
       | driverId        | {ninja-driver-id}                  |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | expectedWaypointIds | {KEY_WAYPOINT_ID}                  |
     And API Driver - Driver submit POD:
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                               |
       | waypointId | {KEY_WAYPOINT_ID}                                                                |
@@ -260,6 +263,7 @@ Feature: Implanted Manifest
     And API Driver - Driver read routes:
       | driverId        | {ninja-driver-id}                  |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | expectedWaypointIds | {KEY_WAYPOINT_ID}                  |
     And API Driver - Driver submit POD:
       | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | waypointId  | {KEY_WAYPOINT_ID}                  |
@@ -312,6 +316,7 @@ Feature: Implanted Manifest
     And API Driver - Driver read routes:
       | driverId        | {ninja-driver-id}                  |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | expectedWaypointIds | {KEY_WAYPOINT_ID}                  |
     And API Driver - Driver submit POD:
       | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}              |
       | waypointId  | {KEY_WAYPOINT_ID}                               |

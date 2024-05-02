@@ -39,8 +39,9 @@ Feature: Route Manifest
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[3].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                                                                                     |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                    |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId},{KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                      |
@@ -103,8 +104,9 @@ Feature: Route Manifest
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                                                                                     |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                    |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId},{KEY_LIST_OF_CREATED_ORDERS[2].transactions[1].waypointId} |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                   |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                                           |
@@ -193,8 +195,9 @@ Feature: Route Manifest
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[3].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                                                                                     |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                    |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId},{KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                      |
@@ -310,8 +313,9 @@ Feature: Route Manifest
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}               |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId} |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                               |
       | waypointId      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}                                 |
@@ -386,8 +390,9 @@ Feature: Route Manifest
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     When API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                  |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | expectedWaypointIds | {KEY_WAYPOINT_ID}                  |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | waypointId      | {KEY_WAYPOINT_ID}                  |
@@ -468,8 +473,9 @@ Feature: Route Manifest
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[3].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                                                                                     |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                    |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId},{KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
     Then DB DP - get DP job order with order "{KEY_LIST_OF_CREATED_ORDERS[1].id}" and status "PENDING"
     When API DP - DP user authenticate with username "{dp-user-username}" password "{dp-user-password}" and dp id "{dp-id}"
     And API Driver - Driver submit POD:
@@ -606,8 +612,9 @@ Feature: Route Manifest
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                        |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
+      | expectedWaypointIds | {KEY_LIST_OF_RESERVATIONS[1].waypointId} |
     And API Driver - Driver submit POD:
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                    |
       | waypointId | {KEY_LIST_OF_RESERVATIONS[1].waypointId}                                              |
@@ -635,8 +642,9 @@ Feature: Route Manifest
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                        |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
+      | expectedWaypointIds | {KEY_LIST_OF_RESERVATIONS[2].waypointId} |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                        |
       | waypointId      | {KEY_LIST_OF_RESERVATIONS[2].waypointId}                                                                  |
@@ -710,8 +718,9 @@ Feature: Route Manifest
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                          |
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                  |
@@ -750,8 +759,9 @@ Feature: Route Manifest
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                 |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                         |
@@ -791,8 +801,9 @@ Feature: Route Manifest
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                      |
