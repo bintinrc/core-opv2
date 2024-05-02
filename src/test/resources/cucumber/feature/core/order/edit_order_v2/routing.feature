@@ -32,11 +32,6 @@ Feature: Routing
       | name    | PULL OUT OF ROUTE                |
       | routeId | KEY_LIST_OF_CREATED_ROUTES[1].id |
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId} |
-      | routeId | null                         |
-      | seqNo   | null                         |
-      | status  | Pending                      |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_TRANSACTION.waypointId} |
       | routeId  | null                         |
@@ -70,11 +65,6 @@ Feature: Routing
       | name    | PULL OUT OF ROUTE                |
       | routeId | KEY_LIST_OF_CREATED_ROUTES[1].id |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId} |
-      | routeId | null                         |
-      | seqNo   | null                         |
-      | status  | Pending                      |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_TRANSACTION.waypointId} |
       | routeId  | null                         |
@@ -112,11 +102,6 @@ Feature: Routing
       | name    | PULL OUT OF ROUTE                |
       | routeId | KEY_LIST_OF_CREATED_ROUTES[1].id |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId} |
-      | routeId | null                         |
-      | seqNo   | null                         |
-      | status  | Pending                      |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_TRANSACTION.waypointId} |
       | routeId  | null                         |
@@ -183,11 +168,6 @@ Feature: Routing
     And DB Core - verify transactions record:
       | id      | {KEY_TRANSACTION.id}               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}       |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | seqNo   | not null                           |
-      | status  | Routed                             |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_TRANSACTION.waypointId}       |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
@@ -223,11 +203,6 @@ Feature: Routing
     And DB Core - verify transactions record:
       | id      | {KEY_TRANSACTION.id}               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}       |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | seqNo   | not null                           |
-      | status  | Routed                             |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_TRANSACTION.waypointId}       |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
@@ -267,11 +242,6 @@ Feature: Routing
     And DB Core - verify transactions record:
       | id      | {KEY_TRANSACTION.id}               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}       |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | seqNo   | not null                           |
-      | status  | Routed                             |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_TRANSACTION.waypointId}       |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
@@ -330,11 +300,6 @@ Feature: Routing
       | routeId | KEY_LIST_OF_CREATED_ROUTES[1].id |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId} |
-      | routeId | null                         |
-      | seqNo   | null                         |
-      | status  | Pending                      |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_TRANSACTION.waypointId} |
       | routeId  | null                         |
@@ -349,11 +314,6 @@ Feature: Routing
       | txnId      | {KEY_TRANSACTION.id}         |
       | waypointId | {KEY_TRANSACTION.waypointId} |
       | txnStatus  | PENDING                      |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}       |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | seqNo   | not null                           |
-      | status  | Routed                             |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_TRANSACTION.waypointId}       |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
@@ -394,11 +354,6 @@ Feature: Routing
     And DB Core - verify transactions record:
       | id      | {KEY_TRANSACTION.id}               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}       |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | seqNo   | not null                           |
-      | status  | Routed                             |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_TRANSACTION.waypointId}       |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |

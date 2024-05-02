@@ -41,11 +41,10 @@ Feature: Resume Order
       | dnrId           | 0                           |
       | startTimeCustom | {KEY_TRANSACTION.startTime} |
       | endTimeCustom   | {KEY_TRANSACTION.endTime}   |
-
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId} |
-      | routeId | null                         |
-      | seqNo   | null                         |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | routeId  | null                         |
+      | seqNo    | null                         |
     And DB Routing Search - verify transactions record:
       | txnId           | {KEY_TRANSACTION.id}                       |
       | txnType         | PICKUP                                     |
@@ -61,10 +60,10 @@ Feature: Resume Order
       | dnrId           | 0                           |
       | startTimeCustom | {KEY_TRANSACTION.startTime} |
       | endTimeCustom   | {KEY_TRANSACTION.endTime}   |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId} |
-      | routeId | null                         |
-      | seqNo   | null                         |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | routeId  | null                         |
+      | seqNo    | null                         |
     And DB Routing Search - verify transactions record:
       | txnId           | {KEY_TRANSACTION.id}                       |
       | txnType         | DELIVERY                                   |
@@ -159,11 +158,11 @@ Feature: Resume Order
       | dnrId           | 0                           |
       | startTimeCustom | {KEY_TRANSACTION.startTime} |
       | endTimeCustom   | {KEY_TRANSACTION.endTime}   |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId} |
-      | status  | Pending                      |
-      | routeId | null                         |
-      | seqNo   | null                         |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | Pending                      |
+      | routeId  | null                         |
+      | seqNo    | null                         |
     And DB Routing Search - verify transactions record:
       | txnId           | {KEY_TRANSACTION.id}                       |
       | txnType         | PICKUP                                     |
@@ -180,11 +179,11 @@ Feature: Resume Order
       | dnrId           | 0                           |
       | startTimeCustom | {KEY_TRANSACTION.startTime} |
       | endTimeCustom   | {KEY_TRANSACTION.endTime}   |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId} |
-      | status  | Pending                      |
-      | routeId | null                         |
-      | seqNo   | null                         |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | Pending                      |
+      | routeId  | null                         |
+      | seqNo    | null                         |
     And DB Routing Search - verify transactions record:
       | txnId           | {KEY_TRANSACTION.id}                       |
       | txnType         | DELIVERY                                   |
@@ -318,10 +317,10 @@ Feature: Resume Order
       | dnrId           | 0                           |
       | startTimeCustom | {KEY_TRANSACTION.startTime} |
       | endTimeCustom   | {KEY_TRANSACTION.endTime}   |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId} |
-      | routeId | null                         |
-      | seqNo   | null                         |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | routeId  | null                         |
+      | seqNo    | null                         |
     And DB Routing Search - verify transactions record:
       | txnId           | {KEY_TRANSACTION.id}                       |
       | txnType         | DELIVERY                                   |

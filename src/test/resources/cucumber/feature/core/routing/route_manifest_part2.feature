@@ -340,8 +340,8 @@ Feature: Route Manifest
       | status | SUCCESS |
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | SUCCESS |
-    And DB Core - verify waypoints record:
-      | id     | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+    And DB Route - verify waypoints record:
+      | legacyId     | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | status | Success                                                    |
     And Operator verify order event on Edit Order V2 page using data below:
       | name | FORCED SUCCESS |

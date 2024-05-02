@@ -89,7 +89,7 @@ Feature: Cancel Order
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-      | granularStatus | Transferred to 3PL     |
+      | granularStatus | Transferred to 3PL                 |
     When API Core - cancel order and check error:
       | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | statusCode | 500                                |
@@ -152,12 +152,9 @@ Feature: Cancel Order
       | TICKET RESOLVED |
       | TICKET UPDATED  |
       | CANCEL          |
-    And DB Core - verify waypoints record:
-      | id     | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} |
-      | status | Pending                                                    |
-    And DB Core - verify waypoints record:
-      | id     | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | status | Pending                                                    |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | status   | Pending                                                    |
 
   @ArchiveRouteCommonV2 @HighPriority
   Scenario: Cancel Order - Merged Delivery Waypoints
@@ -200,8 +197,8 @@ Feature: Cancel Order
     And Operator verify Delivery transaction on Edit Order V2 page using data below:
       | status | CANCELLED |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[2].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION_AFTER"
-    And DB Core - verify waypoints record:
-      | id       | {KEY_TRANSACTION_AFTER.waypointId} |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION_AFTER.waypointId} |
       | status   | Pending                            |
       | address1 | Orchard Road central               |
       | country  | SG                                 |
@@ -223,16 +220,16 @@ Feature: Cancel Order
       | PULL OUT OF ROUTE |
       | CANCEL            |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION_AFTER"
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION_AFTER.waypointId} |
-      | status  | Routed                             |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION_AFTER.waypointId} |
+      | status   | Routed                             |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And DB Core - verify transactions record:
       | id         | {KEY_TRANSACTION_AFTER.id}         |
       | type       | DD                                 |
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
-      | status     | Pending                          |
+      | status     | Pending                            |
     And DB Routing Search - verify transactions record:
       | txnId      | {KEY_TRANSACTION_AFTER.id}         |
       | waypointId | {KEY_TRANSACTION_AFTER.waypointId} |
-      | txnStatus  | PENDING                          |
+      | txnStatus  | PENDING                            |

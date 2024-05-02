@@ -101,18 +101,6 @@ Feature: Reschedule
       | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2}       |
       | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode}       |
       | country  | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}        |
-    Then DB Core - verify waypoints record:
-      | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
-      | seqNo         | null                                                       |
-      | routeId       | null                                                       |
-      | status        | Pending                                                    |
-      | address1      | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress1}               |
-      | address2      | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2}               |
-      | postcode      | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode}               |
-      | country       | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}                |
-      | routingZoneId | 1399                                                       |
-      | latitude      | 1.30706095410839                                           |
-      | longitude     | 103.830899303793                                           |
     Then DB Route - verify waypoints record:
       | legacyId      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | seqNo         | null                                                       |
@@ -263,21 +251,6 @@ Feature: Reschedule
       | address1 | 8A MARINA BOULEVARD                                |
       | address2 | MARINA BAY LINK MALL                               |
       | postcode | 018984                                             |
-    Then DB Core - verify waypoints record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
-      | seqNo    | null                                                       |
-      | routeId  | null                                                       |
-      | status   | Pending                                                    |
-      | country  | Singapore                                                  |
-      | city     | Singapore                                                  |
-      | address1 | 8A MARINA BOULEVARD                                        |
-      | address2 | MARINA BAY LINK MALL                                       |
-      | postcode | 018984                                                     |
-#    TODO uncomment when issue with mismatch waypoint lat/long is fixed on AV service
-#    see comment in https://jira.ninjavan.co/browse/NV-11680
-#      | routingZoneId | 30532                                                      |
-#      | latitude      | 1.28046794326566                                           |
-#      | longitude     | 103.853470148164                                           |
     Then DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | seqNo    | null                                                       |
@@ -438,15 +411,6 @@ Feature: Reschedule
       | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2}         |
       | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode}         |
       | country  | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}          |
-    Then DB Core - verify waypoints record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
-      | seqNo    | null                                                       |
-      | routeId  | null                                                       |
-      | status   | Pending                                                    |
-      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1}                 |
-      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2}                 |
-      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode}                 |
-      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}                  |
     Then DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | seqNo    | null                                                       |
@@ -472,8 +436,8 @@ Feature: Reschedule
       | request | {"type": "STANDARD", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
     Then Operator verifies order details on Edit Order V2 page:
       | zone | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
-    And DB Core - verify waypoints record:
-      | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
+    And DB Route - verify waypoints record:
+      | legacyId      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
@@ -602,16 +566,6 @@ Feature: Reschedule
       | postcode | 308402                                             |
       | country  | Singapore                                          |
       | city     | Singapore                                          |
-    Then DB Core - verify waypoints record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
-      | seqNo    | null                                                       |
-      | routeId  | null                                                       |
-      | status   | Pending                                                    |
-      | address1 | 116 Keng Lee Rd                                            |
-      | address2 | 15                                                         |
-      | postcode | 308402                                                     |
-      | country  | Singapore                                                  |
-      | city     | Singapore                                                  |
     Then DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | seqNo    | null                                                       |
@@ -761,16 +715,6 @@ Feature: Reschedule
       | granularStatus  | En-route to Sorting Hub                                   |
       | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].startTime} |
       | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].endTime}   |
-    Then DB Core - verify waypoints record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
-      | seqNo    | null                                                       |
-      | routeId  | null                                                       |
-      | status   | Pending                                                    |
-      | address1 | 116 Keng Lee Rd                                            |
-      | address2 | 15                                                         |
-      | postcode | 308402                                                     |
-      | country  | Singapore                                                  |
-      | city     | Singapore                                                  |
     Then DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | seqNo    | null                                                       |
@@ -887,16 +831,6 @@ Feature: Reschedule
       | granularStatus  | Pending Pickup                                            |
       | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].startTime} |
       | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].endTime}   |
-    Then DB Core - verify waypoints record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
-      | seqNo    | null                                                       |
-      | routeId  | null                                                       |
-      | status   | Pending                                                    |
-      | address1 | 116 Keng Lee Rd                                            |
-      | address2 | 15                                                         |
-      | postcode | 308402                                                     |
-      | country  | Singapore                                                  |
-      | city     | Singapore                                                  |
     Then DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | seqNo    | null                                                       |
@@ -1035,16 +969,6 @@ Feature: Reschedule
       | granularStatus  | En-route to Sorting Hub                                   |
       | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].startTime} |
       | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].endTime}   |
-    Then DB Core - verify waypoints record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
-      | seqNo    | null                                                       |
-      | routeId  | null                                                       |
-      | status   | Pending                                                    |
-      | address1 | 116 Keng Lee Rd                                            |
-      | address2 | 15                                                         |
-      | postcode | 308402                                                     |
-      | country  | Singapore                                                  |
-      | city     | Singapore                                                  |
     Then DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | seqNo    | null                                                       |
@@ -1071,8 +995,8 @@ Feature: Reschedule
       | request | {"type": "STANDARD", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
     Then Operator verifies order details on Edit Order V2 page:
       | zone | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
-    And DB Core - verify waypoints record:
-      | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
+    And DB Route - verify waypoints record:
+      | legacyId      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
 
   @ArchiveRouteCommonV2 @MediumPriority
@@ -1181,15 +1105,6 @@ Feature: Reschedule
       | granularStatus  | En-route to Sorting Hub                                   |
       | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].startTime} |
       | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].endTime}   |
-    Then DB Core - verify waypoints record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
-      | seqNo    | null                                                       |
-      | routeId  | null                                                       |
-      | status   | Pending                                                    |
-      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1}                 |
-      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2}                 |
-      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode}                 |
-      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}                  |
     Then DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | seqNo    | null                                                       |
@@ -1215,6 +1130,6 @@ Feature: Reschedule
       | request | {"type": "STANDARD", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
     Then Operator verifies order details on Edit Order V2 page:
       | zone | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
-    And DB Core - verify waypoints record:
-      | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
+    And DB Route - verify waypoints record:
+      | legacyId      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |

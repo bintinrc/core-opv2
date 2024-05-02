@@ -89,11 +89,6 @@ Feature: Create New Routes on Station Route
       | type       | DD                                 |
       | waypointId | {KEY_TRANSACTION.waypointId}       |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    Then DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}       |
-      | status  | Routed                             |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | seqNo   | not null                           |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_TRANSACTION.waypointId}       |
       | seqNo    | not null                           |
@@ -184,11 +179,6 @@ Feature: Create New Routes on Station Route
       | type       | DD                                 |
       | waypointId | {KEY_TRANSACTION.waypointId}       |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    Then DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}       |
-      | status  | Routed                             |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | seqNo   | not null                           |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_TRANSACTION.waypointId}       |
       | seqNo    | not null                           |
@@ -280,11 +270,6 @@ Feature: Create New Routes on Station Route
       | type       | DD                                 |
       | waypointId | {KEY_TRANSACTION.waypointId}       |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    Then DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}       |
-      | status  | Routed                             |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | seqNo   | not null                           |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_TRANSACTION.waypointId}       |
       | seqNo    | not null                           |
@@ -391,11 +376,6 @@ Feature: Create New Routes on Station Route
       | type       | DD                                 |
       | waypointId | {KEY_TRANSACTION.waypointId}       |
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    Then DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}       |
-      | status  | Routed                             |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | seqNo   | not null                           |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_TRANSACTION.waypointId}       |
       | seqNo    | not null                           |

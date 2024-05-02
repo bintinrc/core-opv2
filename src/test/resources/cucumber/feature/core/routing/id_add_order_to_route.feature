@@ -330,11 +330,6 @@ Feature: Add Order To Route
     And DB Core - verify transactions record:
       | id      | {KEY_PICKUP_A_AFTER.id}            |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_PICKUP_A_AFTER.waypointId}    |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
-      | seqNo   | not null                           |
-      | status  | Routed                             |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_PICKUP_A_AFTER.waypointId}    |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
@@ -422,11 +417,6 @@ Feature: Add Order To Route
     And DB Core - verify transactions record:
       | id      | {KEY_DELIVERY_A_AFTER.id}          |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_DELIVERY_A_AFTER.waypointId}  |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
-      | seqNo   | not null                           |
-      | status  | Routed                             |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_DELIVERY_A_AFTER.waypointId}  |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[2].id} |

@@ -75,15 +75,6 @@ Feature: RTS
       | address2 | {KEY_LIST_OF_CREATED_ORDERS[2].fromAddress2}       |
       | postcode | {KEY_LIST_OF_CREATED_ORDERS[2].fromPostcode}       |
       | country  | {KEY_LIST_OF_CREATED_ORDERS[2].fromCountry}        |
-    Then DB Core - verify waypoints record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
-      | seqNo    | null                                                       |
-      | routeId  | null                                                       |
-      | status   | Pending                                                    |
-      | address1 | {KEY_LIST_OF_CREATED_ORDERS[2].fromAddress1}               |
-      | address2 | {KEY_LIST_OF_CREATED_ORDERS[2].fromAddress2}               |
-      | postcode | {KEY_LIST_OF_CREATED_ORDERS[2].fromPostcode}               |
-      | country  | {KEY_LIST_OF_CREATED_ORDERS[2].fromCountry}                |
     Then DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | seqNo    | null                                                       |
@@ -109,8 +100,8 @@ Feature: RTS
       | request | {"type": "RTS", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
     Then Operator verifies order details on Edit Order V2 page:
       | zone | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
-    And DB Core - verify waypoints record:
-      | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
+    And DB Route - verify waypoints record:
+      | legacyId      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
@@ -204,15 +195,6 @@ Feature: RTS
       | address2 | {KEY_LIST_OF_CREATED_ORDERS[2].fromAddress2}       |
       | postcode | {KEY_LIST_OF_CREATED_ORDERS[2].fromPostcode}       |
       | country  | {KEY_LIST_OF_CREATED_ORDERS[2].fromCountry}        |
-    Then DB Core - verify waypoints record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
-      | seqNo    | null                                                       |
-      | routeId  | null                                                       |
-      | status   | Pending                                                    |
-      | address1 | {KEY_LIST_OF_CREATED_ORDERS[2].fromAddress1}               |
-      | address2 | {KEY_LIST_OF_CREATED_ORDERS[2].fromAddress2}               |
-      | postcode | {KEY_LIST_OF_CREATED_ORDERS[2].fromPostcode}               |
-      | country  | {KEY_LIST_OF_CREATED_ORDERS[2].fromCountry}                |
     Then DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | seqNo    | null                                                       |
@@ -238,8 +220,8 @@ Feature: RTS
       | request | {"type": "RTS", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
     Then Operator verifies order details on Edit Order V2 page:
       | zone | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
-    And DB Core - verify waypoints record:
-      | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
+    And DB Route - verify waypoints record:
+      | legacyId            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
@@ -332,16 +314,6 @@ Feature: RTS
       | postcode | 308402                                             |
       | city     | Singapore                                          |
       | country  | Singapore                                          |
-    Then DB Core - verify waypoints record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
-      | seqNo    | null                                                       |
-      | routeId  | null                                                       |
-      | status   | Pending                                                    |
-      | address1 | 116 Keng Lee Rd                                            |
-      | address2 | 15                                                         |
-      | postcode | 308402                                                     |
-      | city     | Singapore                                                  |
-      | country  | Singapore                                                  |
     Then DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | seqNo    | null                                                       |
@@ -368,8 +340,8 @@ Feature: RTS
       | request | {"type": "RTS", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
     Then Operator verifies order details on Edit Order V2 page:
       | zone | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
-    And DB Core - verify waypoints record:
-      | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
+    And DB Route - verify waypoints record:
+      | legacyId            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
@@ -485,15 +457,6 @@ Feature: RTS
       | address2 | {KEY_LIST_OF_CREATED_ORDERS[2].fromAddress2}       |
       | postcode | {KEY_LIST_OF_CREATED_ORDERS[2].fromPostcode}       |
       | country  | {KEY_LIST_OF_CREATED_ORDERS[2].fromCountry}        |
-    Then DB Core - verify waypoints record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
-      | seqNo    | null                                                       |
-      | routeId  | null                                                       |
-      | status   | Pending                                                    |
-      | address1 | {KEY_LIST_OF_CREATED_ORDERS[2].fromAddress1}               |
-      | address2 | {KEY_LIST_OF_CREATED_ORDERS[2].fromAddress2}               |
-      | postcode | {KEY_LIST_OF_CREATED_ORDERS[2].fromPostcode}               |
-      | country  | {KEY_LIST_OF_CREATED_ORDERS[2].fromCountry}                |
     Then DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | seqNo    | null                                                       |
@@ -519,8 +482,8 @@ Feature: RTS
       | request | {"type": "RTS", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
     Then Operator verifies order details on Edit Order V2 page:
       | zone | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
-    And DB Core - verify waypoints record:
-      | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
+    And DB Route - verify waypoints record:
+      | legacyId            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
@@ -640,15 +603,6 @@ Feature: RTS
       | address2 | {KEY_LIST_OF_CREATED_ORDERS[2].fromAddress2}       |
       | postcode | {KEY_LIST_OF_CREATED_ORDERS[2].fromPostcode}       |
       | country  | {KEY_LIST_OF_CREATED_ORDERS[2].fromCountry}        |
-    Then DB Core - verify waypoints record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
-      | seqNo    | null                                                       |
-      | routeId  | null                                                       |
-      | status   | Pending                                                    |
-      | address1 | {KEY_LIST_OF_CREATED_ORDERS[2].fromAddress1}               |
-      | address2 | {KEY_LIST_OF_CREATED_ORDERS[2].fromAddress2}               |
-      | postcode | {KEY_LIST_OF_CREATED_ORDERS[2].fromPostcode}               |
-      | country  | {KEY_LIST_OF_CREATED_ORDERS[2].fromCountry}                |
     Then DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | seqNo    | null                                                       |
@@ -674,8 +628,8 @@ Feature: RTS
       | request | {"type": "RTS", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
     Then Operator verifies order details on Edit Order V2 page:
       | zone | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
-    And DB Core - verify waypoints record:
-      | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
+    And DB Route - verify waypoints record:
+      | legacyId            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
@@ -774,16 +728,6 @@ Feature: RTS
       | postcode | 308402                                             |
       | city     | Singapore                                          |
       | country  | Singapore                                          |
-    Then DB Core - verify waypoints record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
-      | seqNo    | null                                                       |
-      | routeId  | null                                                       |
-      | status   | Pending                                                    |
-      | address1 | 116 Keng Lee Rd                                            |
-      | address2 | 15                                                         |
-      | postcode | 308402                                                     |
-      | city     | Singapore                                                  |
-      | country  | Singapore                                                  |
     Then DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | seqNo    | null                                                       |
@@ -810,8 +754,8 @@ Feature: RTS
       | request | {"type": "RTS", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
     Then Operator verifies order details on Edit Order V2 page:
       | zone | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
-    And DB Core - verify waypoints record:
-      | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
+    And DB Route - verify waypoints record:
+      | legacyId            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
@@ -898,8 +842,8 @@ Feature: RTS
     When DB Core - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
     And API Sort - Operator get Addressing Zone with details:
       | request | {"type": "RTS", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
-    And DB Core - verify waypoints record:
-      | id            | {KEY_TRANSACTION.waypointId}                 |
+    And DB Route - verify waypoints record:
+      | legacyId            | {KEY_TRANSACTION.waypointId}                 |
       | status        | Pending                                      |
       | routeId       | null                                         |
       | seqNo         | null                                         |

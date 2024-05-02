@@ -88,8 +88,8 @@ Feature: Edit Order Details
       | granularStatus  | Pending Pickup                             |
       | startTimeCustom | {KEY_TRANSACTION.startTime}                |
       | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
-    And DB Core - verify waypoints record:
-      | id            | {KEY_TRANSACTION.waypointId}      |
+    And DB Route - verify waypoints record:
+      | legacyId      | {KEY_TRANSACTION.waypointId}      |
       | seqNo         | null                              |
       | routeId       | null                              |
       | status        | Pending                           |
@@ -181,8 +181,8 @@ Feature: Edit Order Details
       | granularStatus  | Pending Pickup                             |
       | startTimeCustom | {KEY_TRANSACTION.startTime}                |
       | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
-    And DB Core - verify waypoints record:
-      | id            | {KEY_TRANSACTION.waypointId}      |
+    And DB Route - verify waypoints record:
+      | legacyId      | {KEY_TRANSACTION.waypointId}      |
       | seqNo         | null                              |
       | routeId       | null                              |
       | status        | Pending                           |
@@ -277,8 +277,8 @@ Feature: Edit Order Details
       | txnType            | PICKUP                       |
       | startTxnTimeCustom | {KEY_TRANSACTION.startTime}  |
       | endTxnTimeCustom   | {KEY_TRANSACTION.endTime}    |
-    And DB Core - verify waypoints record:
-      | id            | {KEY_TRANSACTION.waypointId} |
+    And DB Route - verify waypoints record:
+      | legacyId      | {KEY_TRANSACTION.waypointId} |
       | seqNo         | null                         |
       | routeId       | null                         |
       | status        | Pending                      |
@@ -380,8 +380,8 @@ Feature: Edit Order Details
       | address2   | 15                           |
       | postcode   | 308402                       |
       | country    | Singapore                    |
-    And DB Core - verify waypoints record:
-      | id            | {KEY_TRANSACTION.waypointId}      |
+    And DB Route - verify waypoints record:
+      | legacyId      | {KEY_TRANSACTION.waypointId}      |
       | seqNo         | null                              |
       | routeId       | null                              |
       | status        | Pending                           |
@@ -499,8 +499,8 @@ Feature: Edit Order Details
       | granularStatus  | Arrived at Sorting Hub                     |
       | startTimeCustom | {KEY_TRANSACTION.startTime}                |
       | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
-    And DB Core - verify waypoints record:
-      | id            | {KEY_TRANSACTION.waypointId}       |
+    And DB Route - verify waypoints record:
+      | legacyId      | {KEY_TRANSACTION.waypointId}       |
       | seqNo         | 100                                |
       | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | status        | Routed                             |

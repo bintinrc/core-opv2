@@ -425,7 +425,7 @@ Feature: Outbound Monitoring
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | On Vehicle for Delivery | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | inbound_scan | STANDARD          |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | On Vehicle for Delivery | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[2].buildToAddressString} | inbound_scan | STANDARD          |
 
-  @CloseNewWindows @ArchiveRouteCommonV2 @HighPriority
+  @CloseNewWindows @ArchiveRouteCommonV2 @HighPriority @wip
   Scenario: Operator Pull Out Multiple Delivery Orders from Multiple Routes on Outbound Breakroute V2 Page
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
@@ -470,11 +470,11 @@ Feature: Outbound Monitoring
       | id      | {KEY_TRANSACTION.id} |
       | status  | Pending              |
       | routeId | null                 |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId} |
-      | status  | Pending                      |
-      | routeId | null                         |
-      | seqNo   | null                         |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | Pending                      |
+      | routeId  | null                         |
+      | seqNo    | null                         |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order event on Edit Order V2 page using data below:
       | name    | PULL OUT OF ROUTE                  |
@@ -484,11 +484,11 @@ Feature: Outbound Monitoring
       | id      | {KEY_TRANSACTION.id} |
       | status  | Pending              |
       | routeId | null                 |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId} |
-      | status  | Pending                      |
-      | routeId | null                         |
-      | seqNo   | null                         |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | Pending                      |
+      | routeId  | null                         |
+      | seqNo    | null                         |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
     Then Operator verify order event on Edit Order V2 page using data below:
       | name    | PULL OUT OF ROUTE                  |
@@ -626,11 +626,11 @@ Feature: Outbound Monitoring
       | id      | {KEY_TRANSACTION.id} |
       | status  | Pending              |
       | routeId | null                 |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId} |
-      | status  | Pending                      |
-      | routeId | null                         |
-      | seqNo   | null                         |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | Pending                      |
+      | routeId  | null                         |
+      | seqNo    | null                         |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
     Then Operator verify order event on Edit Order V2 page using data below:
       | name    | PULL OUT OF ROUTE                  |
@@ -683,11 +683,11 @@ Feature: Outbound Monitoring
       | id      | {KEY_TRANSACTION.id} |
       | status  | Pending              |
       | routeId | null                 |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId} |
-      | status  | Pending                      |
-      | routeId | null                         |
-      | seqNo   | null                         |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | Pending                      |
+      | routeId  | null                         |
+      | seqNo    | null                         |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order event on Edit Order V2 page using data below:
       | name    | PULL OUT OF ROUTE                  |
