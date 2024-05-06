@@ -33,7 +33,7 @@ Feature: Reservation Preset Management
     And API Shipper - Operator fetch shipper id by legacy shipper id "{rpm-shipper-id-legacy}"
     And API Shipper - Operator get all shipper addresses by shipper global id "{rpm-shipper-id}"
     And API Core - Operator create reservation using data below:
-      | reservationRequest | {"legacy_shipper_id":{rpm-shipper-id-legacy}, "global_shipper_id":{rpm-shipper-id}, "pickup_address_id":{KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id}, "pickup_start_time":"{date: 0 days next, yyyy-MM-dd}T09:00:00{gradle-timezone-XXX}","pickup_end_time":"{date: 0 days next, yyyy-MM-dd}T12:00:00{gradle-timezone-XXX}" } |
+      | reservationRequest | {"global_shipper_id":{rpm-shipper-id}, "pickup_address_id":{KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id}, "pickup_start_time":"{date: 0 days next, yyyy-MM-dd}T09:00:00{gradle-timezone-XXX}","pickup_end_time":"{date: 0 days next, yyyy-MM-dd}T12:00:00{gradle-timezone-XXX}" } |
     When Operator go to menu Pick Ups -> Reservation Preset Management
     And Operator create new Reservation Group on Reservation Preset Management page using data below:
       | name   | GENERATED                                 |
@@ -79,7 +79,7 @@ Feature: Reservation Preset Management
     And API Shipper - Operator fetch shipper id by legacy shipper id "{rpm-shipper-id-legacy}"
     And API Shipper - Operator get all shipper addresses by shipper global id "{rpm-shipper-id}"
     And API Core - Operator create reservation using data below:
-      | reservationRequest | {"legacy_shipper_id":{rpm-shipper-id-legacy}, "global_shipper_id":{rpm-shipper-id}, "pickup_address_id":{KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+      | reservationRequest | {"global_shipper_id":{rpm-shipper-id}, "pickup_address_id":{KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When Operator go to menu Pick Ups -> Reservation Preset Management
     And Operator create new Reservation Group on Reservation Preset Management page using data below:
       | name   | GENERATED                                 |
@@ -130,7 +130,7 @@ Feature: Reservation Preset Management
     And API Shipper - Operator fetch shipper id by legacy shipper id "{rpm-shipper-id-legacy}"
     And API Shipper - Operator get all shipper addresses by shipper global id "{rpm-shipper-id}"
     And API Core - Operator create reservation using data below:
-      | reservationRequest | {"legacy_shipper_id":{rpm-shipper-id-legacy}, "global_shipper_id":{rpm-shipper-id}, "pickup_address_id":{KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+      | reservationRequest | {"global_shipper_id":{rpm-shipper-id}, "pickup_address_id":{KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When Operator go to menu Pick Ups -> Reservation Preset Management
     And Operator create new Reservation Group on Reservation Preset Management page using data below:
       | name   | GENERATED                                 |
@@ -292,7 +292,7 @@ Feature: Reservation Preset Management
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].legacyId} |
     #  Route 2nd reservation, route it, and force Success using 2nd driver
     And API Core - Operator create reservation using data below:
-      | reservationRequest | {"legacy_shipper_id":{rpm-shipper-id-legacy}, "global_shipper_id":{rpm-shipper-id}, "pickup_address_id":{KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id}, "pickup_start_time":"{date: 1 days next, yyyy-MM-dd}T09:00:00{gradle-timezone-XXX}","pickup_end_time":"{date: 1 days next, yyyy-MM-dd}T12:00:00{gradle-timezone-XXX}" } |
+      | reservationRequest | {"global_shipper_id":{rpm-shipper-id}, "pickup_address_id":{KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id}, "pickup_start_time":"{date: 1 days next, yyyy-MM-dd}T09:00:00{gradle-timezone-XXX}","pickup_end_time":"{date: 1 days next, yyyy-MM-dd}T12:00:00{gradle-timezone-XXX}" } |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[2].id} } |
     And API Core - Operator add reservation to route using data below:
