@@ -13,7 +13,7 @@ Feature: Create Route Groups - Reservation Filters
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
     And API Core - Operator create reservation using data below:
-      | reservationRequest | { "pickup_service_level":"Standard", "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id},  "global_shipper_id":{shipper-v4-id},"pickup_approx_volume": "<pickupSize>", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+      | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "global_shipper_id":{shipper-v4-id}, "pickup_service_level":"Standard", "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "pickup_approx_volume": "<pickupSize>", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
@@ -42,7 +42,7 @@ Feature: Create Route Groups - Reservation Filters
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
     And API Core - Operator create reservation using data below:
-      | reservationRequest | { "pickup_service_level":"Standard", "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "global_shipper_id":{shipper-v4-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+      | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "global_shipper_id":{shipper-v4-id}, "pickup_service_level":"Standard", "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Core - Operator cancel reservation for id "{KEY_LIST_OF_CREATED_RESERVATIONS[1].id}"
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
@@ -66,7 +66,7 @@ Feature: Create Route Groups - Reservation Filters
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
     And API Core - Operator create reservation using data below:
-      | reservationRequest | { "pickup_service_level":"Standard", "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "global_shipper_id":{shipper-v4-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+      | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "global_shipper_id":{shipper-v4-id}, "pickup_service_level":"Standard", "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Core - Operator add reservation to route using data below:
       | reservationId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
       | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
@@ -116,7 +116,7 @@ Feature: Create Route Groups - Reservation Filters
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
     And API Core - Operator create reservation using data below:
-      | reservationRequest | { "pickup_service_level":"Standard", "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "global_shipper_id":{shipper-v4-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+      | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "global_shipper_id":{shipper-v4-id}, "pickup_service_level":"Standard", "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     And API Core - Operator add reservation to route using data below:
       | reservationId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
       | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
@@ -154,7 +154,7 @@ Feature: Create Route Groups - Reservation Filters
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
     And API Core - Operator create reservation using data below:
-      | reservationRequest | { "pickup_service_level":"Standard", "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "global_shipper_id":{shipper-v4-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+      | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "global_shipper_id":{shipper-v4-id}, "pickup_service_level":"Standard", "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
@@ -175,7 +175,7 @@ Feature: Create Route Groups - Reservation Filters
       | shipperId       | {shipper-v4-id} |
       | generateAddress | RANDOM          |
     And API Core - Operator create reservation using data below:
-      | reservationRequest | { "pickup_service_level":"<pickup_service_level>", "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "global_shipper_id":{shipper-v4-id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
+      | reservationRequest | {"legacy_shipper_id":{shipper-v4-legacy-id}, "global_shipper_id":{shipper-v4-id}, "pickup_service_level":"<pickup_service_level>", "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "pickup_approx_volume":"Less than 10 Parcels", "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}", "pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
