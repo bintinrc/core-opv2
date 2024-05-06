@@ -428,7 +428,7 @@ Feature: Outbound Monitoring
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | On Vehicle for Delivery | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | inbound_scan | STANDARD          |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} | On Vehicle for Delivery | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[2].buildToAddressString} | inbound_scan | STANDARD          |
 
-  @CloseNewWindows @ArchiveRouteCommonV2 @HighPriority @wip
+  @CloseNewWindows @ArchiveRouteCommonV2 @HighPriority
   Scenario: Operator Pull Out Multiple Delivery Orders from Multiple Routes on Outbound Breakroute V2 Page
     And API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                      |
