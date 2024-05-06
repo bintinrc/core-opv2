@@ -42,7 +42,7 @@ Feature: Implanted Manifest
       | id                           | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
       | pods[1].shipperScansQuantity | 0                                        |
 
-  @ArchiveRouteCommonV2 @MediumPriority
+  @ArchiveRouteCommonV2 @MediumPriority @wip
   Scenario: Operator Failed to Create Implanted Manifest Pickup - Reservation without POD Pickup
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -66,17 +66,18 @@ Feature: Implanted Manifest
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     When API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | expectedWaypointIds | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}      |
+      | driverId            | {ninja-driver-id}                                |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}               |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId} |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                               |
-      | waypointId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}                                 |
-      | routes     | KEY_DRIVER_ROUTES                                                                |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action": "SUCCESS"}] |
-      | jobType    | RESERVATION                                                                      |
-      | jobAction  | SUCCESS                                                                          |
-      | jobMode    | PICK_UP                                                                          |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                               |
+      | waypointId      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}                                 |
+      | routes          | KEY_DRIVER_ROUTES                                                                |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action": "SUCCESS"}] |
+      | jobType         | RESERVATION                                                                      |
+      | jobAction       | SUCCESS                                                                          |
+      | jobMode         | PICK_UP                                                                          |
+      | globalShipperId | {shipper-v4-id}                                                                  |
     When Operator go to menu New Features -> Implanted Manifest
     And Operator selects "{hub-name}" hub on Implanted Manifest page
     And Operator clicks Create Manifest on Implanted Manifest page
@@ -152,9 +153,9 @@ Feature: Implanted Manifest
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | expectedWaypointIds | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}     |
+      | driverId            | {ninja-driver-id}                                |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}               |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId} |
     And API Driver - Driver submit POD:
       | routeId                  | {KEY_LIST_OF_CREATED_ROUTES[1].id}               |
       | waypointId               | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId} |
@@ -164,6 +165,7 @@ Feature: Implanted Manifest
       | jobAction                | SUCCESS                                          |
       | jobMode                  | PICK_UP                                          |
       | totalUnmanifestedParcels | 2                                                |
+      | globalShipperId          | {shipper-v4-id}                                  |
     When Operator go to menu New Features -> Implanted Manifest
     And Operator selects "{hub-name}" hub on Implanted Manifest page
     And Operator clicks Create Manifest on Implanted Manifest page

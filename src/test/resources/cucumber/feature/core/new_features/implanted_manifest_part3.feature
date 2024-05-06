@@ -31,14 +31,15 @@ Feature: Implanted Manifest
       | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | expectedWaypointIds | {KEY_WAYPOINT_ID}                  |
     And API Driver - Driver submit POD:
-      | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | waypointId  | {KEY_WAYPOINT_ID}                  |
-      | routes      | KEY_DRIVER_ROUTES                  |
-      | parcels     | []                                 |
-      | jobType     | PICKUP_APPOINTMENT                 |
-      | jobAction   | SUCCESS                            |
-      | jobMode     | PICK_UP                            |
-      | basePayload | {"pickup_quantity":1}              |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | waypointId      | {KEY_WAYPOINT_ID}                  |
+      | routes          | KEY_DRIVER_ROUTES                  |
+      | parcels         | []                                 |
+      | jobType         | PICKUP_APPOINTMENT                 |
+      | jobAction       | SUCCESS                            |
+      | jobMode         | PICK_UP                            |
+      | basePayload     | {"pickup_quantity":1}              |
+      | globalShipperId | {shipper-v4-id}                    |
     When Operator go to menu New Features -> Implanted Manifest
     When Operator creates Manifest for Hub "{hub-name}" and scan barcodes:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
@@ -155,8 +156,8 @@ Feature: Implanted Manifest
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     When API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                  |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | expectedWaypointIds | {KEY_WAYPOINT_ID}                  |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
@@ -167,6 +168,7 @@ Feature: Implanted Manifest
       | jobAction       | FAIL                               |
       | jobMode         | PICK_UP                            |
       | failureReasonId | 1472                               |
+      | globalShipperId | {shipper-v4-id}                    |
     When Operator go to menu New Features -> Implanted Manifest
     When Operator creates Manifest for Hub "{hub-name}" and scan barcodes:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
@@ -209,17 +211,18 @@ Feature: Implanted Manifest
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     When API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                  |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | expectedWaypointIds | {KEY_WAYPOINT_ID}                  |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                               |
-      | waypointId | {KEY_WAYPOINT_ID}                                                                |
-      | routes     | KEY_DRIVER_ROUTES                                                                |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action": "SUCCESS"}] |
-      | jobType    | PICKUP_APPOINTMENT                                                               |
-      | jobAction  | SUCCESS                                                                          |
-      | jobMode    | PICK_UP                                                                          |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                               |
+      | waypointId      | {KEY_WAYPOINT_ID}                                                                |
+      | routes          | KEY_DRIVER_ROUTES                                                                |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action": "SUCCESS"}] |
+      | jobType         | PICKUP_APPOINTMENT                                                               |
+      | jobAction       | SUCCESS                                                                          |
+      | jobMode         | PICK_UP                                                                          |
+      | globalShipperId | {shipper-v4-id}                                                                  |
     When Operator go to menu New Features -> Implanted Manifest
     When Operator creates Manifest for Hub "{hub-name}" and scan barcodes:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
@@ -261,18 +264,19 @@ Feature: Implanted Manifest
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     When API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                  |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | expectedWaypointIds | {KEY_WAYPOINT_ID}                  |
     And API Driver - Driver submit POD:
-      | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | waypointId  | {KEY_WAYPOINT_ID}                  |
-      | routes      | KEY_DRIVER_ROUTES                  |
-      | parcels     | []                                 |
-      | jobType     | PICKUP_APPOINTMENT                 |
-      | jobAction   | SUCCESS                            |
-      | jobMode     | PICK_UP                            |
-      | basePayload | {"pickup_quantity":2}              |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | waypointId      | {KEY_WAYPOINT_ID}                  |
+      | routes          | KEY_DRIVER_ROUTES                  |
+      | parcels         | []                                 |
+      | jobType         | PICKUP_APPOINTMENT                 |
+      | jobAction       | SUCCESS                            |
+      | jobMode         | PICK_UP                            |
+      | basePayload     | {"pickup_quantity":2}              |
+      | globalShipperId | {shipper-v4-id}                    |
     When Operator go to menu New Features -> Implanted Manifest
     When Operator creates Manifest for Hub "{hub-name}" and scan barcodes:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
@@ -314,18 +318,19 @@ Feature: Implanted Manifest
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     When API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                  |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | expectedWaypointIds | {KEY_WAYPOINT_ID}                  |
     And API Driver - Driver submit POD:
-      | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}              |
-      | waypointId  | {KEY_WAYPOINT_ID}                               |
-      | routes      | KEY_DRIVER_ROUTES                               |
-      | parcels     | []                                              |
-      | jobType     | PICKUP_APPOINTMENT                              |
-      | jobAction   | SUCCESS                                         |
-      | jobMode     | PICK_UP                                         |
-      | basePayload | {"pickup_quantity":1,"commit_date": 1686402522} |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}              |
+      | waypointId      | {KEY_WAYPOINT_ID}                               |
+      | routes          | KEY_DRIVER_ROUTES                               |
+      | parcels         | []                                              |
+      | jobType         | PICKUP_APPOINTMENT                              |
+      | jobAction       | SUCCESS                                         |
+      | jobMode         | PICK_UP                                         |
+      | basePayload     | {"pickup_quantity":1,"commit_date": 1686402522} |
+      | globalShipperId | {shipper-v4-id}                                 |
     When Operator go to menu New Features -> Implanted Manifest
     When Operator creates Manifest for Hub "{hub-name}" and scan barcodes:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
