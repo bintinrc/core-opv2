@@ -66,9 +66,9 @@ Feature: Cancel RTS
       | name       | Elsa Sender                        |
       | email      | elsaf@ninja.com                    |
       | contact    | +6583014912                        |
-    When DB Core - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
+    When DB Route - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
     And API Sort - Operator get Addressing Zone with details:
-      | request | {"type": "STANDARD", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
+      | request | {"type": "STANDARD", "latitude": {KEY_ROUTE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_ROUTE_WAYPOINT_DETAILS.longitude}} |
     And DB Route - verify waypoints record:
       | legacyId      | {KEY_TRANSACTION.waypointId}          |
       | address1      | 9 TUA KONG GREEN                      |

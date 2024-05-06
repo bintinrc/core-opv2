@@ -153,9 +153,9 @@ Feature: Update Delivery Address with CSV
     And DB Core - verify orders record:
       | id  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | rts | 1                                  |
-    When DB Core - operator get waypoints details for "{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}"
+    When DB Route - operator get waypoints details for "{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}"
     And API Sort - Operator get Addressing Zone with details:
-      | request | {"type": "RTS", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
+      | request | {"type": "RTS", "latitude": {KEY_ROUTE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_ROUTE_WAYPOINT_DETAILS.longitude}} |
     Then Operator verifies order details on Edit Order V2 page:
       | zone | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
     And DB Route - verify waypoints record:

@@ -76,6 +76,7 @@ Feature: Problematic Waypoints/Parcels
       | jobAction       | FAIL                                                                                                |
       | jobMode         | DELIVERY                                                                                            |
       | failureReasonId | 11                                                                                                  |
+      | globalShipperId | {shipper-v4-id}                                                                                     |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                   |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                                           |
@@ -85,6 +86,7 @@ Feature: Problematic Waypoints/Parcels
       | jobAction       | FAIL                                                                                                 |
       | jobMode         | PICK_UP                                                                                              |
       | failureReasonId | 112                                                                                                  |
+      | globalShipperId | {shipper-v4-id}                                                                                      |
     When Operator go to menu Inbounding -> Route Inbound
     And Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | {hub-name}                         |
@@ -143,6 +145,7 @@ Feature: Problematic Waypoints/Parcels
       | jobAction       | FAIL                                             |
       | jobMode         | PICK_UP                                          |
       | failureReasonId | 112                                              |
+      | globalShipperId | {shipper-v4-id}                                  |
     When Operator go to menu Inbounding -> Route Inbound
     And Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | {hub-name}                         |

@@ -98,9 +98,9 @@ Feature: RTS
       | rts             | 1                                          |
       | startTimeCustom | {KEY_TRANSACTION.startTime}                |
       | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
-    When DB Core - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
+    When DB Route - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
     And API Sort - Operator get Addressing Zone with details:
-      | request | {"type": "RTS", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
+      | request | {"type": "RTS", "latitude": {KEY_ROUTE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_ROUTE_WAYPOINT_DETAILS.longitude}} |
     And DB Route - verify waypoints record:
       | legacyId            | {KEY_TRANSACTION.waypointId}                 |
       | status        | Pending                                      |
@@ -183,9 +183,9 @@ Feature: RTS
       | rts             | 1                                          |
       | startTimeCustom | {KEY_TRANSACTION.startTime}                |
       | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
-    When DB Core - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
+    When DB Route - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
     And API Sort - Operator get Addressing Zone with details:
-      | request | {"type": "RTS", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
+      | request | {"type": "RTS", "latitude": {KEY_ROUTE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_ROUTE_WAYPOINT_DETAILS.longitude}} |
     And DB Route - verify waypoints record:
       | legacyId            | {KEY_TRANSACTION.waypointId}                 |
       | status        | Pending                                      |
@@ -547,9 +547,9 @@ Feature: RTS
       | rts             | 1                                          |
       | startTimeCustom | {KEY_TRANSACTION_AFTER.startTime}          |
       | endTimeCustom   | {KEY_TRANSACTION_AFTER.endTime}            |
-    When DB Core - operator get waypoints details for "{KEY_TRANSACTION_AFTER.waypointId}"
+    When DB Route - operator get waypoints details for "{KEY_TRANSACTION_AFTER.waypointId}"
     And API Sort - Operator get Addressing Zone with details:
-      | request | {"type": "RTS", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
+      | request | {"type": "RTS", "latitude": {KEY_ROUTE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_ROUTE_WAYPOINT_DETAILS.longitude}} |
     Then Operator verifies order details on Edit Order V2 page:
       | zone | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
     And DB Route - verify waypoints record:
