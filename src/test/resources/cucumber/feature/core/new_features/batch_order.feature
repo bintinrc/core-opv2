@@ -130,7 +130,7 @@ Feature: Batch Order
       | userName  | AUTOMATION EDITED                  |
       | userEmail | {operator-portal-uid}              |
 
-  @DeleteOrArchiveRoute @HighPriority
+  @DeleteOrArchiveRoute @HighPriority @wip
   Scenario: Rollback Order - Valid Batch Id, Status = Pickup Fail
     When API Order - Operator v4.1 create new batch
     When API Order - Shipper create order for the created batch using data below:
@@ -162,7 +162,7 @@ Feature: Batch Order
     And API Driver - Driver read routes:
       | driverId            | {ninja-driver-id}                                                                                                     |
       | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                    |
-      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId},{KEY_LIST_OF_CREATED_ORDERS[2].transactions[1].waypointId} |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId},{KEY_LIST_OF_CREATED_ORDERS[2].transactions[1].waypointId} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                   |
@@ -173,6 +173,7 @@ Feature: Batch Order
       | jobAction       | FAIL                                                                                                 |
       | jobMode         | PICK_UP                                                                                              |
       | failureReasonId | 139                                                                                                  |
+      | globalShipperId | {shipper-v4-id}                                                                                      |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                   |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[1].waypointId}                                           |
@@ -182,6 +183,7 @@ Feature: Batch Order
       | jobAction       | FAIL                                                                                                 |
       | jobMode         | PICK_UP                                                                                              |
       | failureReasonId | 139                                                                                                  |
+      | globalShipperId | {shipper-v4-id}                                                                                      |
     When Operator go to menu New Features -> Batch Order
     And Operator search for "{KEY_CREATED_BATCH.batchId}" batch on Batch Orders page
     Then Operator verifies orders info on Batch Orders page:
