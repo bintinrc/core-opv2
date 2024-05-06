@@ -42,7 +42,7 @@ Feature: Implanted Manifest
       | id                           | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
       | pods[1].shipperScansQuantity | 0                                        |
 
-  @ArchiveRouteCommonV2 @MediumPriority @wip
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Operator Failed to Create Implanted Manifest Pickup - Reservation without POD Pickup
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |

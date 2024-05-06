@@ -130,7 +130,7 @@ Feature: Batch Order
       | userName  | AUTOMATION EDITED                  |
       | userEmail | {operator-portal-uid}              |
 
-  @DeleteOrArchiveRoute @HighPriority @wip
+  @DeleteOrArchiveRoute @HighPriority
   Scenario: Rollback Order - Valid Batch Id, Status = Pickup Fail
     When API Order - Operator v4.1 create new batch
     When API Order - Shipper create order for the created batch using data below:
