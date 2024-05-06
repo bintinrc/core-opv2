@@ -145,7 +145,7 @@ Feature: Collection Summary
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |         | {KEY_LIST_OF_CREATED_ORDERS[1].to1LineToAddress} | Delivery (Normal) | Failed | 1        |                    |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |         | {KEY_LIST_OF_CREATED_ORDERS[2].to1LineToAddress} | Delivery (Return) | Failed | 1        | Inbounded          |
 
-  @ArchiveRouteCommonV2 @MediumPriority @wip
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: View Return Parcels
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |

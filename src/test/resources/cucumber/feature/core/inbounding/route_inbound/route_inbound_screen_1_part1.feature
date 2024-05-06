@@ -61,7 +61,7 @@ Feature: Route Inbound Screen 1
       | Tracking ID | FETCH_BY_TRACKING_ID | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | Driver      | FETCH_BY_DRIVER      | {ninja-driver-name}                   |
 
-  @ArchiveRouteCommonV2 @HighPriority @wip
+  @ArchiveRouteCommonV2 @HighPriority
   Scenario: Get Route Details by Route ID - Route with Waypoints
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
