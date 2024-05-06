@@ -109,7 +109,7 @@ Feature: Route Inbound Screen 1
     And API Driver - Driver read routes:
       | driverId            | {ninja-driver-id}                                          |
       | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
-      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                   |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[1].waypointId}                                           |

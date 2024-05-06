@@ -95,13 +95,14 @@ Feature: Inbound COD & COP
       | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                    |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                                            |
-      | routes     | KEY_DRIVER_ROUTES                                                                                     |
-      | jobType    | TRANSACTION                                                                                           |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS", "cod":<cashOnPickup>}] |
-      | jobAction  | SUCCESS                                                                                               |
-      | jobMode    | PICK_UP                                                                                               |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                    |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                                            |
+      | routes          | KEY_DRIVER_ROUTES                                                                                     |
+      | jobType         | TRANSACTION                                                                                           |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS", "cod":<cashOnPickup>}] |
+      | jobAction       | SUCCESS                                                                                               |
+      | jobMode         | PICK_UP                                                                                               |
+      | globalShipperId | {shipper-v4-id}                                                                                       |
     Given Operator go to menu Inbounding -> Route Inbound
     When Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | {hub-name}                          |
