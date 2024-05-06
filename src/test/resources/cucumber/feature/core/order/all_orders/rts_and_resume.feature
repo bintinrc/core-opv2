@@ -41,6 +41,7 @@ Feature: All Orders - RTS & Resume
       | jobAction       | FAIL                                                                                               |
       | jobMode         | DELIVERY                                                                                           |
       | failureReasonId | 5                                                                                                  |
+      | globalShipperId | {shipper-v4-id}                                                                                    |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     When Operator go to menu Order -> All Orders
     And Operator find multiple orders below by uploading CSV on All Orders page

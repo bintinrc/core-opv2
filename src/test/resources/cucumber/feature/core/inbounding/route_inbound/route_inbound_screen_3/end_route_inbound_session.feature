@@ -33,13 +33,14 @@ Feature: End Route Inbound Session
       | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                      |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                              |
-      | routes     | KEY_DRIVER_ROUTES                                                                                       |
-      | jobType    | TRANSACTION                                                                                             |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS", "cod":<cashOnDelivery>}] |
-      | jobAction  | SUCCESS                                                                                                 |
-      | jobMode    | DELIVERY                                                                                                |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                      |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                              |
+      | routes          | KEY_DRIVER_ROUTES                                                                                       |
+      | jobType         | TRANSACTION                                                                                             |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS", "cod":<cashOnDelivery>}] |
+      | jobAction       | SUCCESS                                                                                                 |
+      | jobMode         | DELIVERY                                                                                                |
+      | globalShipperId | {shipper-v4-id}                                                                                         |
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                            |
@@ -111,13 +112,14 @@ Feature: End Route Inbound Session
       | expectedRouteId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | expectedWaypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                      |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                              |
-      | routes     | KEY_DRIVER_ROUTES                                                                                       |
-      | jobType    | TRANSACTION                                                                                             |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS", "cod":<cashOnDelivery>}] |
-      | jobAction  | SUCCESS                                                                                                 |
-      | jobMode    | DELIVERY                                                                                                |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                      |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                              |
+      | routes          | KEY_DRIVER_ROUTES                                                                                       |
+      | jobType         | TRANSACTION                                                                                             |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS", "cod":<cashOnDelivery>}] |
+      | jobAction       | SUCCESS                                                                                                 |
+      | jobMode         | DELIVERY                                                                                                |
+      | globalShipperId | {shipper-v4-id}                                                                                         |
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                            |

@@ -40,6 +40,7 @@ Feature: Inbound COD & COP
       | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS", "cod":<cashOnDelivery>}] |
       | jobAction  | SUCCESS                                                                                                 |
       | jobMode    | DELIVERY                                                                                                |
+      | globalShipperId | {shipper-v4-id} |
     Given Operator go to menu Inbounding -> Route Inbound
     When Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | {hub-name}                            |

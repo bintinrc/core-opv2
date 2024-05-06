@@ -135,6 +135,7 @@ Feature: Resume Order
       | jobAction       | FAIL                                                                               |
       | jobMode         | PICK_UP                                                                            |
       | failureReasonId | 9                                                                                  |
+      | globalShipperId | {shipper-v4-id} |
     And API Core - cancel order "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verifies order details on Edit Order V2 page:
@@ -229,6 +230,7 @@ Feature: Resume Order
       | jobAction       | FAIL                                                                                                |
       | jobMode         | DELIVERY                                                                                            |
       | failureReasonId | 18                                                                                                  |
+      | globalShipperId | {shipper-v4-id} |
     And API Core - force cancel order "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verifies order details on Edit Order V2 page:

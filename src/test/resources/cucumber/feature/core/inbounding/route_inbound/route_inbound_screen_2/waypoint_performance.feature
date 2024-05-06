@@ -135,13 +135,14 @@ Feature: Waypoint Performance
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[3].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                           |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId}                                   |
-      | routes     | KEY_DRIVER_ROUTES                                                                            |
-      | jobType    | TRANSACTION                                                                                  |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[3]}", "action":"SUCCESS", "cod":23.57}] |
-      | jobAction  | SUCCESS                                                                                      |
-      | jobMode    | DELIVERY                                                                                     |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                           |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId}                                   |
+      | routes          | KEY_DRIVER_ROUTES                                                                            |
+      | jobType         | TRANSACTION                                                                                  |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[3]}", "action":"SUCCESS", "cod":23.57}] |
+      | jobAction       | SUCCESS                                                                                      |
+      | jobMode         | DELIVERY                                                                                     |
+      | globalShipperId | {shipper-v4-id}                                                                              |
     Given Operator go to menu Inbounding -> Route Inbound
     When Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | {hub-name}                         |
@@ -243,6 +244,7 @@ Feature: Waypoint Performance
       | jobAction       | FAIL                                                                                                |
       | jobMode         | DELIVERY                                                                                            |
       | failureReasonId | 11                                                                                                  |
+      | globalShipperId | {shipper-v4-id}                                                                                     |
     Given Operator go to menu Inbounding -> Route Inbound
     When Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | {hub-name}                         |
@@ -345,14 +347,14 @@ Feature: Waypoint Performance
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[3].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                           |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId}                                   |
-      | routes     | KEY_DRIVER_ROUTES                                                                            |
-      | jobType    | TRANSACTION                                                                                  |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[3]}", "action":"SUCCESS", "cod":23.57}] |
-      | jobAction  | SUCCESS                                                                                      |
-      | jobMode    | DELIVERY                                                                                     |
-
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                           |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId}                                   |
+      | routes          | KEY_DRIVER_ROUTES                                                                            |
+      | jobType         | TRANSACTION                                                                                  |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[3]}", "action":"SUCCESS", "cod":23.57}] |
+      | jobAction       | SUCCESS                                                                                      |
+      | jobMode         | DELIVERY                                                                                     |
+      | globalShipperId | {shipper-v4-id}                                                                              |
     When API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                      |
@@ -450,13 +452,14 @@ Feature: Waypoint Performance
       | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                      |
-      | routes     | KEY_DRIVER_ROUTES                                                               |
-      | jobType    | TRANSACTION                                                                     |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS"}] |
-      | jobAction  | SUCCESS                                                                         |
-      | jobMode    | DELIVERY                                                                        |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                      |
+      | routes          | KEY_DRIVER_ROUTES                                                               |
+      | jobType         | TRANSACTION                                                                     |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS"}] |
+      | jobAction       | SUCCESS                                                                         |
+      | jobMode         | DELIVERY                                                                        |
+      | globalShipperId | {shipper-v4-id}                                                                 |
     And API Core - Operator update order granular status:
       | orderId        | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
       | granularStatus | Pending Reschedule                 |
