@@ -28,16 +28,18 @@ Feature: Add Comment Session
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                      |
-      | routes     | KEY_DRIVER_ROUTES                                                               |
-      | jobType    | TRANSACTION                                                                     |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS"}] |
-      | jobAction  | SUCCESS                                                                         |
-      | jobMode    | DELIVERY                                                                        |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                      |
+      | routes          | KEY_DRIVER_ROUTES                                                               |
+      | jobType         | TRANSACTION                                                                     |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS"}] |
+      | jobAction       | SUCCESS                                                                         |
+      | jobMode         | DELIVERY                                                                        |
+      | globalShipperId | {shipper-v4-id}                                                                 |
     And Operator go to menu Inbounding -> Route Inbound
     And Operator get Route Summary Details on Route Inbound page using data below:
       | hubName      | {hub-name}                         |

@@ -30,6 +30,7 @@ Feature: Route Manifest
     And API Driver - Driver read routes:
       | driverId        | {ninja-driver-id}                  |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    |expectedWaypointIds| {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}  |
     And API Driver - Driver submit POD:
       | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
       | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                      |
@@ -38,6 +39,7 @@ Feature: Route Manifest
       | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS"}] |
       | jobAction  | SUCCESS                                                                         |
       | jobMode    | DELIVERY                                                                        |
+      | globalShipperId | {shipper-v4-id} |
     When Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And Operator verify Route summary Parcel count on Route Manifest page:
       |            | Pending | Success | Failure | All |
@@ -77,9 +79,11 @@ Feature: Route Manifest
     And API Driver - Driver read routes:
       | driverId        | {ninja-driver-id}                  |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver read routes:
       | driverId        | {ninja-driver-id}                  |
       | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                 |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                         |
@@ -89,6 +93,7 @@ Feature: Route Manifest
       | jobAction       | FAIL                                                                                               |
       | jobMode         | DELIVERY                                                                                           |
       | failureReasonId | 6                                                                                                  |
+      | globalShipperId | {shipper-v4-id} |
     When Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And Operator verify Route summary Parcel count on Route Manifest page:
       |            | Pending | Success | Failure | All |

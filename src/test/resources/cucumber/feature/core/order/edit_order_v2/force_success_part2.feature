@@ -113,9 +113,9 @@ Feature: Force Success
     And DB Core - verify transactions record:
       | id     | {KEY_TRANSACTION.id} |
       | status | Success              |
-    And DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | Success                      |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | Success                      |
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
       | id     | {KEY_TRANSACTION.id} |
@@ -157,9 +157,9 @@ Feature: Force Success
     And DB Core - verify transactions record:
       | id     | {KEY_TRANSACTION.id} |
       | status | Success              |
-    And DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | Success                      |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | Success                      |
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
       | id     | {KEY_TRANSACTION.id} |
@@ -209,9 +209,9 @@ Feature: Force Success
     And DB Core - verify transactions record:
       | id     | {KEY_TRANSACTION.id} |
       | status | Success              |
-    And DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | Success                      |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | Success                      |
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
       | id     | {KEY_TRANSACTION.id} |
@@ -267,9 +267,9 @@ Feature: Force Success
     And DB Core - verify transactions record:
       | id     | {KEY_TRANSACTION.id} |
       | status | Success              |
-    And DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | Success                      |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | Success                      |
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
       | id     | {KEY_TRANSACTION.id} |

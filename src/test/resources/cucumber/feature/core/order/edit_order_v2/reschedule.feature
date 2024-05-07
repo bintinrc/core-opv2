@@ -21,8 +21,9 @@ Feature: Reschedule
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                   |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                                           |
@@ -32,6 +33,7 @@ Feature: Reschedule
       | jobAction       | FAIL                                                                                                 |
       | jobMode         | PICK_UP                                                                                              |
       | failureReasonId | 139                                                                                                  |
+      | globalShipperId | {shipper-v4-id}                                                                                      |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Pickup fail |
@@ -101,18 +103,6 @@ Feature: Reschedule
       | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2}       |
       | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode}       |
       | country  | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}        |
-    Then DB Core - verify waypoints record:
-      | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
-      | seqNo         | null                                                       |
-      | routeId       | null                                                       |
-      | status        | Pending                                                    |
-      | address1      | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress1}               |
-      | address2      | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2}               |
-      | postcode      | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode}               |
-      | country       | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}                |
-      | routingZoneId | 1399                                                       |
-      | latitude      | 1.30706095410839                                           |
-      | longitude     | 103.830899303793                                           |
     Then DB Route - verify waypoints record:
       | legacyId      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | seqNo         | null                                                       |
@@ -174,8 +164,9 @@ Feature: Reschedule
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                   |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                                           |
@@ -185,6 +176,7 @@ Feature: Reschedule
       | jobAction       | FAIL                                                                                                 |
       | jobMode         | PICK_UP                                                                                              |
       | failureReasonId | 139                                                                                                  |
+      | globalShipperId | {shipper-v4-id}                                                                                      |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Pickup fail |
@@ -263,21 +255,6 @@ Feature: Reschedule
       | address1 | 8A MARINA BOULEVARD                                |
       | address2 | MARINA BAY LINK MALL                               |
       | postcode | 018984                                             |
-    Then DB Core - verify waypoints record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
-      | seqNo    | null                                                       |
-      | routeId  | null                                                       |
-      | status   | Pending                                                    |
-      | country  | Singapore                                                  |
-      | city     | Singapore                                                  |
-      | address1 | 8A MARINA BOULEVARD                                        |
-      | address2 | MARINA BAY LINK MALL                                       |
-      | postcode | 018984                                                     |
-#    TODO uncomment when issue with mismatch waypoint lat/long is fixed on AV service
-#    see comment in https://jira.ninjavan.co/browse/NV-11680
-#      | routingZoneId | 30532                                                      |
-#      | latitude      | 1.28046794326566                                           |
-#      | longitude     | 103.853470148164                                           |
     Then DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | seqNo    | null                                                       |
@@ -350,8 +327,9 @@ Feature: Reschedule
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                  |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                          |
@@ -361,6 +339,7 @@ Feature: Reschedule
       | jobAction       | FAIL                                                                                                |
       | jobMode         | DELIVERY                                                                                            |
       | failureReasonId | 18                                                                                                  |
+      | globalShipperId | {shipper-v4-id}                                                                                     |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Delivery fail      |
@@ -438,15 +417,6 @@ Feature: Reschedule
       | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2}         |
       | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode}         |
       | country  | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}          |
-    Then DB Core - verify waypoints record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
-      | seqNo    | null                                                       |
-      | routeId  | null                                                       |
-      | status   | Pending                                                    |
-      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1}                 |
-      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2}                 |
-      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode}                 |
-      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}                  |
     Then DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | seqNo    | null                                                       |
@@ -467,13 +437,13 @@ Feature: Reschedule
       | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].toContact}  |
       | comments | OrderHelper::saveWaypoint                  |
       | seq_no   | 1                                          |
-    When DB Core - operator get waypoints details for "{KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId}"
+    When DB Route - operator get waypoints details for "{KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId}"
     And API Sort - Operator get Addressing Zone with details:
-      | request | {"type": "STANDARD", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
+      | request | {"type": "STANDARD", "latitude": {KEY_ROUTE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_ROUTE_WAYPOINT_DETAILS.longitude}} |
     Then Operator verifies order details on Edit Order V2 page:
       | zone | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
-    And DB Core - verify waypoints record:
-      | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
+    And DB Route - verify waypoints record:
+      | legacyId      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_NEW_TRANSACTION"
@@ -511,8 +481,9 @@ Feature: Reschedule
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                  |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                          |
@@ -522,6 +493,7 @@ Feature: Reschedule
       | jobAction       | FAIL                                                                                                |
       | jobMode         | DELIVERY                                                                                            |
       | failureReasonId | 18                                                                                                  |
+      | globalShipperId | {shipper-v4-id} |
     And API Sort - Operator global inbound
       | globalInboundRequest | {"inbound_type":"SORTING_HUB","dimensions":null,"to_reschedule":false,"to_show_shipper_info":false,"tags":[]} |
       | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                                                                         |
@@ -602,16 +574,6 @@ Feature: Reschedule
       | postcode | 308402                                             |
       | country  | Singapore                                          |
       | city     | Singapore                                          |
-    Then DB Core - verify waypoints record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
-      | seqNo    | null                                                       |
-      | routeId  | null                                                       |
-      | status   | Pending                                                    |
-      | address1 | 116 Keng Lee Rd                                            |
-      | address2 | 15                                                         |
-      | postcode | 308402                                                     |
-      | country  | Singapore                                                  |
-      | city     | Singapore                                                  |
     Then DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | seqNo    | null                                                       |
@@ -669,8 +631,9 @@ Feature: Reschedule
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                  |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                          |
@@ -680,6 +643,7 @@ Feature: Reschedule
       | jobAction       | FAIL                                                                                                |
       | jobMode         | DELIVERY                                                                                            |
       | failureReasonId | 18                                                                                                  |
+      | globalShipperId | {shipper-v4-id} |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Delivery fail      |
@@ -761,16 +725,6 @@ Feature: Reschedule
       | granularStatus  | En-route to Sorting Hub                                   |
       | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].startTime} |
       | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].endTime}   |
-    Then DB Core - verify waypoints record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
-      | seqNo    | null                                                       |
-      | routeId  | null                                                       |
-      | status   | Pending                                                    |
-      | address1 | 116 Keng Lee Rd                                            |
-      | address2 | 15                                                         |
-      | postcode | 308402                                                     |
-      | country  | Singapore                                                  |
-      | city     | Singapore                                                  |
     Then DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | seqNo    | null                                                       |
@@ -809,8 +763,9 @@ Feature: Reschedule
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                   |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                                           |
@@ -820,6 +775,7 @@ Feature: Reschedule
       | jobAction       | FAIL                                                                                                 |
       | jobMode         | PICK_UP                                                                                              |
       | failureReasonId | 139                                                                                                  |
+      | globalShipperId | {shipper-v4-id} |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Pickup fail |
@@ -887,16 +843,6 @@ Feature: Reschedule
       | granularStatus  | Pending Pickup                                            |
       | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].startTime} |
       | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].endTime}   |
-    Then DB Core - verify waypoints record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
-      | seqNo    | null                                                       |
-      | routeId  | null                                                       |
-      | status   | Pending                                                    |
-      | address1 | 116 Keng Lee Rd                                            |
-      | address2 | 15                                                         |
-      | postcode | 308402                                                     |
-      | country  | Singapore                                                  |
-      | city     | Singapore                                                  |
     Then DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
       | seqNo    | null                                                       |
@@ -942,8 +888,9 @@ Feature: Reschedule
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                  |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                          |
@@ -953,6 +900,7 @@ Feature: Reschedule
       | jobAction       | FAIL                                                                                                |
       | jobMode         | DELIVERY                                                                                            |
       | failureReasonId | 18                                                                                                  |
+      | globalShipperId | {shipper-v4-id} |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Delivery fail      |
@@ -1035,16 +983,6 @@ Feature: Reschedule
       | granularStatus  | En-route to Sorting Hub                                   |
       | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].startTime} |
       | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].endTime}   |
-    Then DB Core - verify waypoints record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
-      | seqNo    | null                                                       |
-      | routeId  | null                                                       |
-      | status   | Pending                                                    |
-      | address1 | 116 Keng Lee Rd                                            |
-      | address2 | 15                                                         |
-      | postcode | 308402                                                     |
-      | country  | Singapore                                                  |
-      | city     | Singapore                                                  |
     Then DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | seqNo    | null                                                       |
@@ -1066,13 +1004,13 @@ Feature: Reschedule
       | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].toContact}  |
       | comments | OrderHelper::saveWaypoint                  |
       | seq_no   | 1                                          |
-    When DB Core - operator get waypoints details for "{KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId}"
+    When DB Route - operator get waypoints details for "{KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId}"
     And API Sort - Operator get Addressing Zone with details:
-      | request | {"type": "STANDARD", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
+      | request | {"type": "STANDARD", "latitude": {KEY_ROUTE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_ROUTE_WAYPOINT_DETAILS.longitude}} |
     Then Operator verifies order details on Edit Order V2 page:
       | zone | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
-    And DB Core - verify waypoints record:
-      | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
+    And DB Route - verify waypoints record:
+      | legacyId      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |
 
   @ArchiveRouteCommonV2 @MediumPriority
@@ -1098,8 +1036,9 @@ Feature: Reschedule
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                  |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                          |
@@ -1109,6 +1048,7 @@ Feature: Reschedule
       | jobAction       | FAIL                                                                                                |
       | jobMode         | DELIVERY                                                                                            |
       | failureReasonId | 10                                                                                                  |
+      | globalShipperId | {shipper-v4-id} |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Delivery fail      |
@@ -1181,15 +1121,6 @@ Feature: Reschedule
       | granularStatus  | En-route to Sorting Hub                                   |
       | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].startTime} |
       | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].endTime}   |
-    Then DB Core - verify waypoints record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
-      | seqNo    | null                                                       |
-      | routeId  | null                                                       |
-      | status   | Pending                                                    |
-      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1}                 |
-      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2}                 |
-      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode}                 |
-      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}                  |
     Then DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | seqNo    | null                                                       |
@@ -1210,11 +1141,11 @@ Feature: Reschedule
       | contact  | {KEY_LIST_OF_CREATED_ORDERS[1].toContact}  |
       | comments | OrderHelper::saveWaypoint                  |
       | seq_no   | 1                                          |
-    When DB Core - operator get waypoints details for "{KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId}"
+    When DB Route - operator get waypoints details for "{KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId}"
     And API Sort - Operator get Addressing Zone with details:
-      | request | {"type": "STANDARD", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
+      | request | {"type": "STANDARD", "latitude": {KEY_ROUTE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_ROUTE_WAYPOINT_DETAILS.longitude}} |
     Then Operator verifies order details on Edit Order V2 page:
       | zone | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
-    And DB Core - verify waypoints record:
-      | id            | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
+    And DB Route - verify waypoints record:
+      | legacyId      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[3].waypointId} |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId}                      |

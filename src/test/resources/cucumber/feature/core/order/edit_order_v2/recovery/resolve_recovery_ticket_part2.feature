@@ -57,9 +57,9 @@ Feature: Resolve Recovery Ticket
       | status | CANCELLED |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | Pending                      |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | Pending                      |
     And Operator verify order events on Edit Order V2 page using data below:
       | name            |
       | UPDATE STATUS   |
@@ -337,9 +337,6 @@ Feature: Resolve Recovery Ticket
       | status | PENDING  |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    Then DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | Success                      |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_TRANSACTION.waypointId} |
       | status   | Success                      |
@@ -363,9 +360,6 @@ Feature: Resolve Recovery Ticket
       | startTimeCustom | {KEY_TRANSACTION.startTime}                |
       | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    Then DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | Pending                      |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_TRANSACTION.waypointId} |
       | status   | Pending                      |
@@ -447,9 +441,6 @@ Feature: Resolve Recovery Ticket
       | status | PENDING  |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    Then DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | Success                      |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_TRANSACTION.waypointId} |
       | status   | Success                      |
@@ -473,9 +464,6 @@ Feature: Resolve Recovery Ticket
       | startTimeCustom | {KEY_TRANSACTION.startTime}                |
       | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    Then DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | Pending                      |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_TRANSACTION.waypointId} |
       | status   | Pending                      |
@@ -565,9 +553,6 @@ Feature: Resolve Recovery Ticket
       | status | PENDING  |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    Then DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | Success                      |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_TRANSACTION.waypointId} |
       | status   | Success                      |
@@ -591,9 +576,6 @@ Feature: Resolve Recovery Ticket
       | startTimeCustom | {KEY_TRANSACTION.startTime}                |
       | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    Then DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | Pending                      |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_TRANSACTION.waypointId} |
       | status   | Pending                      |
@@ -671,31 +653,31 @@ Feature: Resolve Recovery Ticket
     And DB Core - verify transactions record:
       | id     | {KEY_PP_TRANSACTION_BEFORE.id} |
       | status | Fail                           |
-    And DB Core - verify waypoints record:
-      | id     | {KEY_PP_TRANSACTION_BEFORE.waypointId} |
-      | status | Fail                                   |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_PP_TRANSACTION_BEFORE.waypointId} |
+      | status   | Fail                                   |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_TRANSACTION_BEFORE"
     And DB Core - verify transactions record:
       | id     | {KEY_DD_TRANSACTION_BEFORE.id} |
       | status | Pending                        |
-    And DB Core - verify waypoints record:
-      | id     | {KEY_DD_TRANSACTION_BEFORE.waypointId} |
-      | status | Pending                                |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_DD_TRANSACTION_BEFORE.waypointId} |
+      | status   | Pending                                |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_PP_TRANSACTION_AFTER"
     And DB Core - verify transactions record:
       | id     | {KEY_PP_TRANSACTION_AFTER.id} |
       | status | Pending                       |
-    And DB Core - verify waypoints record:
-      | id     | {KEY_PP_TRANSACTION_AFTER.waypointId} |
-      | status | Pending                               |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_PP_TRANSACTION_AFTER.waypointId} |
+      | status   | Pending                               |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_TRANSACTION_AFTER"
     And DB Core - verify transactions record:
       | id     | {KEY_DD_TRANSACTION_AFTER.id} |
       | status | Pending                       |
-    And DB Core - verify waypoints record:
-      | id     | {KEY_DD_TRANSACTION_AFTER.waypointId} |
-      | status | Pending                               |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_DD_TRANSACTION_AFTER.waypointId} |
+      | status   | Pending                               |
     And Operator verify order events on Edit Order V2 page using data below:
       | name            |
       | UPDATE STATUS   |
@@ -775,30 +757,30 @@ Feature: Resolve Recovery Ticket
     And DB Core - verify transactions record:
       | id     | {KEY_PP_TRANSACTION_BEFORE.id} |
       | status | Fail                           |
-    And DB Core - verify waypoints record:
-      | id     | {KEY_PP_TRANSACTION_BEFORE.waypointId} |
+    And DB Route - verify waypoints record:
+      | legacyId     | {KEY_PP_TRANSACTION_BEFORE.waypointId} |
       | status | Fail                                   |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_TRANSACTION_BEFORE"
     And DB Core - verify transactions record:
       | id     | {KEY_DD_TRANSACTION_BEFORE.id} |
       | status | Pending                        |
-    And DB Core - verify waypoints record:
-      | id     | {KEY_DD_TRANSACTION_BEFORE.waypointId} |
+    And DB Route - verify waypoints record:
+      | legacyId     | {KEY_DD_TRANSACTION_BEFORE.waypointId} |
       | status | Pending                                |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_PP_TRANSACTION_AFTER"
     And DB Core - verify transactions record:
       | id     | {KEY_PP_TRANSACTION_AFTER.id} |
       | status | Pending                       |
-    And DB Core - verify waypoints record:
-      | id     | {KEY_PP_TRANSACTION_AFTER.waypointId} |
+    And DB Route - verify waypoints record:
+      | legacyId     | {KEY_PP_TRANSACTION_AFTER.waypointId} |
       | status | Pending                               |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_DD_TRANSACTION_AFTER"
     And DB Core - verify transactions record:
       | id     | {KEY_DD_TRANSACTION_AFTER.id} |
       | status | Pending                       |
-    And DB Core - verify waypoints record:
-      | id     | {KEY_DD_TRANSACTION_AFTER.waypointId} |
+    And DB Route - verify waypoints record:
+      | legacyId     | {KEY_DD_TRANSACTION_AFTER.waypointId} |
       | status | Pending                               |
     And Operator verify order events on Edit Order V2 page using data below:
       | name            |

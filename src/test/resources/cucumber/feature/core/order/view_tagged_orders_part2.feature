@@ -24,16 +24,18 @@ Feature: View Tagged Orders
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                      |
-      | routes     | KEY_DRIVER_ROUTES                                                               |
-      | jobType    | TRANSACTION                                                                     |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS"}] |
-      | jobAction  | SUCCESS                                                                         |
-      | jobMode    | PICK_UP                                                                         |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                      |
+      | routes          | KEY_DRIVER_ROUTES                                                               |
+      | jobType         | TRANSACTION                                                                     |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS"}] |
+      | jobAction       | SUCCESS                                                                         |
+      | jobMode         | PICK_UP                                                                         |
+      | globalShipperId | {shipper-v4-id}                                                                 |
     When Operator go to menu Order -> View Tagged Orders
     And Operator selects filter and clicks Load Selection on View Tagged Orders page:
       | orderTags      | {order-tag-name}        |
@@ -131,8 +133,9 @@ Feature: View Tagged Orders
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                 |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                                         |
@@ -142,6 +145,7 @@ Feature: View Tagged Orders
       | jobAction       | FAIL                                                                                               |
       | jobMode         | PICK_UP                                                                                            |
       | failureReasonId | 9                                                                                                  |
+      | globalShipperId | {shipper-v4-id}                                                                                    |
     When Operator go to menu Order -> View Tagged Orders
     And Operator selects filter and clicks Load Selection on View Tagged Orders page:
       | orderTags      | {order-tag-name} |

@@ -206,17 +206,19 @@ Feature: Outbound Monitoring
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[2].id}, "type":"DELIVERY"} |
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     Given API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver van inbound:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                     |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                             |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "SUCCESS" }] |
-      | routes     | KEY_DRIVER_ROUTES                                                                      |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                     |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                             |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "SUCCESS" }] |
+      | routes          | KEY_DRIVER_ROUTES                                                                      |
+      | globalShipperId | {shipper-v4-id}                                                                        |
     When Operator go to menu New Features -> Outbound Monitoring
     When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
       | zoneName | {zone-name-2} |
@@ -252,20 +254,22 @@ Feature: Outbound Monitoring
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[2].id}, "type":"PICKUP"} |
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} |
     And API Driver - Driver van inbound:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                               |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                       |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action": "SUCCESS"}] |
-      | routes     | KEY_DRIVER_ROUTES                                                                |
-      | jobType    | TRANSACTION                                                                      |
-      | jobAction  | SUCCESS                                                                          |
-      | jobMode    | PICK_UP                                                                          |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                               |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                       |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action": "SUCCESS"}] |
+      | routes          | KEY_DRIVER_ROUTES                                                                |
+      | jobType         | TRANSACTION                                                                      |
+      | jobAction       | SUCCESS                                                                          |
+      | jobMode         | PICK_UP                                                                          |
+      | globalShipperId | {shipper-v4-id}                                                                  |
     When Operator go to menu New Features -> Outbound Monitoring
     When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
       | zoneName | {zone-name-2} |
@@ -338,8 +342,9 @@ Feature: Outbound Monitoring
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     Given API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver van inbound:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
@@ -353,6 +358,7 @@ Feature: Outbound Monitoring
       | jobAction       | FAIL                                                                                                 |
       | jobMode         | DELIVERY                                                                                             |
       | failureReasonId | 139                                                                                                  |
+      | globalShipperId | {shipper-v4-id}                                                                                      |
     And API Core - Operator reschedule order:
       | orderId           | {KEY_LIST_OF_CREATED_ORDERS[1].id}        |
       | rescheduleRequest | {"date":"{date: 0 days ago, yyyy-MM-dd}"} |
@@ -470,11 +476,11 @@ Feature: Outbound Monitoring
       | id      | {KEY_TRANSACTION.id} |
       | status  | Pending              |
       | routeId | null                 |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId} |
-      | status  | Pending                      |
-      | routeId | null                         |
-      | seqNo   | null                         |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | Pending                      |
+      | routeId  | null                         |
+      | seqNo    | null                         |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order event on Edit Order V2 page using data below:
       | name    | PULL OUT OF ROUTE                  |
@@ -484,11 +490,11 @@ Feature: Outbound Monitoring
       | id      | {KEY_TRANSACTION.id} |
       | status  | Pending              |
       | routeId | null                 |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId} |
-      | status  | Pending                      |
-      | routeId | null                         |
-      | seqNo   | null                         |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | Pending                      |
+      | routeId  | null                         |
+      | seqNo    | null                         |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
     Then Operator verify order event on Edit Order V2 page using data below:
       | name    | PULL OUT OF ROUTE                  |
@@ -515,8 +521,9 @@ Feature: Outbound Monitoring
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                                                                                     |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                    |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId},{KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
     And API Driver - Driver van inbound:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
@@ -525,10 +532,11 @@ Feature: Outbound Monitoring
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                        |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action": "SUCCESS" }] |
-      | routes     | KEY_DRIVER_ROUTES                                                                 |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                        |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action": "SUCCESS" }] |
+      | routes          | KEY_DRIVER_ROUTES                                                                 |
+      | globalShipperId | {shipper-v4-id}                                                                   |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                   |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId}                                           |
@@ -538,6 +546,7 @@ Feature: Outbound Monitoring
       | jobAction       | FAIL                                                                                                 |
       | jobMode         | DELIVERY                                                                                             |
       | failureReasonId | 139                                                                                                  |
+      | globalShipperId | {shipper-v4-id}                                                                                      |
     Given Operator go to menu New Features -> Outbound Monitoring
     When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
       | zoneName | {zone-name} |
@@ -580,18 +589,20 @@ Feature: Outbound Monitoring
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver van inbound:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                        |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action": "SUCCESS" }] |
-      | routes     | KEY_DRIVER_ROUTES                                                                 |
-    # 2nd Order/Route
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                        |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action": "SUCCESS" }] |
+      | routes          | KEY_DRIVER_ROUTES                                                                 |
+      | globalShipperId | {shipper-v4-id}                                                                   |
+      # 2nd Order/Route
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id-2}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator add parcel to the route using data below:
@@ -626,11 +637,11 @@ Feature: Outbound Monitoring
       | id      | {KEY_TRANSACTION.id} |
       | status  | Pending              |
       | routeId | null                 |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId} |
-      | status  | Pending                      |
-      | routeId | null                         |
-      | seqNo   | null                         |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | Pending                      |
+      | routeId  | null                         |
+      | seqNo    | null                         |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
     Then Operator verify order event on Edit Order V2 page using data below:
       | name    | PULL OUT OF ROUTE                  |
@@ -683,11 +694,11 @@ Feature: Outbound Monitoring
       | id      | {KEY_TRANSACTION.id} |
       | status  | Pending              |
       | routeId | null                 |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId} |
-      | status  | Pending                      |
-      | routeId | null                         |
-      | seqNo   | null                         |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | Pending                      |
+      | routeId  | null                         |
+      | seqNo    | null                         |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verify order event on Edit Order V2 page using data below:
       | name    | PULL OUT OF ROUTE                  |

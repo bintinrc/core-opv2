@@ -51,11 +51,6 @@ Feature: ID - Order COD Limit
     And DB Core - verify transactions record:
       | id      | {KEY_TRANSACTION.id}               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}       |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | seqNo   | not null                           |
-      | status  | Routed                             |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_TRANSACTION.waypointId}       |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
@@ -163,11 +158,6 @@ Feature: ID - Order COD Limit
     And DB Core - verify transactions record:
       | id      | {KEY_TRANSACTION.id}               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}       |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | seqNo   | not null                           |
-      | status  | Routed                             |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_TRANSACTION.waypointId}       |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
@@ -249,11 +239,6 @@ Feature: ID - Order COD Limit
     And DB Core - verify transactions record:
       | id      | {KEY_TRANSACTION.id}               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}       |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | seqNo   | not null                           |
-      | status  | Routed                             |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_TRANSACTION.waypointId}       |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
@@ -819,11 +804,6 @@ Feature: ID - Order COD Limit
     And DB Core - verify transactions record:
       | id      | {KEY_TRANSACTION.id}               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}       |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | seqNo   | not null                           |
-      | status  | Routed                             |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_TRANSACTION.waypointId}       |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
@@ -1007,11 +987,6 @@ Feature: ID - Order COD Limit
     And DB Core - verify transactions record:
       | id      | {KEY_TRANSACTION.id}               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}       |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | seqNo   | not null                           |
-      | status  | Routed                             |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_TRANSACTION.waypointId}       |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
@@ -1187,11 +1162,6 @@ Feature: ID - Order COD Limit
     And DB Core - verify transactions record:
       | id      | {KEY_TRANSACTION.id}               |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION.waypointId}       |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | seqNo   | not null                           |
-      | status  | Routed                             |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_TRANSACTION.waypointId}       |
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |

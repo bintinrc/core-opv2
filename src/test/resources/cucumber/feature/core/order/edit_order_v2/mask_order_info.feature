@@ -302,8 +302,9 @@ Feature: Mask Order Info
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                  |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                          |
@@ -313,6 +314,7 @@ Feature: Mask Order Info
       | jobAction       | FAIL                                                                                                |
       | jobMode         | DELIVERY                                                                                            |
       | failureReasonId | 18                                                                                                  |
+      | globalShipperId | {shipper-v4-id}                                                                                     |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Delivery fail      |
@@ -374,8 +376,9 @@ Feature: Mask Order Info
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                  |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                          |
@@ -385,6 +388,7 @@ Feature: Mask Order Info
       | jobAction       | FAIL                                                                                                |
       | jobMode         | DELIVERY                                                                                            |
       | failureReasonId | 18                                                                                                  |
+      | globalShipperId | {shipper-v4-id}                                                                                     |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Delivery fail      |
@@ -445,8 +449,9 @@ Feature: Mask Order Info
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                  |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                          |
@@ -456,6 +461,7 @@ Feature: Mask Order Info
       | jobAction       | FAIL                                                                                                |
       | jobMode         | DELIVERY                                                                                            |
       | failureReasonId | 18                                                                                                  |
+      | globalShipperId | {shipper-v4-id}                                                                                     |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Delivery fail      |
@@ -525,8 +531,9 @@ Feature: Mask Order Info
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                  |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                          |
@@ -536,6 +543,7 @@ Feature: Mask Order Info
       | jobAction       | FAIL                                                                                                |
       | jobMode         | DELIVERY                                                                                            |
       | failureReasonId | 18                                                                                                  |
+      | globalShipperId | {shipper-v4-id}                                                                                     |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verifies order details on Edit Order V2 page:
       | status         | Delivery fail      |
@@ -663,13 +671,13 @@ Feature: Mask Order Info
       | top | Delivery details updated |
     When Operator refresh page
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | name    | New name                                                                                                                                                  |
-      | contact | Click to reveal (tracked)0004                                                                                                                             |
+      | name    | New name                                                                   |
+      | contact | Click to reveal (tracked)0004                                              |
       | address | Click to reveal (tracked)WALK Click to reveal (tracked)address 2 102600 SG |
     And Operator verify transaction on Edit Order V2 page using data below:
-      | type               | DELIVERY                                                                                                                                                  |
-      | name               | New name                                                                                                                                                  |
-      | contact            | Click to reveal (tracked)0004                                                                                                                             |
+      | type               | DELIVERY                                                                   |
+      | name               | New name                                                                   |
+      | contact            | Click to reveal (tracked)0004                                              |
       | destinationAddress | Click to reveal (tracked)WALK Click to reveal (tracked)address 2 SG 102600 |
     When Operator unmask Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:
@@ -697,11 +705,11 @@ Feature: Mask Order Info
       | status         | Transit                |
       | granularStatus | Arrived at Sorting Hub |
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | contact | Click to reveal (tracked)0004                                                                                                                             |
+      | contact | Click to reveal (tracked)0004                                              |
       | address | Click to reveal (tracked)WALK Click to reveal (tracked)address 2 102600 SG |
     And Operator verify transaction on Edit Order V2 page using data below:
-      | type               | DELIVERY                                                                                                                                                  |
-      | contact            | Click to reveal (tracked)0004                                                                                                                             |
+      | type               | DELIVERY                                                                   |
+      | contact            | Click to reveal (tracked)0004                                              |
       | destinationAddress | Click to reveal (tracked)WALK Click to reveal (tracked)address 2 SG 102600 |
     When Operator unmask Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:
@@ -725,11 +733,11 @@ Feature: Mask Order Info
       | top | Delivery details updated |
     When Operator refresh page
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | contact | Click to reveal (tracked)5678                                                                                                                                    |
+      | contact | Click to reveal (tracked)5678                            |
       | address | Click to reveal (tracked)home 439888 Singapore Singapore |
     And Operator verify transaction on Edit Order V2 page using data below:
-      | type               | DELIVERY                                                                                                                                                         |
-      | contact            | Click to reveal (tracked)5678                                                                                                                                    |
+      | type               | DELIVERY                                                 |
+      | contact            | Click to reveal (tracked)5678                            |
       | destinationAddress | Click to reveal (tracked)home Singapore Singapore 439888 |
     When Operator unmask Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:

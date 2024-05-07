@@ -73,8 +73,8 @@ Feature: RTS
     And DB Core - verify transactions record:
       | id     | {KEY_TRANSACTION.id} |
       | status | Fail                 |
-    And DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
+    And DB Route - verify waypoints record:
+      | legacyId     | {KEY_TRANSACTION.waypointId} |
       | status | Routed                       |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
@@ -98,11 +98,11 @@ Feature: RTS
       | rts             | 1                                          |
       | startTimeCustom | {KEY_TRANSACTION.startTime}                |
       | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
-    When DB Core - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
+    When DB Route - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
     And API Sort - Operator get Addressing Zone with details:
-      | request | {"type": "RTS", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
-    And DB Core - verify waypoints record:
-      | id            | {KEY_TRANSACTION.waypointId}                 |
+      | request | {"type": "RTS", "latitude": {KEY_ROUTE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_ROUTE_WAYPOINT_DETAILS.longitude}} |
+    And DB Route - verify waypoints record:
+      | legacyId            | {KEY_TRANSACTION.waypointId}                 |
       | status        | Pending                                      |
       | routeId       | null                                         |
       | seqNo         | null                                         |
@@ -183,11 +183,11 @@ Feature: RTS
       | rts             | 1                                          |
       | startTimeCustom | {KEY_TRANSACTION.startTime}                |
       | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
-    When DB Core - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
+    When DB Route - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
     And API Sort - Operator get Addressing Zone with details:
-      | request | {"type": "RTS", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
-    And DB Core - verify waypoints record:
-      | id            | {KEY_TRANSACTION.waypointId}                 |
+      | request | {"type": "RTS", "latitude": {KEY_ROUTE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_ROUTE_WAYPOINT_DETAILS.longitude}} |
+    And DB Route - verify waypoints record:
+      | legacyId            | {KEY_TRANSACTION.waypointId}                 |
       | status        | Pending                                      |
       | routeId       | null                                         |
       | seqNo         | null                                         |
@@ -271,8 +271,8 @@ Feature: RTS
       | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2}   |
       | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode}   |
       | country  | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}    |
-    And DB Core - verify waypoints record:
-      | id       | {KEY_TRANSACTION.waypointId}                 |
+    And DB Route - verify waypoints record:
+      | legacyId       | {KEY_TRANSACTION.waypointId}                 |
       | status   | Pending                                      |
       | routeId  | null                                         |
       | seqNo    | null                                         |
@@ -362,8 +362,8 @@ Feature: RTS
       | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].fromAddress2}   |
       | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode}   |
       | country  | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}    |
-    And DB Core - verify waypoints record:
-      | id       | {KEY_TRANSACTION.waypointId}                 |
+    And DB Route - verify waypoints record:
+      | legacyId       | {KEY_TRANSACTION.waypointId}                 |
       | status   | Pending                                      |
       | routeId  | null                                         |
       | seqNo    | null                                         |
@@ -532,8 +532,8 @@ Feature: RTS
       | postcode   | 439888                             |
       | city       | Singapore                          |
       | country    | Singapore                          |
-    Then DB Core - verify waypoints record:
-      | id      | {KEY_TRANSACTION_AFTER.waypointId} |
+    Then DB Route - verify waypoints record:
+      | legacyId      | {KEY_TRANSACTION_AFTER.waypointId} |
       | seqNo   | null                               |
       | routeId | null                               |
       | status  | Pending                            |
@@ -547,13 +547,13 @@ Feature: RTS
       | rts             | 1                                          |
       | startTimeCustom | {KEY_TRANSACTION_AFTER.startTime}          |
       | endTimeCustom   | {KEY_TRANSACTION_AFTER.endTime}            |
-    When DB Core - operator get waypoints details for "{KEY_TRANSACTION_AFTER.waypointId}"
+    When DB Route - operator get waypoints details for "{KEY_TRANSACTION_AFTER.waypointId}"
     And API Sort - Operator get Addressing Zone with details:
-      | request | {"type": "RTS", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
+      | request | {"type": "RTS", "latitude": {KEY_ROUTE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_ROUTE_WAYPOINT_DETAILS.longitude}} |
     Then Operator verifies order details on Edit Order V2 page:
       | zone | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
-    And DB Core - verify waypoints record:
-      | id            | {KEY_TRANSACTION_AFTER.waypointId}    |
+    And DB Route - verify waypoints record:
+      | legacyId            | {KEY_TRANSACTION_AFTER.waypointId}    |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId} |
 
   @ArchiveRouteCommonV2 @MediumPriority
@@ -608,8 +608,8 @@ Feature: RTS
       | address2   | addsrt                             |
       | postcode   | 757995                             |
       | country    | SG                                 |
-    And DB Core - verify waypoints record:
-      | id       | {KEY_TRANSACTION.waypointId} |
+    And DB Route - verify waypoints record:
+      | legacyId       | {KEY_TRANSACTION.waypointId} |
       | status   | Pending                      |
       | routeId  | null                         |
       | seqNo    | null                         |

@@ -31,9 +31,9 @@ Feature: Manual Update Order Status
       | MANUAL ACTION | UPDATE STATUS | <description> |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | <pickupWpStatus>             |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | <pickupWpStatus>             |
     And DB Routing Search - verify transactions record:
       | txnId          | {KEY_TRANSACTION.id}                       |
       | txnType        | PICKUP                                     |
@@ -42,9 +42,9 @@ Feature: Manual Update Order Status
       | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | granularStatus | Staging                                    |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | <deliveryWpStatus>           |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | <deliveryWpStatus>           |
     And DB Routing Search - verify transactions record:
       | txnId          | {KEY_TRANSACTION.id}                       |
       | txnType        | DELIVERY                                   |
@@ -88,9 +88,9 @@ Feature: Manual Update Order Status
       | MANUAL ACTION | UPDATE STATUS | <description> |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | <pickupWpStatus>             |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | <pickupWpStatus>             |
     And DB Routing Search - verify transactions record:
       | txnId          | {KEY_TRANSACTION.id}                       |
       | txnType        | PICKUP                                     |
@@ -99,9 +99,9 @@ Feature: Manual Update Order Status
       | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | granularStatus | Pending Pickup                             |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | <deliveryWpStatus>           |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | <deliveryWpStatus>           |
     And DB Routing Search - verify transactions record:
       | txnId          | {KEY_TRANSACTION.id}                       |
       | txnType        | DELIVERY                                   |
@@ -150,9 +150,9 @@ Feature: Manual Update Order Status
       | MANUAL ACTION | UPDATE STATUS | <description> |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | <pickupWpStatus>             |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | <pickupWpStatus>             |
     And DB Routing Search - verify transactions record:
       | txnId          | {KEY_TRANSACTION.id}                       |
       | txnType        | PICKUP                                     |
@@ -161,9 +161,9 @@ Feature: Manual Update Order Status
       | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | granularStatus | Pending Pickup                             |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | <deliveryWpStatus>           |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | <deliveryWpStatus>           |
     And DB Routing Search - verify transactions record:
       | txnId          | {KEY_TRANSACTION.id}                       |
       | txnType        | DELIVERY                                   |
@@ -201,9 +201,9 @@ Feature: Manual Update Order Status
       | MANUAL ACTION | UPDATE STATUS | <description> |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | <pickupWpStatus>             |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | <pickupWpStatus>             |
     And DB Routing Search - verify transactions record:
       | txnId          | {KEY_TRANSACTION.id}                       |
       | txnType        | PICKUP                                     |
@@ -212,9 +212,9 @@ Feature: Manual Update Order Status
       | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | granularStatus | Van en-route to pickup                     |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | <deliveryWpStatus>           |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | <deliveryWpStatus>           |
     And DB Routing Search - verify transactions record:
       | txnId          | {KEY_TRANSACTION.id}                       |
       | txnType        | DELIVERY                                   |
@@ -252,9 +252,9 @@ Feature: Manual Update Order Status
       | MANUAL ACTION | UPDATE STATUS | <description> |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | <pickupWpStatus>             |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | <pickupWpStatus>             |
     And DB Routing Search - verify transactions record:
       | txnId          | {KEY_TRANSACTION.id}                       |
       | txnType        | PICKUP                                     |
@@ -263,9 +263,9 @@ Feature: Manual Update Order Status
       | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | granularStatus | En-route to Sorting Hub                    |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | <deliveryWpStatus>           |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | <deliveryWpStatus>           |
     And DB Routing Search - verify transactions record:
       | txnId          | {KEY_TRANSACTION.id}                       |
       | txnType        | DELIVERY                                   |
@@ -304,9 +304,9 @@ Feature: Manual Update Order Status
       | MANUAL ACTION | UPDATE STATUS | <description> |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | <pickupWpStatus>             |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | <pickupWpStatus>             |
     And DB Routing Search - verify transactions record:
       | txnId          | {KEY_TRANSACTION.id}                       |
       | txnType        | PICKUP                                     |
@@ -315,9 +315,9 @@ Feature: Manual Update Order Status
       | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | granularStatus | Pickup fail                                |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | <deliveryWpStatus>           |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | <deliveryWpStatus>           |
     And DB Routing Search - verify transactions record:
       | txnId          | {KEY_TRANSACTION.id}                       |
       | txnType        | DELIVERY                                   |
@@ -355,9 +355,9 @@ Feature: Manual Update Order Status
       | MANUAL ACTION | UPDATE STATUS | <description> |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | <pickupWpStatus>             |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | <pickupWpStatus>             |
     And DB Routing Search - verify transactions record:
       | txnId          | {KEY_TRANSACTION.id}                       |
       | txnType        | PICKUP                                     |
@@ -366,9 +366,9 @@ Feature: Manual Update Order Status
       | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | granularStatus | Arrived at Sorting Hub                     |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | <deliveryWpStatus>           |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | <deliveryWpStatus>           |
     And DB Routing Search - verify transactions record:
       | txnId          | {KEY_TRANSACTION.id}                       |
       | txnType        | DELIVERY                                   |
@@ -406,9 +406,9 @@ Feature: Manual Update Order Status
       | MANUAL ACTION | UPDATE STATUS | <description> |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | <pickupWpStatus>             |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | <pickupWpStatus>             |
     And DB Routing Search - verify transactions record:
       | txnId          | {KEY_TRANSACTION.id}                       |
       | txnType        | PICKUP                                     |
@@ -417,9 +417,9 @@ Feature: Manual Update Order Status
       | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | granularStatus | Arrived at Origin Hub                      |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | <deliveryWpStatus>           |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | <deliveryWpStatus>           |
     And DB Routing Search - verify transactions record:
       | txnId          | {KEY_TRANSACTION.id}                       |
       | txnType        | DELIVERY                                   |
@@ -457,9 +457,9 @@ Feature: Manual Update Order Status
       | MANUAL ACTION | UPDATE STATUS | <description> |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | <pickupWpStatus>             |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | <pickupWpStatus>             |
     And DB Routing Search - verify transactions record:
       | txnId          | {KEY_TRANSACTION.id}                       |
       | txnType        | PICKUP                                     |
@@ -468,9 +468,9 @@ Feature: Manual Update Order Status
       | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | granularStatus | Pending Pickup at Distribution Point       |
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    And DB Core - verify waypoints record:
-      | id     | {KEY_TRANSACTION.waypointId} |
-      | status | <deliveryWpStatus>           |
+    And DB Route - verify waypoints record:
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | <deliveryWpStatus>           |
     And DB Routing Search - verify transactions record:
       | txnId          | {KEY_TRANSACTION.id}                       |
       | txnType        | DELIVERY                                   |

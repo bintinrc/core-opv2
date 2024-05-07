@@ -39,16 +39,18 @@ Feature: Route Manifest
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[3].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                                                                                     |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                    |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId},{KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                      |
-      | routes     | KEY_DRIVER_ROUTES                                                               |
-      | jobType    | TRANSACTION                                                                     |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS"}] |
-      | jobAction  | SUCCESS                                                                         |
-      | jobMode    | DELIVERY                                                                        |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                      |
+      | routes          | KEY_DRIVER_ROUTES                                                               |
+      | jobType         | TRANSACTION                                                                     |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS"}] |
+      | jobAction       | SUCCESS                                                                         |
+      | jobMode         | DELIVERY                                                                        |
+      | globalShipperId | {shipper-v4-id}                                                                 |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                 |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId}                                         |
@@ -58,6 +60,7 @@ Feature: Route Manifest
       | jobAction       | FAIL                                                                                               |
       | jobMode         | DELIVERY                                                                                           |
       | failureReasonId | 6                                                                                                  |
+      | globalShipperId | {shipper-v4-id}                                                                                    |
     When Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And Operator verify Route summary Parcel count on Route Manifest page:
       |            | Pending | Success | Failure | All |
@@ -103,8 +106,9 @@ Feature: Route Manifest
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                                                                                     |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                    |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId},{KEY_LIST_OF_CREATED_ORDERS[2].transactions[1].waypointId} |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                   |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId}                                           |
@@ -114,14 +118,16 @@ Feature: Route Manifest
       | jobAction       | FAIL                                                                                                 |
       | jobMode         | PICK_UP                                                                                              |
       | failureReasonId | 139                                                                                                  |
+      | globalShipperId | {shipper-v4-id}                                                                                      |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[1].waypointId}                      |
-      | routes     | KEY_DRIVER_ROUTES                                                               |
-      | jobType    | TRANSACTION                                                                     |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}", "action":"SUCCESS"}] |
-      | jobAction  | SUCCESS                                                                         |
-      | jobMode    | PICK_UP                                                                         |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[1].waypointId}                      |
+      | routes          | KEY_DRIVER_ROUTES                                                               |
+      | jobType         | TRANSACTION                                                                     |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}", "action":"SUCCESS"}] |
+      | jobAction       | SUCCESS                                                                         |
+      | jobMode         | PICK_UP                                                                         |
+      | globalShipperId | {shipper-v4-id}                                                                 |
     When Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And Operator verify Route summary Parcel count on Route Manifest page:
       |         | Pending | Success | Failure | All |
@@ -193,16 +199,18 @@ Feature: Route Manifest
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[3].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                                                                                     |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                    |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId},{KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                      |
-      | routes     | KEY_DRIVER_ROUTES                                                               |
-      | jobType    | TRANSACTION                                                                     |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS"}] |
-      | jobAction  | SUCCESS                                                                         |
-      | jobMode    | DELIVERY                                                                        |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                      |
+      | routes          | KEY_DRIVER_ROUTES                                                               |
+      | jobType         | TRANSACTION                                                                     |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS"}] |
+      | jobAction       | SUCCESS                                                                         |
+      | jobMode         | DELIVERY                                                                        |
+      | globalShipperId | {shipper-v4-id}                                                                 |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                 |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId}                                         |
@@ -212,6 +220,7 @@ Feature: Route Manifest
       | jobAction       | FAIL                                                                                               |
       | jobMode         | DELIVERY                                                                                           |
       | failureReasonId | 6                                                                                                  |
+      | globalShipperId | {shipper-v4-id}                                                                                    |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                   |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[4].transactions[1].waypointId}                                           |
@@ -221,14 +230,16 @@ Feature: Route Manifest
       | jobAction       | FAIL                                                                                                 |
       | jobMode         | PICK_UP                                                                                              |
       | failureReasonId | 139                                                                                                  |
+      | globalShipperId | {shipper-v4-id}                                                                                      |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[5].transactions[1].waypointId}                      |
-      | routes     | KEY_DRIVER_ROUTES                                                               |
-      | jobType    | TRANSACTION                                                                     |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[5]}", "action":"SUCCESS"}] |
-      | jobAction  | SUCCESS                                                                         |
-      | jobMode    | PICK_UP                                                                         |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[5].transactions[1].waypointId}                      |
+      | routes          | KEY_DRIVER_ROUTES                                                               |
+      | jobType         | TRANSACTION                                                                     |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[5]}", "action":"SUCCESS"}] |
+      | jobAction       | SUCCESS                                                                         |
+      | jobMode         | PICK_UP                                                                         |
+      | globalShipperId | {shipper-v4-id}                                                                 |
     When Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And Operator verify Route summary Parcel count on Route Manifest page:
       |            | Pending | Success | Failure | All |
@@ -310,8 +321,9 @@ Feature: Route Manifest
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}               |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId} |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                               |
       | waypointId      | {KEY_LIST_OF_CREATED_RESERVATIONS[1].waypointId}                                 |
@@ -374,10 +386,13 @@ Feature: Route Manifest
       | generateAddress | RANDOM              |
     And API Control - Operator create pickup appointment job with data below:
       | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId": {KEY_LIST_OF_CREATED_ADDRESSES[1].id} }, "pickupService":{ "level":"Standard", "type":"Scheduled"}, "pickupTimeslot":{ "ready":"{date: 1 days next, YYYY-MM-dd}T09:00:00+08:00", "latest":"{date: 1 days next, YYYY-MM-dd}T12:00:00+08:00"}, "pickupApproxVolume":"Less than 10 Parcels"} |
+    And DB Route - wait until job_waypoints table is populated for job id "{KEY_CONTROL_CREATED_PA_JOBS[1].id}"
     And API Control - Operator create pickup appointment job with data below:
       | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId": {KEY_LIST_OF_CREATED_ADDRESSES[2].id} }, "pickupService":{ "level":"Standard", "type":"Scheduled"}, "pickupTimeslot":{ "ready":"{date: 1 days next, YYYY-MM-dd}T09:00:00+08:00", "latest":"{date: 1 days next, YYYY-MM-dd}T12:00:00+08:00"}, "pickupApproxVolume":"Less than 10 Parcels"} |
+    And DB Route - wait until job_waypoints table is populated for job id "{KEY_CONTROL_CREATED_PA_JOBS[2].id}"
     And API Control - Operator create pickup appointment job with data below:
       | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId": {KEY_LIST_OF_CREATED_ADDRESSES[3].id} }, "pickupService":{ "level":"Standard", "type":"Scheduled"}, "pickupTimeslot":{ "ready":"{date: 1 days next, YYYY-MM-dd}T09:00:00+08:00", "latest":"{date: 1 days next, YYYY-MM-dd}T12:00:00+08:00"}, "pickupApproxVolume":"Less than 10 Parcels"} |
+    And DB Route - wait until job_waypoints table is populated for job id "{KEY_CONTROL_CREATED_PA_JOBS[3].id}"
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Core - Operator bulk add pickup jobs to the route using data below:
@@ -386,8 +401,9 @@ Feature: Route Manifest
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     When API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                  |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | expectedWaypointIds | {KEY_WAYPOINT_ID}                  |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | waypointId      | {KEY_WAYPOINT_ID}                  |
@@ -397,15 +413,17 @@ Feature: Route Manifest
       | jobAction       | FAIL                               |
       | jobMode         | PICK_UP                            |
       | failureReasonId | 1472                               |
+      | globalShipperId | {shipper-v4-id}                    |
     And DB Route - get waypoint id for job id "{KEY_CONTROL_CREATED_PA_JOBS[2].id}"
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | waypointId | {KEY_WAYPOINT_ID}                  |
-      | routes     | KEY_DRIVER_ROUTES                  |
-      | parcels    | []                                 |
-      | jobType    | PICKUP_APPOINTMENT                 |
-      | jobAction  | SUCCESS                            |
-      | jobMode    | PICK_UP                            |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | waypointId      | {KEY_WAYPOINT_ID}                  |
+      | routes          | KEY_DRIVER_ROUTES                  |
+      | parcels         | []                                 |
+      | jobType         | PICKUP_APPOINTMENT                 |
+      | jobAction       | SUCCESS                            |
+      | jobMode         | PICK_UP                            |
+      | globalShipperId | {shipper-v4-id}                    |
     When Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And Operator verify Route summary Waypoint type on Route Manifest page:
       |                   | Pending | Success | Failure | All |
@@ -468,19 +486,21 @@ Feature: Route Manifest
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[3].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[3].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                                                                                     |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                    |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId},{KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
     Then DB DP - get DP job order with order "{KEY_LIST_OF_CREATED_ORDERS[1].id}" and status "PENDING"
     When API DP - DP user authenticate with username "{dp-user-username}" password "{dp-user-password}" and dp id "{dp-id}"
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                                        |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                                                                                                                                |
-      | parcels    | [{"tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","rts":false,"id":{KEY_LIST_OF_CREATED_ORDERS[1].id},"dp_job_id":{KEY_DP_LIST_OF_DP_JOB_ORDERS[1].dpJobId},"status":"PENDING","action":"SUCCESS"}] |
-      | routes     | KEY_DRIVER_ROUTES                                                                                                                                                                                         |
-      | jobType    | TRANSACTION                                                                                                                                                                                               |
-      | jobAction  | SUCCESS                                                                                                                                                                                                   |
-      | jobMode    | DELIVERY                                                                                                                                                                                                  |
-      | dpId       | {dp-id}                                                                                                                                                                                                   |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                                        |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                                                                                                                                |
+      | parcels         | [{"tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","rts":false,"id":{KEY_LIST_OF_CREATED_ORDERS[1].id},"dp_job_id":{KEY_DP_LIST_OF_DP_JOB_ORDERS[1].dpJobId},"status":"PENDING","action":"SUCCESS"}] |
+      | routes          | KEY_DRIVER_ROUTES                                                                                                                                                                                         |
+      | jobType         | TRANSACTION                                                                                                                                                                                               |
+      | jobAction       | SUCCESS                                                                                                                                                                                                   |
+      | jobMode         | DELIVERY                                                                                                                                                                                                  |
+      | dpId            | {dp-id}                                                                                                                                                                                                   |
+      | globalShipperId | {shipper-v4-id}                                                                                                                                                                                           |
     Then DB DP - get DP job order with order "{KEY_LIST_OF_CREATED_ORDERS[2].id}" and status "PENDING"
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                                                           |
@@ -492,6 +512,7 @@ Feature: Route Manifest
       | jobMode         | DELIVERY                                                                                                                                                                                                                     |
       | dpId            | {dp-id}                                                                                                                                                                                                                      |
       | failureReasonId | 6                                                                                                                                                                                                                            |
+      | globalShipperId | {shipper-v4-id}                                                                                                                                                                                                              |
     When Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And Operator verify Route summary Parcel count on Route Manifest page:
       |            | Pending | Success | Failure | All |
@@ -606,17 +627,19 @@ Feature: Route Manifest
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                        |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
+      | expectedWaypointIds | {KEY_LIST_OF_RESERVATIONS[1].waypointId} |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                    |
-      | waypointId | {KEY_LIST_OF_RESERVATIONS[1].waypointId}                                              |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "SUCCESS"}] |
-      | routes     | KEY_DRIVER_ROUTES                                                                     |
-      | jobType    | RESERVATION                                                                           |
-      | jobAction  | SUCCESS                                                                               |
-      | jobMode    | PICK_UP                                                                               |
-      | dpId       | {dp-id}                                                                               |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                    |
+      | waypointId      | {KEY_LIST_OF_RESERVATIONS[1].waypointId}                                              |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "SUCCESS"}] |
+      | routes          | KEY_DRIVER_ROUTES                                                                     |
+      | jobType         | RESERVATION                                                                           |
+      | jobAction       | SUCCESS                                                                               |
+      | jobMode         | PICK_UP                                                                               |
+      | dpId            | {dp-id}                                                                               |
+      | globalShipperId | {shipper-v4-id}                                                                       |
      #FAIL second reservation
     When API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
@@ -635,8 +658,9 @@ Feature: Route Manifest
     And API Driver - Driver login with username "{ninja-driver-username}" and "{ninja-driver-password}"
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                        |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
+      | expectedWaypointIds | {KEY_LIST_OF_RESERVATIONS[2].waypointId} |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                        |
       | waypointId      | {KEY_LIST_OF_RESERVATIONS[2].waypointId}                                                                  |
@@ -647,7 +671,8 @@ Feature: Route Manifest
       | jobMode         | PICK_UP                                                                                                   |
       | dpId            | {dp-id}                                                                                                   |
       | failureReasonId | 6                                                                                                         |
-      #pending third
+      | globalShipperId | {shipper-v4-id}                                                                                           |
+        #pending third
     When API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
       | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
@@ -710,16 +735,18 @@ Feature: Route Manifest
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                          |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                  |
-      | routes     | KEY_DRIVER_ROUTES                                                                           |
-      | jobType    | TRANSACTION                                                                                 |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS", "cod":100 }] |
-      | jobAction  | SUCCESS                                                                                     |
-      | jobMode    | DELIVERY                                                                                    |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                          |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                  |
+      | routes          | KEY_DRIVER_ROUTES                                                                           |
+      | jobType         | TRANSACTION                                                                                 |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS", "cod":100 }] |
+      | jobAction       | SUCCESS                                                                                     |
+      | jobMode         | DELIVERY                                                                                    |
+      | globalShipperId | {shipper-v4-id}                                                                             |
     When Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And Operator verify Route summary COD collection on Route Manifest page:
       |           | Amount |
@@ -750,8 +777,9 @@ Feature: Route Manifest
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                 |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                                         |
@@ -761,6 +789,7 @@ Feature: Route Manifest
       | jobAction       | FAIL                                                                                               |
       | jobMode         | DELIVERY                                                                                           |
       | failureReasonId | 6                                                                                                  |
+      | globalShipperId | {shipper-v4-id}                                                                                    |
     When Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And Operator verify Route summary COD collection on Route Manifest page:
       |           | Amount |
@@ -791,16 +820,18 @@ Feature: Route Manifest
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
     And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver read routes:
-      | driverId        | {ninja-driver-id}                  |
-      | expectedRouteId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+      | driverId            | {ninja-driver-id}                                          |
+      | expectedRouteId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | expectedWaypointIds | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
     And API Driver - Driver submit POD:
-      | routeId    | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
-      | waypointId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                      |
-      | routes     | KEY_DRIVER_ROUTES                                                               |
-      | jobType    | TRANSACTION                                                                     |
-      | parcels    | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS"}] |
-      | jobAction  | SUCCESS                                                                         |
-      | jobMode    | DELIVERY                                                                        |
+      | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                              |
+      | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                      |
+      | routes          | KEY_DRIVER_ROUTES                                                               |
+      | jobType         | TRANSACTION                                                                     |
+      | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}", "action":"SUCCESS"}] |
+      | jobAction       | SUCCESS                                                                         |
+      | jobMode         | DELIVERY                                                                        |
+      | globalShipperId | {shipper-v4-id}                                                                 |
     When Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And Operator verify Route summary COD collection on Route Manifest page:
       |           | Amount |

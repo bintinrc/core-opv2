@@ -56,9 +56,9 @@ Feature: Edit Order Details
       | name | UPDATE AV |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    When DB Core - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
+    When DB Route - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
     And API Sort - Operator get Addressing Zone with details:
-      | request | {"type": "STANDARD", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
+      | request | {"type": "STANDARD", "latitude": {KEY_ROUTE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_ROUTE_WAYPOINT_DETAILS.longitude}} |
     And DB Addressing - verify zones record:
       | legacyZoneId | {KEY_SORT_ZONE_INFO.legacyZoneId} |
       | systemId     | sg                                |
@@ -88,8 +88,8 @@ Feature: Edit Order Details
       | granularStatus  | Pending Pickup                             |
       | startTimeCustom | {KEY_TRANSACTION.startTime}                |
       | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
-    And DB Core - verify waypoints record:
-      | id            | {KEY_TRANSACTION.waypointId}      |
+    And DB Route - verify waypoints record:
+      | legacyId      | {KEY_TRANSACTION.waypointId}      |
       | seqNo         | null                              |
       | routeId       | null                              |
       | status        | Pending                           |
@@ -149,9 +149,9 @@ Feature: Edit Order Details
       | name | UPDATE AV |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    When DB Core - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
+    When DB Route - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
     And API Sort - Operator get Addressing Zone with details:
-      | request | {"type": "STANDARD", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
+      | request | {"type": "STANDARD", "latitude": {KEY_ROUTE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_ROUTE_WAYPOINT_DETAILS.longitude}} |
     And DB Addressing - verify zones record:
       | legacyZoneId | {KEY_SORT_ZONE_INFO.legacyZoneId} |
       | systemId     | sg                                |
@@ -181,8 +181,8 @@ Feature: Edit Order Details
       | granularStatus  | Pending Pickup                             |
       | startTimeCustom | {KEY_TRANSACTION.startTime}                |
       | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
-    And DB Core - verify waypoints record:
-      | id            | {KEY_TRANSACTION.waypointId}      |
+    And DB Route - verify waypoints record:
+      | legacyId      | {KEY_TRANSACTION.waypointId}      |
       | seqNo         | null                              |
       | routeId       | null                              |
       | status        | Pending                           |
@@ -245,9 +245,9 @@ Feature: Edit Order Details
       | description | User: AUTO (system AV) (support@ninjavan.co) Address: 9 TUA KONG GREEN \|\|\|\|455384 Address Type: ADDRESS_TYPE_DELIVERY Zone ID: 22861 Destination Hub ID: 387 Lat, Long: 1.3184395712682, 103.925311276846 Address Status: VERIFIED AV Mode (Manual/Auto): MANUAL Source: FROM_SHIPPER |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    When DB Core - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
+    When DB Route - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
     And API Sort - Operator get Addressing Zone with details:
-      | request | {"type": "STANDARD", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
+      | request | {"type": "STANDARD", "latitude": {KEY_ROUTE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_ROUTE_WAYPOINT_DETAILS.longitude}} |
     And DB Addressing - verify zones record:
       | legacyZoneId | {KEY_SORT_ZONE_INFO.legacyZoneId} |
       | systemId     | sg                                |
@@ -277,8 +277,8 @@ Feature: Edit Order Details
       | txnType            | PICKUP                       |
       | startTxnTimeCustom | {KEY_TRANSACTION.startTime}  |
       | endTxnTimeCustom   | {KEY_TRANSACTION.endTime}    |
-    And DB Core - verify waypoints record:
-      | id            | {KEY_TRANSACTION.waypointId} |
+    And DB Route - verify waypoints record:
+      | legacyId      | {KEY_TRANSACTION.waypointId} |
       | seqNo         | null                         |
       | routeId       | null                         |
       | status        | Pending                      |
@@ -357,9 +357,9 @@ Feature: Edit Order Details
       | name | UPDATE AV |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    When DB Core - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
+    When DB Route - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
     And API Sort - Operator get Addressing Zone with details:
-      | request | {"type": "STANDARD", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
+      | request | {"type": "STANDARD", "latitude": {KEY_ROUTE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_ROUTE_WAYPOINT_DETAILS.longitude}} |
     And DB Addressing - verify zones record:
       | legacyZoneId | {KEY_SORT_ZONE_INFO.legacyZoneId} |
       | systemId     | sg                                |
@@ -380,8 +380,8 @@ Feature: Edit Order Details
       | address2   | 15                           |
       | postcode   | 308402                       |
       | country    | Singapore                    |
-    And DB Core - verify waypoints record:
-      | id            | {KEY_TRANSACTION.waypointId}      |
+    And DB Route - verify waypoints record:
+      | legacyId      | {KEY_TRANSACTION.waypointId}      |
       | seqNo         | null                              |
       | routeId       | null                              |
       | status        | Pending                           |
@@ -469,9 +469,9 @@ Feature: Edit Order Details
       | name | UPDATE AV |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    When DB Core - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
+    When DB Route - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
     And API Sort - Operator get Addressing Zone with details:
-      | request | {"type": "STANDARD", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
+      | request | {"type": "STANDARD", "latitude": {KEY_ROUTE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_ROUTE_WAYPOINT_DETAILS.longitude}} |
     And DB Addressing - verify zones record:
       | legacyZoneId | {KEY_SORT_ZONE_INFO.legacyZoneId} |
       | systemId     | sg                                |
@@ -499,8 +499,8 @@ Feature: Edit Order Details
       | granularStatus  | Arrived at Sorting Hub                     |
       | startTimeCustom | {KEY_TRANSACTION.startTime}                |
       | endTimeCustom   | {KEY_TRANSACTION.endTime}                  |
-    And DB Core - verify waypoints record:
-      | id            | {KEY_TRANSACTION.waypointId}       |
+    And DB Route - verify waypoints record:
+      | legacyId      | {KEY_TRANSACTION.waypointId}       |
       | seqNo         | 100                                |
       | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | status        | Routed                             |

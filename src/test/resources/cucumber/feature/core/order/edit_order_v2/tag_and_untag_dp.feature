@@ -68,13 +68,6 @@ Feature: Tag & Untag DP
       | granularStatus  | Pending Pickup                                            |
       | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].startTime} |
       | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].endTime}   |
-    And DB Core - verify waypoints record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | address1 | 501, ORCHARD ROAD, SG, 238880                              |
-      | address2 | 3-4                                                        |
-      | postcode | 238880                                                     |
-      | city     | SG                                                         |
-      | country  | SG                                                         |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | address1 | 501, ORCHARD ROAD, SG, 238880                              |
@@ -134,12 +127,6 @@ Feature: Tag & Untag DP
       | granularStatus  | Pending Pickup                                            |
       | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].startTime} |
       | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].endTime}   |
-    And DB Core - verify waypoints record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1}                 |
-      | address2 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress2}                 |
-      | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].toPostcode}                 |
-      | country  | {KEY_LIST_OF_CREATED_ORDERS[1].toCountry}                  |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | address1 | {KEY_LIST_OF_CREATED_ORDERS[1].toAddress1}                 |
@@ -187,8 +174,8 @@ Feature: Tag & Untag DP
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UPDATE ADDRESS |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And DB Core - verify waypoints record:
-      | id      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+    And DB Route - verify waypoints record:
+      | legacyId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | status  | Routed                                                     |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | seqNo   | not null                                                   |
@@ -241,8 +228,8 @@ Feature: Tag & Untag DP
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UPDATE ADDRESS |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
-    And DB Core - verify waypoints record:
-      | id      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+    And DB Route - verify waypoints record:
+      | legacyId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | status  | Routed                                                     |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | seqNo   | not null                                                   |
@@ -298,8 +285,8 @@ Feature: Tag & Untag DP
       | name | UNASSIGNED FROM DP |
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UPDATE ADDRESS |
-    And DB Core - verify waypoints record:
-      | id      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+    And DB Route - verify waypoints record:
+      | legacyId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | status  | Pending                                                    |
       | routeId | null                                                       |
       | seqNo   | null                                                       |
@@ -430,9 +417,9 @@ Feature: Tag & Untag DP
       | seq_no   | 1                                          |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    When DB Core - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
+    When DB Route - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
     And API Sort - Operator get Addressing Zone with details:
-      | request | {"type": "STANDARD", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
+      | request | {"type": "STANDARD", "latitude": {KEY_ROUTE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_ROUTE_WAYPOINT_DETAILS.longitude}} |
     And DB Addressing - verify zones record:
       | legacyZoneId | {KEY_SORT_ZONE_INFO.legacyZoneId} |
       | systemId     | sg                                |
@@ -453,13 +440,6 @@ Feature: Tag & Untag DP
       | txnStatus       | PENDING                                                    |
       | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].startTime}  |
       | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].endTime}    |
-    And DB Core - verify waypoints record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | address1 | 501, ORCHARD ROAD, SG, 238880                              |
-      | address2 | 3-4                                                        |
-      | postcode | 238880                                                     |
-      | city     | SG                                                         |
-      | country  | SG                                                         |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | address1 | 501, ORCHARD ROAD, SG, 238880                              |
@@ -536,9 +516,9 @@ Feature: Tag & Untag DP
       | seq_no   | 1                                          |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
-    When DB Core - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
+    When DB Route - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
     And API Sort - Operator get Addressing Zone with details:
-      | request | {"type": "STANDARD", "latitude": {KEY_CORE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_CORE_WAYPOINT_DETAILS.longitude}} |
+      | request | {"type": "STANDARD", "latitude": {KEY_ROUTE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_ROUTE_WAYPOINT_DETAILS.longitude}} |
     And DB Addressing - verify zones record:
       | legacyZoneId | {KEY_SORT_ZONE_INFO.legacyZoneId} |
       | systemId     | sg                                |
@@ -560,16 +540,6 @@ Feature: Tag & Untag DP
       | txnStatus       | PENDING                                                    |
       | startTimeCustom | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].startTime}  |
       | endTimeCustom   | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].endTime}    |
-    And DB Core - verify waypoints record:
-      | id       | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | seqNo    | 100                                                        |
-      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
-      | status   | Routed                                                     |
-      | address1 | 501, ORCHARD ROAD, SG, 238880                              |
-      | address2 | 3-4                                                        |
-      | postcode | 238880                                                     |
-      | city     | SG                                                         |
-      | country  | SG                                                         |
     And DB Route - verify waypoints record:
       | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
       | seqNo    | 100                                                        |
