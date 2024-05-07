@@ -107,7 +107,7 @@ Feature: Mask Route Manifest Info
       | status  | Pending                                                                                                                                                                        |
       | address | {KEY_LIST_OF_CREATED_ADDRESSES[1].address1} {KEY_LIST_OF_CREATED_ADDRESSES[1].address2} {KEY_LIST_OF_CREATED_ADDRESSES[1].postcode} {KEY_LIST_OF_CREATED_ADDRESSES[1].country} |
 
-  @deletePickupJob @ArchiveRouteCommonV2 @DeleteOrArchiveRoute @MediumPriority @wip
+  @deletePickupJob @ArchiveRouteCommonV2 @DeleteOrArchiveRoute @MediumPriority
   Scenario: Operator View Unmask Order for PA Job on Route Manifest
     Given API Shipper - Operator get address details using data below:
       | shipperId | {shipper-v4-paj-id}      |
