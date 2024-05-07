@@ -158,7 +158,7 @@ Feature: Route Manifest
       | trackingIds    | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}         |
     And Operator is able to download signature in POP details dialog on Route Manifest page
 
-  @MediumPriority @wip
+  @MediumPriority
   Scenario: Operator View POP for Pending Pickup Appointment Job on Route Manifest
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {shipper-v4-paj-id} |
