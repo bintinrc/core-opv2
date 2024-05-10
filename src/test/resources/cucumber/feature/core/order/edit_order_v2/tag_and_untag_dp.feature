@@ -36,7 +36,7 @@ Feature: Tag & Untag DP
       | toAddress1 | 501, ORCHARD ROAD, SG, 238880      |
       | toAddress2 | 3-4                                |
       | toPostcode | 238880                             |
-      | toCity     | SG                                 |
+      | toCity     | Singapore                          |
       | toCountry  | SG                                 |
     And DB Core - operator verify orders.data.previousDeliveryDetails is updated correctly:
       | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id}         |
@@ -57,7 +57,7 @@ Feature: Tag & Untag DP
       | address1              | 501, ORCHARD ROAD, SG, 238880                              |
       | address2              | 3-4                                                        |
       | postcode              | 238880                                                     |
-      | city                  | SG                                                         |
+      | city                  | Singapore                                                  |
       | country               | SG                                                         |
     And DB Routing Search - verify transactions record:
       | txnId           | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}        |
@@ -73,7 +73,7 @@ Feature: Tag & Untag DP
       | address1 | 501, ORCHARD ROAD, SG, 238880                              |
       | address2 | 3-4                                                        |
       | postcode | 238880                                                     |
-      | city     | SG                                                         |
+      | city     | Singapore                                                  |
       | country  | SG                                                         |
 
   @HighPriority
@@ -175,10 +175,10 @@ Feature: Tag & Untag DP
       | name | UPDATE ADDRESS |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Route - verify waypoints record:
-      | legacyId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | status  | Routed                                                     |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
-      | seqNo   | not null                                                   |
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | status   | Routed                                                     |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | seqNo    | not null                                                   |
     And DB Core - verify transactions record:
       | id         | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}         |
       | type       | DD                                                         |
@@ -229,10 +229,10 @@ Feature: Tag & Untag DP
       | name | UPDATE ADDRESS |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And DB Route - verify waypoints record:
-      | legacyId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | status  | Routed                                                     |
-      | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
-      | seqNo   | not null                                                   |
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | status   | Routed                                                     |
+      | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
+      | seqNo    | not null                                                   |
     And DB Routing Search - verify transactions record:
       | txnId           | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}        |
       | txnType         | DELIVERY                                                  |
@@ -286,10 +286,10 @@ Feature: Tag & Untag DP
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UPDATE ADDRESS |
     And DB Route - verify waypoints record:
-      | legacyId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
-      | status  | Pending                                                    |
-      | routeId | null                                                       |
-      | seqNo   | null                                                       |
+      | legacyId | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | status   | Pending                                                    |
+      | routeId  | null                                                       |
+      | seqNo    | null                                                       |
     And DB Core - verify transactions record:
       | id         | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}          |
       | type       | DD                                                          |
@@ -402,7 +402,7 @@ Feature: Tag & Untag DP
       | toAddress1 | 501, ORCHARD ROAD, SG, 238880      |
       | toAddress2 | 3-4                                |
       | toPostcode | 238880                             |
-      | toCity     | SG                                 |
+      | toCity     | Singapore                          |
       | toCountry  | SG                                 |
     And DB Core - operator verify orders.data.previousDeliveryDetails is updated correctly:
       | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id}         |
@@ -432,7 +432,7 @@ Feature: Tag & Untag DP
       | address1              | 501, ORCHARD ROAD, SG, 238880                              |
       | address2              | 3-4                                                        |
       | postcode              | 238880                                                     |
-      | city                  | SG                                                         |
+      | city                  | Singapore                                                  |
       | country               | SG                                                         |
     And DB Routing Search - verify transactions record:
       | txnId           | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}         |
@@ -445,7 +445,7 @@ Feature: Tag & Untag DP
       | address1 | 501, ORCHARD ROAD, SG, 238880                              |
       | address2 | 3-4                                                        |
       | postcode | 238880                                                     |
-      | city     | SG                                                         |
+      | city     | Singapore                                                  |
       | country  | SG                                                         |
 
   @HighPriority
@@ -501,7 +501,7 @@ Feature: Tag & Untag DP
       | toAddress1 | 501, ORCHARD ROAD, SG, 238880      |
       | toAddress2 | 3-4                                |
       | toPostcode | 238880                             |
-      | toCity     | SG                                 |
+      | toCity     | Singapore                          |
       | toCountry  | SG                                 |
     And DB Core - operator verify orders.data.previousDeliveryDetails is updated correctly:
       | orderId  | {KEY_LIST_OF_CREATED_ORDERS[1].id}         |
@@ -532,7 +532,7 @@ Feature: Tag & Untag DP
       | address1              | 501, ORCHARD ROAD, SG, 238880                              |
       | address2              | 3-4                                                        |
       | postcode              | 238880                                                     |
-      | city                  | SG                                                         |
+      | city                  | Singapore                                                  |
       | country               | SG                                                         |
     And DB Routing Search - verify transactions record:
       | txnId           | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].id}         |
@@ -548,5 +548,5 @@ Feature: Tag & Untag DP
       | address1 | 501, ORCHARD ROAD, SG, 238880                              |
       | address2 | 3-4                                                        |
       | postcode | 238880                                                     |
-      | city     | SG                                                         |
+      | city     | Singapore                                                  |
       | country  | SG                                                         |

@@ -40,7 +40,7 @@ public class MainPage extends OperatorV2SimplePage implements MaskedPage {
     MAP_OF_END_URL.put("2. Route Group Management", "route-group");
     MAP_OF_END_URL.put("3. Route Engine - Zonal Routing", "zonal-routing");
     MAP_OF_END_URL.put("4. Route Engine - Bulk Add to Route", "add-parcel-to-route");
-    MAP_OF_END_URL.put("All Orders", "order");
+    MAP_OF_END_URL.put("All Orders", "order-v2");
     MAP_OF_END_URL.put("All Shippers", "shippers");
     MAP_OF_END_URL.put("Printer Settings", "printers");
     MAP_OF_END_URL.put("Recovery Tickets Scanning", "recovery-ticket-scanning");
