@@ -16,9 +16,9 @@ Feature: Order Tag Management V2
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
     When Operator go to menu Order -> Order Tag Management V2
     And Operator find orders by uploading CSV on Order Tag Management page V2:
-      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator searches and selects orders created on Order Tag Management page V2:
-      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator tags order V2 with:
       | {order-tag-name}   |
       | {order-tag-name-2} |
@@ -40,17 +40,17 @@ Feature: Order Tag Management V2
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
     When Operator go to menu Order -> Order Tag Management V2
     And Operator find orders by uploading CSV on Order Tag Management page V2:
-      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator searches and selects orders created on Order Tag Management page V2:
-      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator tags order V2 with:
       | {order-tag-name}   |
       | {order-tag-name-2} |
       | {order-tag-name-3} |
     And Operator find orders by uploading CSV on Order Tag Management page V2:
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator searches and selects orders created on Order Tag Management page V2:
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator removes order tags on Order Tag Management page V2:
       | {order-tag-name}   |
       | {order-tag-name-2} |
@@ -69,15 +69,15 @@ Feature: Order Tag Management V2
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
     When Operator go to menu Order -> Order Tag Management V2
     And Operator find orders by uploading CSV on Order Tag Management page V2:
-      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator searches and selects orders created on Order Tag Management page V2:
-      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator tags order V2 with:
       | {order-tag-name} |
     And Operator find orders by uploading CSV on Order Tag Management page V2:
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator searches and selects orders created on Order Tag Management page V2:
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator tags order V2 with:
       | {order-tag-name-2} |
       | {order-tag-name-3} |
@@ -98,17 +98,17 @@ Feature: Order Tag Management V2
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
     When Operator go to menu Order -> Order Tag Management V2
     And Operator find orders by uploading CSV on Order Tag Management page V2:
-      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator searches and selects orders created on Order Tag Management page V2:
-      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator tags order V2 with:
       | {order-tag-name}   |
       | {order-tag-name-2} |
       | {order-tag-name-3} |
     And Operator find orders by uploading CSV on Order Tag Management page V2:
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator searches and selects orders created on Order Tag Management page V2:
-      | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And Operator clear all order tags on Order Tag Management page V2
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     Then Operator verifies no tags shown on Edit Order V2 page
