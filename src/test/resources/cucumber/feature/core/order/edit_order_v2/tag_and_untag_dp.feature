@@ -21,10 +21,10 @@ Feature: Tag & Untag DP
     Then Operator verifies delivery is indicated by 'Ninja Collect' icon on Edit Order V2 page
     And Operator unmask Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | name    | {KEY_LIST_OF_CREATED_ORDERS[1].toName}         |
-      | email   | {KEY_LIST_OF_CREATED_ORDERS[1].toEmail}        |
-      | contact | {KEY_LIST_OF_CREATED_ORDERS[1].toContact}      |
-      | address | 501, ORCHARD ROAD, SG, 238880 3-4 238880 SG SG |
+      | name    | {KEY_LIST_OF_CREATED_ORDERS[1].toName}                |
+      | email   | {KEY_LIST_OF_CREATED_ORDERS[1].toEmail}               |
+      | contact | {KEY_LIST_OF_CREATED_ORDERS[1].toContact}             |
+      | address | 501, ORCHARD ROAD, SG, 238880 3-4 238880 Singapore SG |
     And Operator verify order event on Edit Order V2 page using data below:
       | name | ASSIGNED TO DP |
     And Operator verify order event on Edit Order V2 page using data below:
@@ -384,10 +384,10 @@ Feature: Tag & Untag DP
     Then Operator verifies delivery is indicated by 'Ninja Collect' icon on Edit Order V2 page
     And Operator unmask Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | name    | {KEY_LIST_OF_CREATED_ORDERS[1].toName}         |
-      | email   | {KEY_LIST_OF_CREATED_ORDERS[1].toEmail}        |
-      | contact | {KEY_LIST_OF_CREATED_ORDERS[1].toContact}      |
-      | address | 501, ORCHARD ROAD, SG, 238880 3-4 238880 SG SG |
+      | name    | {KEY_LIST_OF_CREATED_ORDERS[1].toName}                |
+      | email   | {KEY_LIST_OF_CREATED_ORDERS[1].toEmail}               |
+      | contact | {KEY_LIST_OF_CREATED_ORDERS[1].toContact}             |
+      | address | 501, ORCHARD ROAD, SG, 238880 3-4 238880 Singapore SG |
     And Operator verify order event on Edit Order V2 page using data below:
       | name | ASSIGNED TO DP |
     And Operator verify order event on Edit Order V2 page using data below:
@@ -483,10 +483,10 @@ Feature: Tag & Untag DP
     Then Operator verifies delivery is indicated by 'Ninja Collect' icon on Edit Order V2 page
     And Operator unmask Edit Order V2 page
     And Operator verify Delivery details on Edit Order V2 page using data below:
-      | name    | {KEY_LIST_OF_CREATED_ORDERS[1].toName}         |
-      | email   | {KEY_LIST_OF_CREATED_ORDERS[1].toEmail}        |
-      | contact | {KEY_LIST_OF_CREATED_ORDERS[1].toContact}      |
-      | address | 501, ORCHARD ROAD, SG, 238880 3-4 238880 SG SG |
+      | name    | {KEY_LIST_OF_CREATED_ORDERS[1].toName}                |
+      | email   | {KEY_LIST_OF_CREATED_ORDERS[1].toEmail}               |
+      | contact | {KEY_LIST_OF_CREATED_ORDERS[1].toContact}             |
+      | address | 501, ORCHARD ROAD, SG, 238880 3-4 238880 Singapore SG |
     And Operator verify order event on Edit Order V2 page using data below:
       | name | ASSIGNED TO DP |
     And Operator verify order event on Edit Order V2 page using data below:
