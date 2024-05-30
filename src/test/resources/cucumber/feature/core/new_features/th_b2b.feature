@@ -5,7 +5,7 @@ Feature: TH B2B
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @HighPriority @ArchiveRouteCommonV2 @test
+  @HighPriority @ArchiveRouteCommonV2
   Scenario: Upload CSV File Successfully for All B2B Orders
     Given API Order - Shipper create multiple V4 orders using data below:
       | numberOfOrder       | 3                                                                                                                                                                                                                                                                                                                                |

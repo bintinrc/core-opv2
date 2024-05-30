@@ -287,7 +287,7 @@ public class AllOrdersPage extends OperatorV2SimplePage implements MaskedPage {
   public void verifyItsCurrentPage() {
     super.waitUntilPageLoaded();
     Assertions.assertThat(getWebDriver().getCurrentUrl())
-        .withFailMessage("All Orders page is not opened").endsWith("/order");
+        .withFailMessage("All Orders page is not opened").endsWith("/order-v2");
   }
 
   public void downloadSampleCsvFile() {
