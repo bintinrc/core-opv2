@@ -447,7 +447,11 @@ Feature: ID - Order COD Limit
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[2].id}, "type":"DELIVERY"} |
     And API Route - delete routes:
       | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
-
+    And API Core - verify driver's total cod:
+      | driverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
+      | routeDate | {gradle-current-date-yyyy-MM-dd}   |
+      | cod       | 0                                  |
+      | refresh   | true                               |
     When Operator go to menu Routing -> Add Order to Route
     And Operator set "{KEY_LIST_OF_CREATED_ROUTES[1].id}" route id on Add Order to Route page
     And Operator set "Delivery" transaction type on Add Order to Route page
@@ -455,7 +459,6 @@ Feature: ID - Order COD Limit
     Then Operator verifies that success notification displayed:
       | top | Order {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verifies the last scanned tracking id is "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}"
-
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator verify order event on Edit Order V2 page using data below:
       | name | ADD TO ROUTE |

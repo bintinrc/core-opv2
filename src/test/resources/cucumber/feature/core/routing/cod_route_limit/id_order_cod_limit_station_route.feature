@@ -80,6 +80,7 @@ Feature: ID - Order COD Limit
       | driverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | {cod-below-limit}                  |
+      | refresh   | true                               |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Disallow to Add Single Order with COD >40 Millions to Single New Driver Route on Station Route
@@ -225,6 +226,7 @@ Feature: ID - Order COD Limit
       | driverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | {cod-below-limit}                  |
+      | refresh   | true                               |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Disallow to Add Multiple Orders with COD >40 Millions to Single New Driver Route on Station Route
@@ -353,6 +355,7 @@ Feature: ID - Order COD Limit
       | driverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | {cod-below-limit}                  |
+      | refresh   | true                               |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Disallow to Add Single Orders with COD >40 Millions to Single Existing Driver Route on Station Route
@@ -394,7 +397,7 @@ Feature: ID - Order COD Limit
       | {KEY_DRIVER_LIST_OF_DRIVERS[1].firstName} | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When Operator click Next button on Station Route page
     Then Operator verify errors are displayed on Station Route page:
-      | {"error":{"application_exception_code":173000,"application":"ROUTE-V2","title":"REQUEST_ERR","message":"[limit={cod-limit}.00] [driverID={KEY_DRIVER_LIST_OF_DRIVERS[1].id}][date={gradle-current-date-yyyy-MM-dd}][orderIDs=[{KEY_LIST_OF_CREATED_ORDERS[1].id}]]: cannot exceed maximum daily COD limit amount per driver"}} |
+      | {"error":{"application_exception_code":173000,"application":"ROUTE-V2","title":"REQUEST_ERR","message":"cannot exceed maximum daily COD limit amount per driver [limit={cod-limit}.00][driverID={KEY_DRIVER_LIST_OF_DRIVERS[1].id}][date={gradle-current-date-yyyy-MM-dd}][orderIDs=[{KEY_LIST_OF_CREATED_ORDERS[1].id}]]"}} |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Allow to Add Multiple Orders with COD <40 Millions to Single Existing Driver Route on Station Route
@@ -495,6 +498,7 @@ Feature: ID - Order COD Limit
       | driverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | {cod-below-limit}                  |
+      | refresh   | true                               |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Disallow to Add Multiple Orders with COD >40 Millions to Single Existing Driver Route on Station Route
@@ -547,7 +551,7 @@ Feature: ID - Order COD Limit
       | {KEY_DRIVER_LIST_OF_DRIVERS[1].firstName} | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When Operator click Next button on Station Route page
     Then Operator verify errors are displayed on Station Route page:
-      | {"error":{"application_exception_code":173000,"application":"ROUTE-V2","title":"REQUEST_ERR","message":"[limit={cod-limit}.00] [driverID={KEY_DRIVER_LIST_OF_DRIVERS[1].id}][date={gradle-current-date-yyyy-MM-dd}][orderIDs=[{KEY_LIST_OF_CREATED_ORDERS[1].id} {KEY_LIST_OF_CREATED_ORDERS[2].id}]]: cannot exceed maximum daily COD limit amount per driver"}} |
+      | {"error":{"application_exception_code":173000,"application":"ROUTE-V2","title":"REQUEST_ERR","message":"cannot exceed maximum daily COD limit amount per driver [limit={cod-limit}.00][driverID={KEY_DRIVER_LIST_OF_DRIVERS[1].id}][date={gradle-current-date-yyyy-MM-dd}][orderIDs=[{KEY_LIST_OF_CREATED_ORDERS[1].id} {KEY_LIST_OF_CREATED_ORDERS[2].id}]]"}} |
 
   @DeleteDriverV2 @DeleteRoutes @MediumPriority
   Scenario: Operator Disallow to Add Multiple Orders with COD >40 Millions to Multiple Existing Driver Routes on Station Route - 1 Route is Archived
@@ -603,7 +607,7 @@ Feature: ID - Order COD Limit
       | {KEY_DRIVER_LIST_OF_DRIVERS[1].firstName} | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
     When Operator click Next button on Station Route page
     Then Operator verify errors are displayed on Station Route page:
-      | {"error":{"application_exception_code":173000,"application":"ROUTE-V2","title":"REQUEST_ERR","message":"[limit={cod-limit}.00] [driverID={KEY_DRIVER_LIST_OF_DRIVERS[1].id}][date={gradle-current-date-yyyy-MM-dd}][orderIDs=[{KEY_LIST_OF_CREATED_ORDERS[2].id}]]: cannot exceed maximum daily COD limit amount per driver"}} |
+      | {"error":{"application_exception_code":173000,"application":"ROUTE-V2","title":"REQUEST_ERR","message":"cannot exceed maximum daily COD limit amount per driver [limit={cod-limit}.00][driverID={KEY_DRIVER_LIST_OF_DRIVERS[1].id}][date={gradle-current-date-yyyy-MM-dd}][orderIDs=[{KEY_LIST_OF_CREATED_ORDERS[2].id}]]"}} |
 
   @DeleteDriverV2 @DeleteRoutes @MediumPriority
   Scenario: Operator Allow to Add Multiple Orders with COD >40 Millions to Multiple Existing Driver Routes on Station Route - 1 Route is Deleted
@@ -634,6 +638,11 @@ Feature: ID - Order COD Limit
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
     And API Route - delete routes:
       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    And API Core - verify driver's total cod:
+      | driverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
+      | routeDate | {gradle-next-0-day-yyyy-MM-dd}     |
+      | cod       | 0                                  |
+      | refresh   | true                               |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[1].id} } |
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/id/station-route"
@@ -663,7 +672,6 @@ Feature: ID - Order COD Limit
     And Operator verify table records on Created routes detail screen on Station Route page:
       | driverName                                | parcelCount | routeId                            |
       | {KEY_DRIVER_LIST_OF_DRIVERS[1].firstName} | 1           | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
-
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
     And Operator verify order event on Edit Order V2 page using data below:
       | name | ADD TO ROUTE |
@@ -692,3 +700,4 @@ Feature: ID - Order COD Limit
       | driverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | {cod-multiple-above-limit}         |
+      | refresh   | true                               |
