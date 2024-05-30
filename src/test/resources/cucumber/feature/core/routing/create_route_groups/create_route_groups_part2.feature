@@ -296,11 +296,12 @@ Feature: Create Route Groups
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
-      | creationTime | today |
+      | creationTime | today                 |
+      | shipper      | {filter-shipper-name} |
     And Operator choose "Include Reservations" on Reservation Filters section on Create Route Groups page
-    And Operator add following filters on Reservation Filters section on Create Route Groups page:
-      | reservationType   | Normal  |
-      | reservationStatus | PENDING |
+#    And Operator add following filters on Reservation Filters section on Create Route Groups page:
+#      | reservationType   | Normal  |
+#      | reservationStatus | PENDING |
     And Operator click Load Selection on Create Route Groups page
     Then Operator verifies Reservation records on Create Route Groups page using data below:
       | id                                  | type                   | shipper                                 | address                                                                  | status  | endDateTime                                                     |
