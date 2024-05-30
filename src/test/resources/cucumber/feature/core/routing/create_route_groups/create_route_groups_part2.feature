@@ -297,7 +297,6 @@ Feature: Create Route Groups
     Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTime | today                 |
-      | shipper      | {filter-shipper-name} |
     And Operator choose "Include Reservations" on Reservation Filters section on Create Route Groups page
 #    And Operator add following filters on Reservation Filters section on Create Route Groups page:
 #      | reservationType   | Normal  |
