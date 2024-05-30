@@ -527,7 +527,7 @@ Feature: Assign Drivers List on Station Route
       | action | Kept |
     Then Operator verify parcels table row 1 not marked as removed on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority @test
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Check Assignment of Order Count to Assigned Driver on Station Route
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-4}"
     And API Order - Shipper create multiple V4 orders using data below:
