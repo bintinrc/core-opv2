@@ -278,3 +278,30 @@ Feature: Create Route Groups
     Then Operator verifies Reservation records not shown on Create Route Groups page using data below:
       | id                                       |
       | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
+
+  @HighPriority @test
+  Scenario: Operator Filter PA Job on Create Route Groups
+    Given API Order - Shipper create multiple V4 orders using data below:
+      | shipperClientId     | {shipper-v4-paj-client-id}                                                                                                                                                                                                                                                                                                                   |
+      | shipperClientSecret | {shipper-v4-paj-client-secret}                                                                                                                                                                                                                                                                                                               |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                       |
+      | v4OrderRequest      | { "service_type":"Normal", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
+    And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
+    Given API Shipper - Operator create new shipper address using data below:
+      | shipperId       | {shipper-v4-paj-id} |
+      | generateAddress | RANDOM              |
+    And API Control - Operator create pickup appointment job with data below:
+      | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId": {KEY_LIST_OF_CREATED_ADDRESSES[1].id} }, "pickupService":{ "level":"Standard", "type":"Scheduled"}, "pickupTimeslot":{ "ready":"{date: 1 days next, YYYY-MM-dd}T09:00:00+08:00", "latest":"{date: 1 days next, YYYY-MM-dd}T12:00:00+08:00"}, "pickupApproxVolume":"Less than 10 Parcels"} |
+    And DB Route - wait until job_waypoints table is populated for job id "{KEY_CONTROL_CREATED_PA_JOBS[1].id}"
+    When Operator go to menu Routing -> 1. Create Route Groups
+    Then Create Route Groups page is loaded
+    And Operator set General Filters on Create Route Groups page:
+      | creationTime | today |
+    And Operator choose "Include Reservations" on Reservation Filters section on Create Route Groups page
+    And Operator add following filters on Reservation Filters section on Create Route Groups page:
+      | reservationType   | Normal  |
+      | reservationStatus | PENDING |
+    And Operator click Load Selection on Create Route Groups page
+    Then Operator verifies Reservation records on Create Route Groups page using data below:
+      | id                                  | type                   | shipper                                 | address                                                                  | status  | endDateTime                                                     |
+      | {KEY_CONTROL_CREATED_PA_JOBS[1].id} | Pickup Appointment Job | {KEY_LIST_OF_CREATED_ADDRESSES[1].name} | {KEY_LIST_OF_CREATED_ADDRESSES[1].to1LineShortAddressWithSpaceDelimiter} | PENDING | {KEY_LIST_OF_CREATED_RESERVATIONS[1].getLocalizedReadyDatetime} |
