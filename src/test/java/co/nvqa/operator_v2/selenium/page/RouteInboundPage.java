@@ -536,7 +536,7 @@ public class RouteInboundPage extends OperatorV2SimplePage {
 
   public void verifyRouteInboundComment(String expectedComment) {
     String actualComment = routeLastComment.getText();
-    Pattern commentPattern = Pattern.compile("Comment by (.+):(.+)");
+    Pattern commentPattern = Pattern.compile("(.+):(.+)");
     Matcher matcher = commentPattern.matcher(actualComment.trim());
     if (matcher.find()) {
       String commentText = matcher.group(2).trim();
