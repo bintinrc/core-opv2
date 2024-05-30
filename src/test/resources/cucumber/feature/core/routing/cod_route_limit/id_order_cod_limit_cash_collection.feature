@@ -25,7 +25,6 @@ Feature: ID - Order COD Limit
       | version                | 2.0                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[1].id} } |
-
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator edit cash collection details on Edit Order V2 page:
       | cashOnDelivery | yes                  |
@@ -37,7 +36,6 @@ Feature: ID - Order COD Limit
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CASH                                                                   |
       | description | Cash On Delivery changed from {cod-multiple-below-limit} to {cod-below-limit} |
-
     And Operator click Delivery -> Add to route on Edit Order V2 page
     And Operator add created order route on Edit Order V2 page using data below:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
@@ -56,7 +54,6 @@ Feature: ID - Order COD Limit
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-
     And API Driver - Driver login with username "{KEY_DRIVER_LIST_OF_DRIVERS[1].username}" and "Password1"
     And API Driver - Driver read routes:
       | driverId            | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}    |
@@ -93,7 +90,6 @@ Feature: ID - Order COD Limit
       | version                | 2.0                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[1].id} } |
-
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator edit cash collection details on Edit Order V2 page:
       | cashOnDelivery | yes                  |
@@ -110,7 +106,7 @@ Feature: ID - Order COD Limit
     And Operator add created order route on Edit Order V2 page using data below:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                               |
+      | top    | Status 400: Bad Request                           |
       | bottom | ^.*Error Message: Driver has exceeded total cod.* |
 
   @DeleteDriverV2 @DeleteRoutes
@@ -200,7 +196,6 @@ Feature: ID - Order COD Limit
       | version                | 2.0                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[1].id} } |
-
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator edit cash collection details on Edit Order V2 page:
       | cashOnDelivery | yes                  |
@@ -212,25 +207,29 @@ Feature: ID - Order COD Limit
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CASH                                                                   |
       | description | Cash On Delivery changed from {cod-multiple-below-limit} to {cod-above-limit} |
-
     And Operator click Delivery -> Add to route on Edit Order V2 page
     And Operator add created order route on Edit Order V2 page using data below:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verifies that error react notification displayed:
-      | top                | Status 400: Unknown                               |
+      | top                | Status 400: Bad Request                           |
       | bottom             | ^.*Error Message: Driver has exceeded total cod.* |
       | waitUntilInvisible | true                                              |
-
-    Given API Core - set system parameter:
-      | key   | DRIVER_DAILY_COD_LIMIT |
-      | value | {cod-above-limit}      |
-
+    Given API Driver Management - Operator create CODLA using this data:
+      | createCodLaRequest | {"requester_email":"{shipper-v4-email}","requested_at":"{date: 0 days ago, YYYY-MM-dd}T00:00:00Z","approver_email":"{operator-portal-uid}","comments":"For testing","start_date":"{date: 0 days ago, YYYY-MM-dd}","num_days":5,"cod_value":{cod-above-limit}} |
+      | driverId           | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}                                                                                                                                                                                                                            |
+    # TODO: the cod limit should be automatically evicted after https://jira.ninjavan.co/browse/NV-11967
+    And API Core - evict driver's cod limit cache:
+      | driverId | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
+    And API Core - verify driver's total cod:
+      | driverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
+      | routeDate | {gradle-current-date-yyyy-MM-dd}   |
+      | cod       | 0                                  |
+      | refresh   | true                               |
     And Operator add created order route on Edit Order V2 page using data below:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verifies that success react notification displayed:
       | top                | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} has been added to route {KEY_LIST_OF_CREATED_ROUTES[1].id} successfully |
       | waitUntilInvisible | true                                                                                                          |
-
     And Operator verify order event on Edit Order V2 page using data below:
       | name    | ADD TO ROUTE                       |
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
@@ -244,7 +243,6 @@ Feature: ID - Order COD Limit
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | seqNo    | not null                           |
       | status   | Routed                             |
-
     And API Driver - Driver login with username "{KEY_DRIVER_LIST_OF_DRIVERS[1].username}" and "Password1"
     And API Driver - Driver read routes:
       | driverId            | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}    |
@@ -281,7 +279,6 @@ Feature: ID - Order COD Limit
       | version                | 2.0                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[1].id} } |
-
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator edit cash collection details on Edit Order V2 page:
       | cashOnDelivery | yes                  |
@@ -293,23 +290,23 @@ Feature: ID - Order COD Limit
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CASH                                                    |
       | description | Cash On Delivery changed from {cod-limit} to {cod-above-limit} |
-
     And Operator click Delivery -> Add to route on Edit Order V2 page
     And Operator add created order route on Edit Order V2 page using data below:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                               |
+      | top    | Status 400: Bad Request                           |
       | bottom | ^.*Error Message: Driver has exceeded total cod.* |
-
-    Given API Core - set system parameter:
-      | key   | DRIVER_DAILY_COD_LIMIT     |
-      | value | {cod-multiple-above-limit} |
-
+    Given API Driver Management - Operator create CODLA using this data:
+      | createCodLaRequest | {"requester_email":"{shipper-v4-email}","requested_at":"{date: 0 days ago, YYYY-MM-dd}T00:00:00Z","approver_email":"{operator-portal-uid}","comments":"For testing","start_date":"{date: 0 days ago, YYYY-MM-dd}","num_days":5,"cod_value":{cod-multiple-above-limit}} |
+      | driverId           | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}                                                                                                                                                                                                                                     |
+    # TODO: the cod limit should be automatically evicted after https://jira.ninjavan.co/browse/NV-11967
+    And API Core - evict driver's cod limit cache:
+      | driverId | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
     And Operator click Delivery -> Add to route on Edit Order V2 page
     And Operator add created order route on Edit Order V2 page using data below:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                               |
+      | top    | Status 400: Bad Request                           |
       | bottom | ^.*Error Message: Driver has exceeded total cod.* |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
@@ -335,7 +332,6 @@ Feature: ID - Order COD Limit
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
-
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator edit cash collection details on Edit Order V2 page:
       | cashOnDelivery | yes            |
@@ -347,7 +343,6 @@ Feature: ID - Order COD Limit
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CASH                                                             |
       | description | Cash On Delivery changed from {cod-multiple-below-limit} to {cod-limit} |
-
     And API Driver - Driver login with username "{KEY_DRIVER_LIST_OF_DRIVERS[1].username}" and "Password1"
     And API Driver - Driver read routes:
       | driverId            | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}    |
@@ -387,13 +382,12 @@ Feature: ID - Order COD Limit
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
-
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator edit cash collection details on Edit Order V2 page:
       | cashOnDelivery | yes                  |
       | amount         | {cod-above-limit}.00 |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                               |
+      | top    | Status 400: Bad Request                           |
       | bottom | ^.*Error Message: Driver has exceeded total cod.* |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
@@ -419,17 +413,16 @@ Feature: ID - Order COD Limit
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
-
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator edit cash collection details on Edit Order V2 page:
       | cashOnDelivery | no |
     Then Operator verifies that success react notification displayed:
       | top | Update cash collection successfully |
+    When Operator refresh page
     Then Operator verify COD icon is not displayed on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CASH                                                   |
       | description | Cash On Delivery changed from {cod-multiple-above-limit} to 0 |
-
     And API Driver - Driver login with username "{KEY_DRIVER_LIST_OF_DRIVERS[1].username}" and "Password1"
     And API Driver - Driver read routes:
       | driverId            | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}    |
@@ -478,7 +471,6 @@ Feature: ID - Order COD Limit
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                 |
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[2].id}, "type":"DELIVERY"} |
-
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator edit cash collection details on Edit Order V2 page:
       | cashOnDelivery | yes                           |
@@ -901,7 +893,7 @@ Feature: ID - Order COD Limit
     And Operator click Update Routes on Edit Routes page
     And Confirm changes on Edit Routes page
     Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                                                                        |
+      | top    | Status 400: Bad Request                                                                    |
       | bottom | ^.*Error Message: Driver {KEY_DRIVER_LIST_OF_DRIVERS[1].id} has exceeded total cod limit.* |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
@@ -1082,7 +1074,7 @@ Feature: ID - Order COD Limit
     And Operator click Update Routes on Edit Routes page
     And Confirm changes on Edit Routes page
     Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                                                                        |
+      | top    | Status 400: Bad Request                                                                    |
       | bottom | ^.*Error Message: Driver {KEY_DRIVER_LIST_OF_DRIVERS[1].id} has exceeded total cod limit.* |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
@@ -1188,24 +1180,24 @@ Feature: ID - Order COD Limit
   @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Disallow to Transfer Orders with COD >40 Millions from Route A to Route B with Same Driver on Edit Routes
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                            |
-      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                |
-      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                               |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                   |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                               |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                   |
+      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                                  |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": {cod-limit},"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                            |
-      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                |
-      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                               |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                              |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                                                 |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": {cod-multiple-below-limit},"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                            |
-      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                |
-      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                               |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                                                              |
+      | generateFrom        | RANDOM                                                                                                                                                                                                                                                                                                                                                                                                                  |
+      | generateTo          | INDEX-0                                                                                                                                                                                                                                                                                                                                                                                                                 |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard","parcel_job":{ "cash_on_delivery": {cod-multiple-below-limit},"is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}","dimensions": {"size": "S" }, "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[3]"
     When API Driver Management - Operator create new driver with data below:
@@ -1247,5 +1239,5 @@ Feature: ID - Order COD Limit
     And Operator click Update Routes on Edit Routes page
     And Confirm changes on Edit Routes page
     Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                                                                        |
+      | top    | Status 400: Bad Request                                                                    |
       | bottom | ^.*Error Message: Driver {KEY_DRIVER_LIST_OF_DRIVERS[1].id} has exceeded total cod limit.* |

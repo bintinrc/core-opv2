@@ -75,5 +75,5 @@ Feature: ID - Order COD Limit
     And Operator add created order route on Edit Order V2 page using data below:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                               |
+      | top    | Status 400: Bad Request                           |
       | bottom | ^.*Error Message: Driver has exceeded total cod.* |
