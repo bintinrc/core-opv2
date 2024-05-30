@@ -292,15 +292,20 @@ Feature: Create Route Groups
       | generateAddress | RANDOM              |
     And API Control - Operator create pickup appointment job with data below:
       | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId": {KEY_LIST_OF_CREATED_ADDRESSES[1].id} }, "pickupService":{ "level":"Standard", "type":"Scheduled"}, "pickupTimeslot":{ "ready":"{date: 1 days next, YYYY-MM-dd}T09:00:00+08:00", "latest":"{date: 1 days next, YYYY-MM-dd}T12:00:00+08:00"}, "pickupApproxVolume":"Less than 10 Parcels"} |
+    When API Route - create route group:
+      | name        | CRG4-{gradle-current-date-yyyyMMddHHmmsss}                                                                   |
+      | description | This Route Group is created by automation test from Operator V2. Created at {gradle-current-date-yyyy-MM-dd} |
+    When API Route - add references to Route Group:
+      | routeGroupId | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].id}                          |
+      | requestBody  | {"pickupAppointmentJobIds":[{KEY_CONTROL_CREATED_PA_JOBS[1].id}]} |
     And DB Route - wait until job_waypoints table is populated for job id "{KEY_CONTROL_CREATED_PA_JOBS[1].id}"
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
-      | creationTime | today                 |
+      | creationTime  | today                                      |
+    | routeGrouping | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name} |
+    And Operator choose "Hide Transactions" on Transaction Filters section on Create Route Groups page
     And Operator choose "Include Reservations" on Reservation Filters section on Create Route Groups page
-#    And Operator add following filters on Reservation Filters section on Create Route Groups page:
-#      | reservationType   | Normal  |
-#      | reservationStatus | PENDING |
     And Operator click Load Selection on Create Route Groups page
     Then Operator verifies Reservation records on Create Route Groups page using data below:
       | id                                  | type                   | shipper                                 | address                                                                  | status  | endDateTime                                                     |
