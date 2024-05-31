@@ -167,8 +167,8 @@ Feature: Tag & Untag DP
     And Operator untags order from DP on Edit Order V2 page
     And Operator waits for 5 seconds
     And Operator refresh page
-    And Operator unmask Edit Order V2 page
     Then Operator verifies delivery is not indicated by 'Ninja Collect' icon on Edit Order V2 page
+    And Operator unmask Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
       | name | UNASSIGNED FROM DP |
     And Operator verify order event on Edit Order V2 page using data below:
