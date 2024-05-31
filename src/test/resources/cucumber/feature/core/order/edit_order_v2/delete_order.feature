@@ -69,7 +69,7 @@ Feature: Delete Order
     And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order V2 page
     And Operator delete order on Edit Order V2 page
     Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                                                                                                                         |
+      | top    | Status 400: Bad Request                                                                                                                     |
       | bottom | ^.*Error Message: Order can only be deleted if in the following states : \[Staging, Pending Pickup, Van en-route to pickup, Pickup fail\].* |
 
   @MediumPriority
@@ -112,12 +112,12 @@ Feature: Delete Order
     And DB Order Create - verify orders records are hard-deleted in reserve_tracking_ids table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And DB Events - verify order_events record:
-      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}    |
-      | type      | 49                                    |
-      | userId    | 397                                   |
-      | userName  | AUTOMATION EDITED                     |
-      | userEmail | {operator-portal-uid}                 |
-      | data      | null                                  |
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | type      | 49                                 |
+      | userId    | 397                                |
+      | userName  | AUTOMATION EDITED                  |
+      | userEmail | {operator-portal-uid}              |
+      | data      | null                               |
 
   @HighPriority
   Scenario: Operator Delete Order - Status = Staging
@@ -176,12 +176,12 @@ Feature: Delete Order
     And DB Order Create - verify orders records are hard-deleted in reserve_tracking_ids table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And DB Events - verify order_events record:
-      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}    |
-      | type      | 49                                    |
-      | userId    | 397                                   |
-      | userName  | AUTOMATION EDITED                     |
-      | userEmail | {operator-portal-uid}                 |
-      | data      | null                                  |
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | type      | 49                                 |
+      | userId    | 397                                |
+      | userName  | AUTOMATION EDITED                  |
+      | userEmail | {operator-portal-uid}              |
+      | data      | null                               |
 
   @HighPriority
   Scenario: Operator Delete Order - Status = Pickup Fail
@@ -213,12 +213,12 @@ Feature: Delete Order
     And DB Order Create - verify orders records are hard-deleted in reserve_tracking_ids table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And DB Events - verify order_events record:
-      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}    |
-      | type      | 49                                    |
-      | userId    | 397                                   |
-      | userName  | AUTOMATION EDITED                     |
-      | userEmail | {operator-portal-uid}                 |
-      | data      | null                                  |
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | type      | 49                                 |
+      | userId    | 397                                |
+      | userName  | AUTOMATION EDITED                  |
+      | userEmail | {operator-portal-uid}              |
+      | data      | null                               |
 
   @MediumPriority
   Scenario: Operator Delete Order with Invoiced Amount
@@ -246,9 +246,9 @@ Feature: Delete Order
     And DB Order Create - verify orders records are hard-deleted in reserve_tracking_ids table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     And DB Events - verify order_events record:
-      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id}                            |
-      | type      | 49                                                            |
-      | userId    | 397                                                           |
-      | userName  | AUTOMATION EDITED                                             |
-      | userEmail | {operator-portal-uid}                                         |
-      | data      | {"invoiced_amount":500.0}                                     |
+      | orderId   | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
+      | type      | 49                                 |
+      | userId    | 397                                |
+      | userName  | AUTOMATION EDITED                  |
+      | userEmail | {operator-portal-uid}              |
+      | data      | {"invoiced_amount":500.0}          |

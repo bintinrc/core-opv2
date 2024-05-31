@@ -37,7 +37,6 @@ Feature: ID - Order COD Limit
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                 |
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[2].id}, "type":"DELIVERY"} |
-
     When Operator go to menu Routing -> Route Logs
     And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id},{KEY_LIST_OF_CREATED_ROUTES[2].id}" Route ID on Route Logs page
     And Operator edits route details:
@@ -63,7 +62,8 @@ Feature: ID - Order COD Limit
     And API Core - verify driver's total cod:
       | driverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
       | routeDate | {gradle-next-1-day-yyyy-MM-dd}     |
-      | cod       | {cod-below-limit}                  |
+      | cod       | {cod-multiple-below-limit}         |
+      | refresh   | true                               |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Disallow to Edit Multiple Routes to Same Date - Multiple Routes have Different Date and Driver COD >40 Millions on Route Logs
@@ -97,15 +97,19 @@ Feature: ID - Order COD Limit
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                 |
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[2].id}, "type":"DELIVERY"} |
-
     When Operator go to menu Routing -> Route Logs
     And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id}" Route ID on Route Logs page
     And Operator edits route details:
       | id   | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | date | {gradle-next-1-day-yyyy-MM-dd}     |
+    And API Core - verify driver's total cod:
+      | driverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
+      | routeDate | {gradle-next-1-day-yyyy-MM-dd}     |
+      | cod       | {cod-above-limit}                  |
+      | refresh   | true                               |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 500: Unknown                                                                                                        |
-      | bottom | ^.*Error Message: exceptions.ProcessingException: Driver {KEY_DRIVER_LIST_OF_DRIVERS[1].id} has exceeded total cod limit.* |
+      | top    | Status 500: Unknown                                                         |
+      | bottom | ^.*Driver {KEY_DRIVER_LIST_OF_DRIVERS[1].id} has exceeded total cod limit.* |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Allow to Transfer Multiple Routes to Same Driver - Multiple Routes have Different Driver and Driver COD <40 Millions on Route Logs
@@ -145,7 +149,6 @@ Feature: ID - Order COD Limit
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                 |
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[2].id}, "type":"DELIVERY"} |
-
     When Operator go to menu Routing -> Route Logs
     And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id}" Route ID on Route Logs page
     And Operator edits route details:
@@ -156,7 +159,6 @@ Feature: ID - Order COD Limit
     Then Operator verify route details on Route Logs page using data below:
       | id         | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
       | driverName | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
-
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
       | routeId                    | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
@@ -173,19 +175,20 @@ Feature: ID - Order COD Limit
       | driverId  | {KEY_DRIVER_LIST_OF_DRIVERS[2].id} |
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
       | cod       | {cod-below-limit}                  |
+      | refresh   | true                               |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Disallow to Transfer Multiple Routes to Same Driver - Multiple Routes have Different Driver and Driver COD >40 Millions on Route Logs
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                        |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":{cod-multiple-above-limit}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                 |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                             |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                 |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":{cod-multiple-above-limit}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
     When API Driver Management - Operator create new driver with data below:
@@ -225,9 +228,9 @@ Feature: ID - Order COD Limit
   @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Allow to Edit Multiple Routes Without Change Driver ID or Datetime - Single Driver Route Has COD <40 Millions on Route Logs
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                        |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                 |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                             |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                 |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":{cod-below-limit}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     When API Driver Management - Operator create new driver with data below:
@@ -259,9 +262,9 @@ Feature: ID - Order COD Limit
   @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Allow to Edit Multiple Routes With Change Driver ID or Datetime - Single Driver Route Has COD <40 Millions on Route Logs
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                        |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                 |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                             |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                 |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":{cod-below-limit}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     When API Driver Management - Operator create new driver with data below:
@@ -291,15 +294,15 @@ Feature: ID - Order COD Limit
   @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Allow to Edit Multiple Routes Without Change Driver ID or Datetime - Multiple Driver Routes Have COD >40 Millions on Route Logs
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                        |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":{cod-multiple-above-limit}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |
-      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                    |
-      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                        |
+      | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                          |
+      | shipperClientSecret | {shipper-v4-client-secret}                                                                                                                                                                                                                                                                                                                                                      |
+      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                                                          |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "cash_on_delivery":{cod-multiple-above-limit}, "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[2]"
     When API Driver Management - Operator create new driver with data below:

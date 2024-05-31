@@ -157,7 +157,7 @@ Feature: Route Inbound Screen 1
       | fetchBy      | FETCH_BY_ROUTE_ID                  |
       | fetchByValue | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verify error message displayed on Route Inbound:
-      | status       | 400 Unknown             |
+      | status       | 400 Bad Request             |
       | errorCode    | 103009                  |
       | errorMessage | Route has no waypoints! |
 
@@ -169,7 +169,7 @@ Feature: Route Inbound Screen 1
       | fetchBy | FETCH_BY_ROUTE_ID |
       | routeId | 123456            |
     Then Operator verify error message displayed on Route Inbound:
-      | status       | 404 Unknown                   |
+      | status       | 404 Not Found                 |
       | errorCode    | 103019                        |
       | errorMessage | Route for id=123456 not found |
 
@@ -183,6 +183,6 @@ Feature: Route Inbound Screen 1
       | fetchBy      | FETCH_BY_ROUTE_ID                  |
       | fetchByValue | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verify error message displayed on Route Inbound:
-      | status       | 400 Unknown                        |
+      | status       | 400 Bad Request                    |
       | errorCode    | 103088                             |
       | errorMessage | Route is not assigned to a driver! |

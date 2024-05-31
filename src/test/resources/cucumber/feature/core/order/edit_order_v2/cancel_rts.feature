@@ -23,14 +23,14 @@ Feature: Cancel RTS
     And Operator cancel RTS on Edit Order V2 page
     Then Operator verifies that success react notification displayed:
       | top | The RTS has been cancelled |
-    Then Operator verifies RTS tag is hidden in delivery details box on Edit Order V2 page
     When Operator refresh page
+    Then Operator verifies RTS tag is hidden in delivery details box on Edit Order V2 page
     And Operator unmask Edit Order V2 page
     Then Operator verify order event on Edit Order V2 page using data below:
       | name | REVERT RTS |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE ADDRESS                                                                                                                                 |
-      | description | To Address 1 changed from 233E ST. JOHN'S ROAD to 9 TUA KONG GREEN To Postcode changed from 757995 to 455384 Is RTS changed from true to false |
+      | name        | UPDATE ADDRESS                                                                                                                                                                                                                                                 |
+      | description | To Address 1 changed from 233E ST. JOHN'S ROAD to 9 TUA KONG GREEN To Postcode changed from 757995 to 455384 To Latitude changed from 1.45694483734937 to 1.288147 To Longitude changed from 103.825580873988 to 103.740233  Is RTS changed from true to false |
     And Operator verify order events on Edit Order V2 page using data below:
       | name | UPDATE AV |
     And Operator verify Delivery details on Edit Order V2 page using data below:
