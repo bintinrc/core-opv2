@@ -368,7 +368,7 @@ Feature: ID - Order COD Limit
       | cod       | {cod-multiple-above-limit}         |
       | refresh   | true                               |
 
-  @DeleteDriverV2 @DeleteRoutes @MediumPriority @wip
+  @DeleteDriverV2 @DeleteRoutes @MediumPriority
   Scenario: Operator Disallow to Add Multiple Orders with COD >40 Millions to Multiple Driver Routes on Zonal Routing - 1 Route is Archived
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                                          |
