@@ -60,7 +60,7 @@ Feature: Manage Order Tags
       | description | This tag is created by Automation Test for testing purpose only. Ignore this tag. |
       | getId       | false                                                                             |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                                            |
+      | top    | Status 400: Bad Request                                        |
       | bottom | ^.*Error Message: Order Tag with Name ABE is already in use!.* |
 
   @DeleteOrderTagsV2 @MediumPriority

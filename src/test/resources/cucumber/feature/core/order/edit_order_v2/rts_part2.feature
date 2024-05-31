@@ -74,8 +74,8 @@ Feature: RTS
       | id     | {KEY_TRANSACTION.id} |
       | status | Fail                 |
     And DB Route - verify waypoints record:
-      | legacyId     | {KEY_TRANSACTION.waypointId} |
-      | status | Routed                       |
+      | legacyId | {KEY_TRANSACTION.waypointId} |
+      | status   | Routed                       |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Delivery transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     And DB Core - verify transactions record:
@@ -102,7 +102,7 @@ Feature: RTS
     And API Sort - Operator get Addressing Zone with details:
       | request | {"type": "RTS", "latitude": {KEY_ROUTE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_ROUTE_WAYPOINT_DETAILS.longitude}} |
     And DB Route - verify waypoints record:
-      | legacyId            | {KEY_TRANSACTION.waypointId}                 |
+      | legacyId      | {KEY_TRANSACTION.waypointId}                 |
       | status        | Pending                                      |
       | routeId       | null                                         |
       | seqNo         | null                                         |
@@ -187,7 +187,7 @@ Feature: RTS
     And API Sort - Operator get Addressing Zone with details:
       | request | {"type": "RTS", "latitude": {KEY_ROUTE_WAYPOINT_DETAILS.latitude}, "longitude":{KEY_ROUTE_WAYPOINT_DETAILS.longitude}} |
     And DB Route - verify waypoints record:
-      | legacyId            | {KEY_TRANSACTION.waypointId}                 |
+      | legacyId      | {KEY_TRANSACTION.waypointId}                 |
       | status        | Pending                                      |
       | routeId       | null                                         |
       | seqNo         | null                                         |
@@ -272,7 +272,7 @@ Feature: RTS
       | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode}   |
       | country  | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}    |
     And DB Route - verify waypoints record:
-      | legacyId       | {KEY_TRANSACTION.waypointId}                 |
+      | legacyId | {KEY_TRANSACTION.waypointId}                 |
       | status   | Pending                                      |
       | routeId  | null                                         |
       | seqNo    | null                                         |
@@ -363,7 +363,7 @@ Feature: RTS
       | postcode | {KEY_LIST_OF_CREATED_ORDERS[1].fromPostcode}   |
       | country  | {KEY_LIST_OF_CREATED_ORDERS[1].fromCountry}    |
     And DB Route - verify waypoints record:
-      | legacyId       | {KEY_TRANSACTION.waypointId}                 |
+      | legacyId | {KEY_TRANSACTION.waypointId}                 |
       | status   | Pending                                      |
       | routeId  | null                                         |
       | seqNo    | null                                         |
@@ -420,7 +420,7 @@ Feature: RTS
       | reason   | Nobody at address    |
       | timeslot | All Day (9AM - 10PM) |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                                                                                               |
+      | top    | Status 400: Bad Request                                                                                           |
       | bottom | ^.*Error Message: An order with status 'ON_HOLD' can be RTS only when last ticket is of type DAMAGED or MISSING.* |
     And DB Core - verify orders record:
       | id  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
@@ -460,7 +460,7 @@ Feature: RTS
       | reason   | Nobody at address    |
       | timeslot | All Day (9AM - 10PM) |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                                                                                               |
+      | top    | Status 400: Bad Request                                                                                           |
       | bottom | ^.*Error Message: An order with status 'ON_HOLD' can be RTS only when last ticket is of type DAMAGED or MISSING.* |
     And DB Core - verify orders record:
       | id  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
@@ -533,10 +533,10 @@ Feature: RTS
       | city       | Singapore                          |
       | country    | Singapore                          |
     Then DB Route - verify waypoints record:
-      | legacyId      | {KEY_TRANSACTION_AFTER.waypointId} |
-      | seqNo   | null                               |
-      | routeId | null                               |
-      | status  | Pending                            |
+      | legacyId | {KEY_TRANSACTION_AFTER.waypointId} |
+      | seqNo    | null                               |
+      | routeId  | null                               |
+      | status   | Pending                            |
     And DB Routing Search - verify transactions record:
       | txnId           | {KEY_TRANSACTION_AFTER.id}                 |
       | txnType         | DELIVERY                                   |
@@ -553,7 +553,7 @@ Feature: RTS
     Then Operator verifies order details on Edit Order V2 page:
       | zone | {KEY_SORT_RTS_ZONE_TYPE.shortName} |
     And DB Route - verify waypoints record:
-      | legacyId            | {KEY_TRANSACTION_AFTER.waypointId}    |
+      | legacyId      | {KEY_TRANSACTION_AFTER.waypointId}    |
       | routingZoneId | {KEY_SORT_RTS_ZONE_TYPE.legacyZoneId} |
 
   @ArchiveRouteCommonV2 @MediumPriority
@@ -609,7 +609,7 @@ Feature: RTS
       | postcode   | 757995                             |
       | country    | SG                                 |
     And DB Route - verify waypoints record:
-      | legacyId       | {KEY_TRANSACTION.waypointId} |
+      | legacyId | {KEY_TRANSACTION.waypointId} |
       | status   | Pending                      |
       | routeId  | null                         |
       | seqNo    | null                         |

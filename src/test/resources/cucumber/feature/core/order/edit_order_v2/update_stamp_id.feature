@@ -203,7 +203,7 @@ Feature: Update Stamp ID
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator change Stamp ID of the created order to "GENERATED" on Edit Order V2 page
     Then Operator verifies that error react notification displayed:
-      | top    | Status 200: Unknown                                              |
+      | top    | Status 200: OK                                              |
       | bottom | ^.*Error Message: Not allowed to update order after completion.* |
 
   @MediumPriority
@@ -220,7 +220,7 @@ Feature: Update Stamp ID
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator change Stamp ID of the created order to "GENERATED" on Edit Order V2 page
     Then Operator verifies that error react notification displayed:
-      | top    | Status 200: Unknown                                              |
+      | top    | Status 200: OK                                              |
       | bottom | ^.*Error Message: Not allowed to update order after completion.* |
 
   @CloseNewWindows @HighPriority
@@ -256,7 +256,7 @@ Feature: Update Stamp ID
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator change Stamp ID of the created order to "NVSGSTAMPCOREOPV21" on Edit Order V2 page
     Then Operator verifies that error react notification displayed:
-      | top    | Status 200: Unknown                                                             |
+      | top    | Status 200: OK                                                             |
       | bottom | ^.*Error Message: Stamp NVSGSTAMPCOREOPV21 exists in order NVSGDIMMI000965047.* |
     When  Operator refresh page
     Then Operator verify next order info on Edit Order V2 page:

@@ -320,7 +320,7 @@ public class EditOrderV2Page extends SimpleReactPage<EditOrderV2Page> {
 
   public void verifyPriorityLevel(String txnType, String priorityLevel) {
     transactionsTable.filterByColumn(COLUMN_TYPE, txnType);
-    TransactionInfo actual = transactionsTable.readEntity(1);
+    TransactionInfo actual = transactionsTable.readEntity(2);
     Assertions.assertThat(actual.getPriorityLevel()).as(txnType + " Priority Level")
         .isEqualTo(priorityLevel);
   }
