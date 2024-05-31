@@ -473,7 +473,7 @@ Feature: ID - Order COD Limit
     And API Core - verify driver's total cod:
       | driverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
-      | cod       | {cod-above-limit}                  |
+      | cod       | {cod-multiple-above-limit}         |
       | refresh   | true                               |
 
   @DeleteDriverV2 @DeleteRoutes @MediumPriority
