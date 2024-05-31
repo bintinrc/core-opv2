@@ -893,8 +893,8 @@ Feature: ID - Order COD Limit
     And Operator click Update Routes on Edit Routes page
     And Confirm changes on Edit Routes page
     Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Bad Request                                                                    |
-      | bottom | ^.*Error Message: Driver {KEY_DRIVER_LIST_OF_DRIVERS[1].id} has exceeded total cod limit.* |
+      | top    | Status 400: Bad Request                    |
+      | bottom | ^.*cannot exceed maximum daily COD limit.* |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Allow to Transfer Orders with COD <40 Millions from Route A to Route B with Different Driver on Edit Routes
@@ -1074,8 +1074,8 @@ Feature: ID - Order COD Limit
     And Operator click Update Routes on Edit Routes page
     And Confirm changes on Edit Routes page
     Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Bad Request                                                                    |
-      | bottom | ^.*Error Message: Driver {KEY_DRIVER_LIST_OF_DRIVERS[1].id} has exceeded total cod limit.* |
+      | top    | Status 400: Bad Request                    |
+      | bottom | ^.*cannot exceed maximum daily COD limit.* |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
   Scenario: Operator Allow to Transfer Orders with COD <40 Millions from Route A to Route B with Same Driver on Edit Routes
