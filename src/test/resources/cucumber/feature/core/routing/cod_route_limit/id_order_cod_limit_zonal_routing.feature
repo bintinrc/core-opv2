@@ -476,7 +476,7 @@ Feature: ID - Order COD Limit
       | cod       | {cod-multiple-above-limit}         |
       | refresh   | true                               |
 
-  @DeleteDriverV2 @DeleteRoutes @MediumPriority @issue
+  @DeleteDriverV2 @DeleteRoutes @MediumPriority
   Scenario: Operator Partial Allow to Add Multiple Orders with COD >40 Millions to Multiple Driver Routes on Zonal Routing
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                           |
@@ -547,11 +547,11 @@ Feature: ID - Order COD Limit
     And Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verifies route details on Route Manifest page:
       | routeId                    | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
-      | codCollectionPendingNoComa | {cod-multiple-above-limit}                  |
+      | codCollectionPendingNoComa | {cod-limit}                                 |
       | driverName                 | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
       | driverId                   | {KEY_DRIVER_LIST_OF_DRIVERS[1].id}          |
     And API Core - verify driver's total cod:
       | driverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
-      | cod       | {cod-multiple-above-limit}         |
+      | cod       | {cod-limit}                        |
       | refresh   | true                               |
