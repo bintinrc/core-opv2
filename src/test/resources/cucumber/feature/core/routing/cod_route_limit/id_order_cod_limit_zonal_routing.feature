@@ -1,5 +1,5 @@
 @OperatorV2 @Core @RoutingID @DriverRouteCODLimit @DriverCodLimitIDPart6
-Feature: ID - Order COD Limit
+Feature: ID - Order COD Limit - Zonal Routing
 
   Background:
     Given Launch browser
