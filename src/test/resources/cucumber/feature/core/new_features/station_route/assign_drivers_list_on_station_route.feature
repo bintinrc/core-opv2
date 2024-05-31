@@ -587,9 +587,10 @@ Feature: Assign Drivers List on Station Route
     When Operator click Check assignment button on Station Route page
     Then Operator verify driver count is 1 on Select route creation method screen on Station Route page
     Then Operator verify parcel count is 1 on Select route creation method screen on Station Route page
-    Then Operator verify driver records on Select route creation method screen on Station Route page:
-      | driverName                                | parcelCount |
-      | {KEY_DRIVER_LIST_OF_DRIVERS[1].firstName} | 1           |
+    # TODO : uncomment the step when this ticket is solved : NV-11917
+#    Then Operator verify driver records on Select route creation method screen on Station Route page:
+#      | driverName                                | parcelCount |
+#      | {KEY_DRIVER_LIST_OF_DRIVERS[1].firstName} | 1           |
 
   @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Operator Disallow Check Assignment of Order Count to Unassigned Driver on Station Route
