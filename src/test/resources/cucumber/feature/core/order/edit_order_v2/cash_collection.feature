@@ -130,6 +130,7 @@ Feature: Cash Collection
       | cashOnPickup | no |
     Then Operator verifies that success react notification displayed:
       | top | Update cash collection successfully |
+    Then Operator refresh page
     And Operator verify COP icon is not displayed on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CASH                            |
@@ -154,6 +155,7 @@ Feature: Cash Collection
       | cashOnDelivery | no |
     Then Operator verifies that success react notification displayed:
       | top | Update cash collection successfully |
+    Then Operator refresh page
     Then Operator verify COD icon is not displayed on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CASH                              |

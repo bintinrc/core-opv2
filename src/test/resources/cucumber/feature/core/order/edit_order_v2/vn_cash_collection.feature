@@ -66,6 +66,7 @@ Feature: Cash Collection
     Then Operator verifies that success react notification displayed:
       | top | Update cash collection successfully |
     Then Operator verify COD icon is not displayed on Edit Order V2 page
+    Then Operator refresh page
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CASH                              |
       | description | Cash On Delivery changed from 23.57 to 0 |
@@ -101,6 +102,7 @@ Feature: Cash Collection
     Then Operator verifies that success react notification displayed:
       | top | Update cash collection successfully |
     Then Operator verify COD icon is not displayed on Edit Order V2 page
+    Then Operator refresh page
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CASH                              |
       | description | Cash On Delivery changed from 23.57 to 0 |
@@ -178,6 +180,7 @@ Feature: Cash Collection
     Then Operator verifies that success react notification displayed:
       | top | Update cash collection successfully |
     Then Operator verify COD icon is not displayed on Edit Order V2 page
+    Then Operator refresh page
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CASH                              |
       | description | Cash On Delivery changed from 23.57 to 0 |
@@ -216,6 +219,7 @@ Feature: Cash Collection
     Then Operator verifies that success react notification displayed:
       | top | Update cash collection successfully |
     Then Operator verify COD icon is not displayed on Edit Order V2 page
+    Then Operator refresh page
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CASH                              |
       | description | Cash On Delivery changed from 23.57 to 0 |
