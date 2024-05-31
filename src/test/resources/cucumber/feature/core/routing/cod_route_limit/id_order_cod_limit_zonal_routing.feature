@@ -257,7 +257,7 @@ Feature: ID - Order COD Limit
     And API Core - verify driver's total cod:
       | driverId  | {KEY_DRIVER_LIST_OF_DRIVERS[1].id} |
       | routeDate | {gradle-current-date-yyyy-MM-dd}   |
-      | cod       | 0                                  |
+      | cod       | {cod-multiple-below-limit}         |
       | refresh   | true                               |
     #    create route 2
     And API Core - Operator create new route using data below:
