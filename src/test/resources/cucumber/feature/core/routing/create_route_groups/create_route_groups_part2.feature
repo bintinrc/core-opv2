@@ -282,8 +282,8 @@ Feature: Create Route Groups
   @HighPriority @test
   Scenario: Operator Filter PA Job on Create Route Groups
     Given API Order - Shipper create multiple V4 orders using data below:
-      | shipperClientId     | {shipper-v4-paj-client-id}                                                                                                                                                                                                                                                                                                         |
-      | shipperClientSecret | {shipper-v4-paj-client-secret}                                                                                                                                                                                                                                                                                                       |
+      | shipperClientId     | {shipper-v4-paj-client-id}                                                                                                                                                                                                                                                                                                       |
+      | shipperClientSecret | {shipper-v4-paj-client-secret}                                                                                                                                                                                                                                                                                                   |
       | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                           |
       | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{{next-1-day-yyyy-MM-dd}}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{{next-1-day-yyyy-MM-dd}}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
@@ -303,6 +303,7 @@ Feature: Create Route Groups
     Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
       | creationTime  | today                                      |
+      | shipper       | {shipper-v4-paj-legacy-id}                 |
     And Operator choose "Hide Transactions" on Transaction Filters section on Create Route Groups page
     And Operator choose "Include Reservations" on Reservation Filters section on Create Route Groups page
     And Operator click Load Selection on Create Route Groups page
