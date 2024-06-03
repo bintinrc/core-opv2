@@ -279,7 +279,7 @@ Feature: Create Route Groups
       | id                                       |
       | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
 
-  @HighPriority @test
+  @HighPriority
   Scenario: Operator Filter PA Job on Create Route Groups
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-paj-client-id}                                                                                                                                                                                                                                                                                                       |
@@ -317,32 +317,5 @@ Feature: Create Route Groups
     And Operator click Load Selection on Create Route Groups page
     And DB Route - get waypoint id for job id "{KEY_CONTROL_CREATED_PA_JOBS[1].id}"
     Then Operator verifies Reservation records on Create Route Groups page using data below:
-      | id                                  | type                   | shipper                                 | address                                                                  | status            | startDateTime                                              | endDateTime                                                 |
-      | {KEY_CONTROL_CREATED_PA_JOBS[1].id} | Pickup Appointment Job | {KEY_LIST_OF_CREATED_ADDRESSES[1].name} | {KEY_LIST_OF_CREATED_ADDRESSES[1].to1LineShortAddressWithSpaceDelimiter} | ready-for-routing | {KEY_CONTROL_CREATED_PA_JOBS[1].getLocalizedReadyDatetime} | {KEY_CONTROL_CREATED_PA_JOBS[1].getLocalizedLatestDatetime} |
-
-
-
-
-#    Given API Order - Shipper create multiple V4 orders using data below:
-#      | shipperClientId     | {shipper-v4-paj-client-id}                                                                                                                                                                                                                                                                                                                   |
-#      | shipperClientSecret | {shipper-v4-paj-client-secret}                                                                                                                                                                                                                                                                                                               |
-#      | generateFromAndTo   | RANDOM                                                                                                                                                                                                                                                                                                                                       |
-#      | v4OrderRequest      | { "service_type":"Parcel", "service_level":"Standard", "parcel_job":{ "is_pickup_required":false, "pickup_date":"{date: 1 days next, yyyy-MM-dd}", "pickup_timeslot":{ "start_time":"12:00", "end_time":"15:00"}, "delivery_start_date":"{date: 1 days next, yyyy-MM-dd}", "delivery_timeslot":{ "start_time":"09:00", "end_time":"22:00"}}} |
-#    And API Core - Operator get multiple order details for tracking ids:
-#      | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
-#      | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
-#    # RESERVATION
-#    Given API Shipper - Operator create new shipper address using data below:
-#      | shipperId             | {shipper-v4-id}                                                                                                                                                                                                                                                                |
-#      | generateAddress       | RANDOM                                                                                                                                                                                                                                                                         |
-#      | shipperAddressRequest | {"name":"{shipper-v4-name}","contact":"{shipper-v4-contact}","email":"{shipper-v4-email}","address1":"address1","address2":"address2","country":"SG","latitude":1.27,"longitude":103.27,"postcode":"159363","milkrun_settings":[],"no_of_reservation":1}],"is_milk_run":false} |
-#    And API Core - Operator create reservation using data below:
-#      | reservationRequest | {"global_shipper_id":{shipper-v4-id}, "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
-#    # PICKUP APPOINTMENT JOB
-#    And API Shipper - Operator get address details using data below:
-#      | shipperId | {shipper-v4-paj-id}      |
-#      | addressId | {shipper-address-paj-id} |
-#    And API Control - Operator create pickup appointment job with data below:
-#      | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId":{shipper-address-paj-id}}, "pickupService":{ "type": "Scheduled","level":"Standard"}, "pickupApproxVolume": "Less than 3 Parcels", "priorityLevel": 0, "pickupInstructions": "Automation created", "disableCutoffValidation": false, "pickupTimeslot":{"ready":"{date: 0 days next, yyyy-MM-dd}T09:00:00+08:00","latest":"{date: 0 days next, yyyy-MM-dd}T18:00:00+08:00"}} |
-#    And DB Route - wait until job_waypoints table is populated for job id "{KEY_CONTROL_CREATED_PA_JOBS[1].id}"
-#
+      | id                                  | type                   | shipper                                 | address                                                                  | status            |
+      | {KEY_CONTROL_CREATED_PA_JOBS[1].id} | Pickup Appointment Job | {KEY_LIST_OF_CREATED_ADDRESSES[1].name} | {KEY_LIST_OF_CREATED_ADDRESSES[1].to1LineShortAddressWithSpaceDelimiter} | ready-for-routing |
