@@ -302,15 +302,23 @@ Feature: Create Route Groups
     When Operator go to menu Routing -> 1. Create Route Groups
     Then Create Route Groups page is loaded
     And Operator set General Filters on Create Route Groups page:
-      | creationTime  | today                                      |
-      | shipper       | {shipper-v4-paj-legacy-id}                 |
+      | startDateTimeFrom | {gradle-next-0-day-yyyy-MM-dd} |
+      | startDateTimeTo   | {gradle-next-1-day-yyyy-MM-dd} |
+      | endDateTimeFrom   | {gradle-next-0-day-yyyy-MM-dd} |
+      | endDateTimeTo     | {gradle-next-1-day-yyyy-MM-dd} |
+      | creationTimeFrom  | {gradle-next-0-day-yyyy-MM-dd} |
+      | creationTimeTo    | {gradle-next-1-day-yyyy-MM-dd} |
     And Operator choose "Hide Transactions" on Transaction Filters section on Create Route Groups page
     And Operator choose "Include Reservations" on Reservation Filters section on Create Route Groups page
+    And Operator add following filters on Reservation Filters section on Create Route Groups page:
+      | reservationType   | Normal               |
+      | reservationStatus | PENDING              |
+      | pickUpSize        | Less than 10 parcels |
     And Operator click Load Selection on Create Route Groups page
     And DB Route - get waypoint id for job id "{KEY_CONTROL_CREATED_PA_JOBS[1].id}"
     Then Operator verifies Reservation records on Create Route Groups page using data below:
-      | id                                  | type                   | shipper                                 | address                                                                  | status  | startDateTime                                                   | endDateTime                                                      |
-      | {KEY_CONTROL_CREATED_PA_JOBS[1].id} | Pickup Appointment job | {KEY_LIST_OF_CREATED_ADDRESSES[1].name} | {KEY_LIST_OF_CREATED_ADDRESSES[1].to1LineShortAddressWithSpaceDelimiter} | PENDING | {KEY_LIST_OF_CREATED_RESERVATIONS[1].getLocalizedReadyDatetime} | {KEY_LIST_OF_CREATED_RESERVATIONS[1].getLocalizedLatestDatetime} |
+      | id                                  | type                   | shipper                                 | address                                                                  | status            | startDateTime                                              | endDateTime                                                 |
+      | {KEY_CONTROL_CREATED_PA_JOBS[1].id} | Pickup Appointment Job | {KEY_LIST_OF_CREATED_ADDRESSES[1].name} | {KEY_LIST_OF_CREATED_ADDRESSES[1].to1LineShortAddressWithSpaceDelimiter} | ready-for-routing | {KEY_CONTROL_CREATED_PA_JOBS[1].getLocalizedReadyDatetime} | {KEY_CONTROL_CREATED_PA_JOBS[1].getLocalizedLatestDatetime} |
 
 
 
