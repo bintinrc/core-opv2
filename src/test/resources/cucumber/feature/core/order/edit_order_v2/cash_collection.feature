@@ -130,6 +130,7 @@ Feature: Cash Collection
       | cashOnPickup | no |
     Then Operator verifies that success react notification displayed:
       | top | Update cash collection successfully |
+    Then Operator refresh page
     And Operator verify COP icon is not displayed on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CASH                            |
@@ -154,6 +155,7 @@ Feature: Cash Collection
       | cashOnDelivery | no |
     Then Operator verifies that success react notification displayed:
       | top | Update cash collection successfully |
+    Then Operator refresh page
     Then Operator verify COD icon is not displayed on Edit Order V2 page
     And Operator verify order event on Edit Order V2 page using data below:
       | name        | UPDATE CASH                              |
@@ -298,5 +300,5 @@ Feature: Cash Collection
       | cashOnDelivery | yes   |
       | amount         | 10.00 |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 500: Unknown                                    |
+      | top    | Status 500: Internal Server Error                      |
       | bottom | ^.*Error Message: Not allowed to update an RTS order.* |
