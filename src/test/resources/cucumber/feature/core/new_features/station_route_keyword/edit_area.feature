@@ -32,7 +32,7 @@ Feature: Edit Area
     And Operator edit area on Station Route Keyword page:
       | area | Area eada {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                                                                                                                                              |
+      | top    | Status 400: Bad Request                                                                                                                                          |
       | bottom | ^.*Error Message: \[duplicatedNames: AREAVARIATION 2 {gradle-current-date-yyyyMMddHHmmsss}\]: name already exists as area or area variation of other coverages.* |
 
   @DeleteDriverV2 @DeleteCoverageV2 @MediumPriority
@@ -62,7 +62,7 @@ Feature: Edit Area
     And Operator edit area on Station Route Keyword page:
       | areaVariations | AreaVariation {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                                                                                                                                            |
+      | top    | Status 400: Bad Request                                                                                                                                        |
       | bottom | ^.*Error Message: \[duplicatedNames: AREAVARIATION {gradle-current-date-yyyyMMddHHmmsss}\]: name already exists as area or area variation of other coverages.* |
 
   @DeleteDriverV2 @DeleteCoverageV2 @MediumPriority
@@ -147,7 +147,7 @@ Feature: Edit Area
       | area           | Area eadm 2 {gradle-current-date-yyyyMMddHHmmsss}     |
       | areaVariations | AreaVariation 3 {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                                                                                                                                              |
+      | top    | Status 400: Bad Request                                                                                                                                          |
       | bottom | ^.*Error Message: \[duplicatedNames: AREAVARIATION 3 {gradle-current-date-yyyyMMddHHmmsss}\]: name already exists as area or area variation of other coverages.* |
 
   @DeleteDriverV2 @DeleteCoverageV2 @MediumPriority
@@ -274,7 +274,7 @@ Feature: Edit Area
     And Operator edit area on Station Route Keyword page:
       | areaVariations | AREA EADEA {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                                                                                                                                         |
+      | top    | Status 400: Bad Request                                                                                                                                     |
       | bottom | ^.*Error Message: \[duplicatedNames: AREA EADEA {gradle-current-date-yyyyMMddHHmmsss}\]: name already exists as area or area variation of other coverages.* |
 
   @DeleteDriverV2 @DeleteCoverageV2 @MediumPriority
@@ -303,7 +303,7 @@ Feature: Edit Area
       | area           | AREA EADL {gradle-current-date-yyyyMMddHHmmsss} |
       | areaVariations | VARIATION {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                                                                                                                                                                                                                |
+      | top    | Status 400: Bad Request                                                                                                                                                                                                            |
       | bottom | ^.*Error Message: Current coverage has no keyword, and there is another existing coverage with the area to be updated without keyword. Cannot update current coverage. \[area: AREA EADL {gradle-current-date-yyyyMMddHHmmsss}\].* |
 
   @DeleteDriverV2 @DeleteCoverageV2 @MediumPriority

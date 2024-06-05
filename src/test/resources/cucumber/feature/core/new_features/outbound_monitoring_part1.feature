@@ -1,6 +1,6 @@
 @OperatorV2 @Core @NewFeatures @OutboundMonitoring @OutboundMonitoringPart1
 Feature: Outbound Monitoring
-
+# TODO : deprecte this page regarding this TDD https://ninjavan-tech.atlassian.net/wiki/spaces/SD/pages/107383921/Core+ADR+-+Redirect+outbound+break+route+to+route+logs+page
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
