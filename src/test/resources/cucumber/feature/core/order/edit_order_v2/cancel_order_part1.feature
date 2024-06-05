@@ -84,7 +84,7 @@ Feature: Cancel Order
       | trackingId     | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}         |
       | granularStatus | Cancelled                                          |
 
-  @ArchiveRouteCommonV2 @HighPriority @update-status @wip
+  @ArchiveRouteCommonV2 @HighPriority @update-status
   Scenario: Cancel Order - Pickup Fail
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                          |
