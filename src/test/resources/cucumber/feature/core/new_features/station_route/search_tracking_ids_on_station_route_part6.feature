@@ -5,7 +5,7 @@ Feature: Search Tracking IDs on Station Route
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Keyword Partial Matched with Address - Keyword is Missing First Half
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-11}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -59,7 +59,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match is not displayed on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Keyword Partial Matched with Address - Keyword is Missing Second Half
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-11}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -113,7 +113,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match is not displayed on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Keyword Partial Matched with Address - Keyword is Missing First and Second Half
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-11}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -167,7 +167,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match is not displayed on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Matching Address - coverage A (area, keyword) & coverage B (area) are Match to Single Address
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-11}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -227,7 +227,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify keyword match "SELATAN" is displayed on 1 position on Station Route page
     And Operator verify keyword match "TIMUR" is displayed on 2 position on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Matching Address - coverage A (area, keyword) & coverage B (area, keyword) are Match to Single Address
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-11}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -284,7 +284,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "International" is displayed in row 1 on Station Route page
     And Operator verify keyword match "Park" is displayed in row 1 on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Matching Address - coverage A (area, empty keyword) & coverage B (area) are Match to Single Address
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-11}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -344,7 +344,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "Teck" is displayed in row 1 on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments  @MediumPriority
   Scenario: Matching Address - coverage A (area, empty keyword) & coverage B (area, keyword) are Match to Single Address
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-11}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -402,7 +402,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "Bedok" is displayed in row 1 on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Matching Address - coverage A (area) & coverage B (keyword) are Match to Single Address
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-11}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -463,7 +463,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "Katong" is displayed in row 1 on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
 
-  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments
+  @DeleteDriverV2 @DeleteCoverageV2 @DeleteCreatedShipments @MediumPriority
   Scenario: Matching Address - coverage A (area, empty keyword) & coverage B (2 area, keyword) are Match to Single Address
     Given API MM - Operator creates multiple 1 new shipments with type "AIR_HAUL" from hub id "{hub-id}" to "{hub-id-11}"
     Given API Order - Shipper create multiple V4 orders using data below:
@@ -521,6 +521,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify area match "Chin" is displayed in row 1 on Station Route page
     And Operator verify keyword match is not displayed on Station Route page
 
+  @MediumPriority
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Start Date > End Date
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route"
     And Operator select filters on Station Route page:
@@ -534,6 +535,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify "Start date cannot be after end date" Shipment completion time error on Station Route page
     And Operator verify Assign drivers button is disabled on Station Route page
 
+  @MediumPriority
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Time Range Greater Than 1 Month
     When Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route"
     And Operator select filters on Station Route page:
@@ -547,6 +549,7 @@ Feature: Search Tracking IDs on Station Route
     And Operator verify "Time range cannot be greater than 1 month(s)" Shipment completion time error on Station Route page
     And Operator verify Assign drivers button is disabled on Station Route page
 
+  @MediumPriority
   Scenario: Operator Search Tracking IDs on Station Route - Shipment Filter - Start Date < End Date
     Given Operator go to this URL "https://operatorv2-qa.ninjavan.co/#/sg/station-route"
     And Operator select filters on Station Route page:

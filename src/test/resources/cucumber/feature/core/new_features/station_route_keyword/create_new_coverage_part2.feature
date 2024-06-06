@@ -403,7 +403,7 @@ Feature: Create New Coverage
       | primaryDriver  | {KEY_DRIVER_LIST_OF_DRIVERS[3].displayName}       |
       | fallbackDriver | {KEY_DRIVER_LIST_OF_DRIVERS[4].displayName}       |
     And Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                                                                                                                                                                              |
+      | top    | Status 400: Bad Request                                                                                                                                                                          |
       | bottom | ^.*Error Message: cannot create current coverage. Please adjust your input. \[area: AREA CNTDK {gradle-current-date-yyyyMMddHHmmsss}\]: there is another existing coverage with the same ar....* |
     Then Operator verify data on Transfer duplicate keywords dialog:
       | area           |  |
@@ -443,7 +443,7 @@ Feature: Create New Coverage
       | primaryDriver  | {KEY_DRIVER_LIST_OF_DRIVERS[3].displayName}        |
       | fallbackDriver | {KEY_DRIVER_LIST_OF_DRIVERS[4].displayName}        |
     And Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                                                                                                                                                                                |
+      | top    | Status 400: Bad Request                                                                                                                                                                            |
       | bottom | ^.*Error Message: cannot create current coverage. Please adjust your input. \[area: AREA CNTDAVK {gradle-current-date-yyyyMMddHHmmsss}\]: there is another existing coverage with the same ar....* |
     Then Operator verify data on Transfer duplicate keywords dialog:
       | area           |  |

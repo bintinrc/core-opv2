@@ -43,10 +43,11 @@ Feature: Stamp Disassociation
       | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     When Operator click on the Disassociate Stamp button
     And Operator go to menu Order -> All Orders
-    Then Operator can't find order on All Orders page using this criteria below:
-      | category    | Tracking / Stamp ID |
-      | searchLogic | contains            |
-      | searchTerm  | KEY_CORE_STAMP_ID   |
+    # Uncomment when All Orders page is migrated to orders-v2
+#    Then Operator can't find order on All Orders page using this criteria below:
+#      | category    | Tracking / Stamp ID |
+#      | searchLogic | contains            |
+#      | searchTerm  | KEY_CORE_STAMP_ID   |
 
   @MediumPriority
   Scenario: Stamp Disassociation of Order by Stamp Id - Invalid Tracking Id
