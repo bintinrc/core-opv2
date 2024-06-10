@@ -15,6 +15,7 @@ Feature: Route Logs
       | routeDateTo   | TODAY      |
       | hubName       | {hub-name} |
     And Operator open Route Manifest V2 page of route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" from Route Logs page
+    When Operator waits for 3 seconds
     Then Operator verifies route details on Route Manifest page:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
 

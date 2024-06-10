@@ -65,7 +65,7 @@ Feature: Create Route Groups - Priority Parcel Filters
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
     And Operator click Load Selection on Create Route Groups page
     Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                                                                        |
+      | top    | Status 400: Bad Request                                                                    |
       | bottom | ^.*Error Message: Same shipper ids are both included and excluded: {filter-shipper-name}.* |
 
   @HighPriority
