@@ -54,16 +54,16 @@ Feature: Mask Route Manifest Info
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
     When Operator open Route Manifest page for route ID "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     Then Operator verify waypoint at Route Manifest using data below:
-      | status      | Pending                                                                        |
-      | trackingIds | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                     |
-      | contact     | Click to reveal (tracked)4435                                                  |
-      | address     | Click to reveal (tracked)AD, SG, 238880 Click to reveal (tracked) SG 238880 SG |
+      | status      | Pending                                                                               |
+      | trackingIds | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                            |
+      | contact     | Click to reveal (tracked)4435                                                         |
+      | address     | Click to reveal (tracked)AD, SG, 238880 Click to reveal (tracked) Singapore 238880 SG |
     When Operator reveals masked information
     Then Operator verify waypoint at Route Manifest using data below:
-      | status      | Pending                                        |
-      | trackingIds | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}     |
-      | contact     | +9727894435                                    |
-      | address     | 501, ORCHARD ROAD, SG, 238880 3-4 SG 238880 SG |
+      | status      | Pending                                               |
+      | trackingIds | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}            |
+      | contact     | +9727894435                                           |
+      | address     | 501, ORCHARD ROAD, SG, 238880 3-4 Singapore 238880 SG |
 
   @DeleteOrArchiveRoute @MediumPriority
   Scenario: Operator View Mask Order for Return Pickup on Route Manifest

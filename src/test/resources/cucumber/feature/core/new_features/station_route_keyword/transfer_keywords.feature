@@ -202,7 +202,7 @@ Feature: Transfer Keywords
       | AREA TKCF {gradle-current-date-yyyyMMddHHmmsss} | KEYWORD {gradle-current-date-yyyyMMddHHmmsss} |
     And Operator click 'Yes, transfer' button on Transfer keywords dialog
     And Operator verifies that error react notification displayed:
-      | top    | Status 400: Unknown                                                                                                                                                                                |
+      | top    | Status 400: Bad Request                                                                                                                                                                            |
       | bottom | ^.*Error Message: cannot transfer all keywords of current coverage \[area=AREA TKCF {gradle-current-date-yyyyMMddHHmmsss}\]: there is another existing coverage with the same area and no key....* |
 
   @DeleteDriverV2 @DeleteCoverageV2 @MediumPriority

@@ -157,5 +157,5 @@ Feature: Create Route Groups
     And Operator choose "Include Transactions" on Transaction Filters section on Create Route Groups page
     And Operator click Load Selection on Create Route Groups page
     Then Operator verifies Transaction records on Create Route Groups page using data below:
-      | trackingId                                 | type                 | shipper                                  | address                                              | status                 |
-      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | Arrived at Sorting Hub |
+      | trackingId                                 | type                 | shipper                                  | address                                                   | status                 |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} | DELIVERY Transaction | {KEY_LIST_OF_CREATED_ORDERS[1].fromName} | {KEY_LIST_OF_CREATED_ORDERS[1].buildShortToAddressString} | Arrived at Sorting Hub |

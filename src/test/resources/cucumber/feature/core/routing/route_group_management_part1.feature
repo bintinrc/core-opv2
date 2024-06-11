@@ -60,6 +60,7 @@ Feature: Route Group Management
     Then Operator verifies that success react notification displayed:
       | top    | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name} |
       | bottom | 1 Route Group Deleted                      |
+    When Operator waits for 3 seconds
     Then Operator verify "{KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name}" route group was deleted on Route Group Management page
 
   @DeleteRouteGroupsV2 @HighPriority
@@ -97,6 +98,7 @@ Feature: Route Group Management
       | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[2].name} |
     Then Operator verifies that success react notification displayed:
       | top | 2 Route Group(s) Deleted |
+    When Operator waits for 3 seconds
     And Operator verify route groups were deleted on Route Group Management page:
       | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name} |
       | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[2].name} |
@@ -111,4 +113,5 @@ Feature: Route Group Management
     Then Operator verifies that success react notification displayed:
       | top    | {KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name} |
       | bottom | 1 Route Group Deleted                      |
+    When Operator waits for 3 seconds
     Then Operator verify "{KEY_LIST_OF_CREATED_ROUTE_GROUPS[1].name}" route group was deleted on Route Group Management page
