@@ -55,6 +55,7 @@ Feature: Order Tag Management V2
       | {order-tag-name}   |
       | {order-tag-name-2} |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    And Operator waits for 2 seconds
     Then Operator verify the tags shown on Edit Order V2 page
       | {order-tag-name-3} |
 
@@ -161,7 +162,10 @@ Feature: Order Tag Management V2
     Then Operator verifies selected value of RTS filter is "Hide" on Order Tag Management page V2
     When Operator clicks 'Clear All Selection' button on Order Tag Management page V2
     And Operator selects filter and clicks Load Selection on Add Tags to Order page V2 using data below:
-      | rts | Hide |
+      | shipperName    | {shipper-v4-name}      |
+      | status         | Transit                |
+      | granularStatus | Arrived at Sorting Hub |
+      | rts            | Hide                   |
     Then Operator verifies orders are not displayed on Order Tag Management page V2:
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |

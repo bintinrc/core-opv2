@@ -202,11 +202,11 @@ public class OrderTagManagementStepsV2 extends AbstractSteps {
   public void operatorVerifyOrdersAreNotDisplayedV2(List<String> trackingIds) {
     orderTagManagementPageV2.inFrame((page) -> {
     List<String> listOfTrackingIds = resolveValues(trackingIds);
-    pause2s();
+    pause3s();
       listOfTrackingIds.forEach(trackingId ->
     {
 
-      page.ordersTable.filterByColumn("trackingId", trackingId);
+      page.ordersTable.filterByColumnV2("trackingId", trackingId);
       page.loadingBar.waitUntilInvisible(60);
       Assertions.assertThat(page.ordersTable.isEmpty())
           .as(f("Order %s must not be displayed", trackingId)).isTrue();

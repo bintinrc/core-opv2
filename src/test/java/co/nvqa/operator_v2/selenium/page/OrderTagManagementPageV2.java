@@ -177,10 +177,10 @@ public class OrderTagManagementPageV2 extends SimpleReactPage<OrderTagManagement
     @FindBy(css = ".ant-select")
     public AntSelect3 selectTag;
 
-    @FindBy(css = "[data-testid='save-button']")
+    @FindBy(css = "[data-testid='remove-tags-dialog.save-button']")
     public Button save;
 
-    @FindBy(css = "button[aria-label='remove']")
+    @FindBy(css = "span[aria-label='close']")
     public Button removeTag;
 
     public RemoveTagsModal(WebDriver webDriver, WebElement webElement) {
