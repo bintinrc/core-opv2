@@ -26,6 +26,8 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
   private static final String ACTION_BUTTON_LOCATOR_PATTERN = "//div[@role='row'][%d]//div[@role='gridcell'][@data-datakey='id']//button[@data-pa-label='%s']";
   private static final String COLUMN_TEXT_FILTER_LOCATOR_PATTERN = "//div[@role='gridcell'][@data-key='%s']//span[./input[@type='text']]";
   private static final String COLUMN_FILTER_LOCATOR_PATTERN_V2 = "//div[@role='gridcell'][@data-key='%s']//div[./input]";
+
+  private static final String COLUMN_FILTER_LOCATOR_PATTERN_V3 = "//div[@role='gridcell'][@data-key='%s']//div//span[./input]";
   private static final String CELL_LOCATOR_PATTERN_V2 = "//div[@class='BaseTable__body']//div[@role='row'][%d]//div[@role='gridcell'][%d]";
   private static final String COLUMN_DROPDOWN_FILTER_LOCATOR_PATTERN = "//div[@role='gridcell'][@data-key='%s']//div[contains(@class,'ant-select')]";
   private static final String COLUMN_MULTISELECT_FILTER_LOCATOR_PATTERN = "//div[@role='gridcell'][@data-key='%s']//div[contains(@class,'FilterSelect')]";
@@ -155,6 +157,12 @@ public class AntTableV2<T extends DataEntity<?>> extends AbstractTable<T> {
       xpath = f(COLUMN_FILTER_LOCATOR_PATTERN_V2, columnLocators.get(columnId));
       if (StringUtils.isNotBlank(tableLocator)) {
         xpath = tableLocator + xpath;
+      }
+      else {
+        xpath = f(COLUMN_FILTER_LOCATOR_PATTERN_V3, columnLocators.get(columnId));
+        if (StringUtils.isNotBlank(tableLocator)) {
+          xpath = tableLocator + xpath;
+        }
       }
       AntTextBox input = new AntTextBox(getWebDriver(), xpath);
       input.scrollIntoView();
