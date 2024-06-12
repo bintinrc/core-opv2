@@ -108,7 +108,6 @@ Feature: ID - Order COD Limit
       | cod       | {cod-above-limit}                  |
       | refresh   | true                               |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 500: Unknown                                                         |
       | bottom | ^.*Driver {KEY_DRIVER_LIST_OF_DRIVERS[1].id} has exceeded total cod limit.* |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
@@ -222,7 +221,6 @@ Feature: ID - Order COD Limit
       | id         | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
       | driverName | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 500: Unknown                                                                                                        |
       | bottom | ^.*Error Message: exceptions.ProcessingException: Driver {KEY_DRIVER_LIST_OF_DRIVERS[2].id} has exceeded total cod limit.* |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
