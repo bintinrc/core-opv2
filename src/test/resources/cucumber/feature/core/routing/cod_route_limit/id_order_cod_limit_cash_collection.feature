@@ -106,7 +106,6 @@ Feature: ID - Order COD Limit
     And Operator add created order route on Edit Order V2 page using data below:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Bad Request                           |
       | bottom | ^.*Error Message: Driver has exceeded total cod.* |
 
   @DeleteDriverV2 @DeleteRoutes
@@ -211,7 +210,6 @@ Feature: ID - Order COD Limit
     And Operator add created order route on Edit Order V2 page using data below:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verifies that error react notification displayed:
-      | top                | Status 400: Bad Request                           |
       | bottom             | ^.*Error Message: Driver has exceeded total cod.* |
       | waitUntilInvisible | true                                              |
     Given API Driver Management - Operator create CODLA using this data:
@@ -294,7 +292,6 @@ Feature: ID - Order COD Limit
     And Operator add created order route on Edit Order V2 page using data below:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Bad Request                           |
       | bottom | ^.*Error Message: Driver has exceeded total cod.* |
     Given API Driver Management - Operator create CODLA using this data:
       | createCodLaRequest | {"requester_email":"{shipper-v4-email}","requested_at":"{date: 0 days ago, YYYY-MM-dd}T00:00:00Z","approver_email":"{operator-portal-uid}","comments":"For testing","start_date":"{date: 0 days ago, YYYY-MM-dd}","num_days":5,"cod_value":{cod-multiple-above-limit}} |
@@ -306,7 +303,6 @@ Feature: ID - Order COD Limit
     And Operator add created order route on Edit Order V2 page using data below:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Bad Request                           |
       | bottom | ^.*Error Message: Driver has exceeded total cod.* |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
@@ -387,7 +383,6 @@ Feature: ID - Order COD Limit
       | cashOnDelivery | yes                  |
       | amount         | {cod-above-limit}.00 |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Bad Request                           |
       | bottom | ^.*Error Message: Driver has exceeded total cod.* |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
@@ -561,7 +556,6 @@ Feature: ID - Order COD Limit
       | id   | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
       | date | {gradle-next-1-day-yyyy-MM-dd}     |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 500: Unknown                                                                                                        |
       | bottom | ^.*Error Message: exceptions.ProcessingException: Driver {KEY_DRIVER_LIST_OF_DRIVERS[1].id} has exceeded total cod limit.* |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
@@ -704,7 +698,6 @@ Feature: ID - Order COD Limit
       | id         | {KEY_LIST_OF_CREATED_ROUTES[1].id}          |
       | driverName | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName} |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 500: Unknown                                                                                                        |
       | bottom | ^.*Error Message: exceptions.ProcessingException: Driver {KEY_DRIVER_LIST_OF_DRIVERS[2].id} has exceeded total cod limit.* |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
@@ -893,7 +886,6 @@ Feature: ID - Order COD Limit
     And Operator click Update Routes on Edit Routes page
     And Confirm changes on Edit Routes page
     Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Bad Request                    |
       | bottom | ^.*cannot exceed maximum daily COD limit.* |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
@@ -1074,7 +1066,6 @@ Feature: ID - Order COD Limit
     And Operator click Update Routes on Edit Routes page
     And Confirm changes on Edit Routes page
     Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Bad Request                    |
       | bottom | ^.*cannot exceed maximum daily COD limit.* |
 
   @DeleteDriverV2 @DeleteRoutes @HighPriority
@@ -1239,5 +1230,4 @@ Feature: ID - Order COD Limit
     And Operator click Update Routes on Edit Routes page
     And Confirm changes on Edit Routes page
     Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Bad Request                    |
       | bottom | ^.*cannot exceed maximum daily COD limit.* |

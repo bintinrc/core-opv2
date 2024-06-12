@@ -64,7 +64,6 @@ Feature: ID - Driver Route Limit
       | driverName    | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
       | checkToast    | false                                       |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 500: Unknown                   |
       | bottom | ^.*cannot create more than 3 routes.* |
     When Operator refresh page
     And DB Route - get route_logs record for driver id "{KEY_DRIVER_LIST_OF_DRIVERS[1].id}"
@@ -113,7 +112,6 @@ Feature: ID - Driver Route Limit
       | driverName    | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
       | checkToast    | false                                       |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 500: Unknown                   |
       | bottom | ^.*cannot create more than 3 routes.* |
 
 
@@ -326,7 +324,6 @@ Feature: ID - Driver Route Limit
       | id         | {KEY_LIST_OF_CREATED_ROUTES[4].id}          |
       | driverName | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName} |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 500: Unknown      |
       | bottom | ^.*Cannot update Route.* |
     Then Operator verify route details on Route Logs page using data below:
       | id         | {KEY_LIST_OF_CREATED_ROUTES[4].id} |

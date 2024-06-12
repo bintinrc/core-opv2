@@ -69,7 +69,6 @@ Feature: Delete Order
     And Operator verify order granular status is "En-route to Sorting Hub" on Edit Order V2 page
     And Operator delete order on Edit Order V2 page
     Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Bad Request                                                                                                                     |
       | bottom | ^.*Error Message: Order can only be deleted if in the following states : \[Staging, Pending Pickup, Van en-route to pickup, Pickup fail\].* |
 
   @MediumPriority

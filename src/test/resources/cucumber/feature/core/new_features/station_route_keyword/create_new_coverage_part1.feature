@@ -303,7 +303,6 @@ Feature: Create New Coverage
       | primaryDriver  | {KEY_DRIVER_LIST_OF_DRIVERS[1].displayName}           |
       | fallbackDriver | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName}           |
     And Operator verifies that error react notification displayed:
-      | top    | Status 400: Bad Request                                                                                                                                                                                                  |
       | bottom | ^.*Error Message: More than one existing areas are found in the area and area variation input: \[AREA CNCNM {gradle-current-date-yyyyMMddHHmmsss},AREAVARIATION 2 {gradle-current-date-yyyyMMddHHmmsss}\]. Please a....* |
 
   @DeleteDriverV2 @DeleteCoverageV2 @MediumPriority

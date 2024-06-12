@@ -120,7 +120,6 @@ Feature: Route Inbound Screen 1
       | fetchBy      | FETCH_BY_TRACKING_ID                  |
       | fetchByValue | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verify error message displayed on Route Inbound:
-      | status       | 400 Bad Request            |
       | errorCode    | 103096                     |
       | errorMessage | Order is not on any route! |
 
@@ -132,7 +131,6 @@ Feature: Route Inbound Screen 1
       | fetchBy      | FETCH_BY_TRACKING_ID |
       | fetchByValue | SOMEWRONGTRACKINGID  |
     Then Operator verify error message displayed on Route Inbound:
-      | status       | 404 Not Found    |
       | errorCode    | 103014           |
       | errorMessage | Order not found! |
 

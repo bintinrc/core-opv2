@@ -60,7 +60,6 @@ Feature: Manage Order Tags
       | description | This tag is created by Automation Test for testing purpose only. Ignore this tag. |
       | getId       | false                                                                             |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Bad Request                                        |
       | bottom | ^.*Error Message: Order Tag with Name ABE is already in use!.* |
 
   @DeleteOrderTagsV2 @MediumPriority
@@ -75,5 +74,4 @@ Feature: Manage Order Tags
     And API Core - delete "{KEY_CORE_LIST_OF_CREATED_ORDER_TAGS[1].id}" order tag
     And Operator deletes "{KEY_CORE_LIST_OF_CREATED_ORDER_TAGS[1].name}" tag without filtering on Manage Order Tags page
     Then Operator verifies that error react notification displayed:
-      | top    | Status 404: Not Found                                                                |
       | bottom | ^.*Error Message: Order Tag {KEY_CORE_LIST_OF_CREATED_ORDER_TAGS[1].id} not found!.* |

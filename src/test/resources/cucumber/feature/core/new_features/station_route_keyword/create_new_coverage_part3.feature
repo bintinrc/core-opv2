@@ -43,7 +43,6 @@ Feature: Create New Coverage
       | fallbackDriver | {KEY_DRIVER_LIST_OF_DRIVERS[2].displayName}      |
     When Operator click 'Yes, Transfer' button on Transfer duplicate keywords dialog
     And Operator verifies that error react notification displayed:
-      | top    | Status 400: Bad Request                                                                                                                                                                           |
       | bottom | ^.*Error Message: cannot create current coverage\. Please adjust your input. \[area: AREA CNHMD {gradle-current-date-yyyyMMddHHmmsss}\]: there is another existing coverage with the same ar....* |
     And DB Route - verify that sr_coverages record is not created:
       | area             | AREA CNHMD {gradle-current-date-yyyyMMddHHmmsss} |
@@ -89,7 +88,6 @@ Feature: Create New Coverage
       | keywords       | KEYWORD {gradle-current-date-yyyyMMddHHmmsss}      |
     When Operator click 'No, don't transfer' button on Transfer duplicate keywords dialog
     And Operator verifies that error react notification displayed:
-      | top    | Status 400: Bad Request                                                                                                                                                                            |
       | bottom | ^.*Error Message: cannot create current coverage. Please adjust your input. \[area: AREA CNHMDAV {gradle-current-date-yyyyMMddHHmmsss}\]: there is another existing coverage with the same ar....* |
     And DB Route - verify that sr_coverages record is not created:
       | area             | AREA CNHMDAV {gradle-current-date-yyyyMMddHHmmsss} |

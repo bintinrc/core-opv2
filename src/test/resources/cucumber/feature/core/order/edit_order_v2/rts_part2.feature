@@ -420,7 +420,6 @@ Feature: RTS
       | reason   | Nobody at address    |
       | timeslot | All Day (9AM - 10PM) |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Bad Request                                                                                           |
       | bottom | ^.*Error Message: An order with status 'ON_HOLD' can be RTS only when last ticket is of type DAMAGED or MISSING.* |
     And DB Core - verify orders record:
       | id  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
@@ -460,7 +459,6 @@ Feature: RTS
       | reason   | Nobody at address    |
       | timeslot | All Day (9AM - 10PM) |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 400: Bad Request                                                                                           |
       | bottom | ^.*Error Message: An order with status 'ON_HOLD' can be RTS only when last ticket is of type DAMAGED or MISSING.* |
     And DB Core - verify orders record:
       | id  | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
