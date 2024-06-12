@@ -1,4 +1,4 @@
-@OperatorV2 @Core @RoutingID @AddOrderToRouteID @RoutingModulesID @current
+@OperatorV2 @Core @RoutingID @AddOrderToRouteID @RoutingModulesID
 Feature: Add Order To Route
 
   Background:
