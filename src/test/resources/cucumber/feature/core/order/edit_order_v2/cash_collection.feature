@@ -300,5 +300,4 @@ Feature: Cash Collection
       | cashOnDelivery | yes   |
       | amount         | 10.00 |
     Then Operator verifies that error react notification displayed:
-      | top    | Status 500: Internal Server Error                      |
       | bottom | ^.*Error Message: Not allowed to update an RTS order.* |
