@@ -1,4 +1,4 @@
-@OperatorV2 @Core @NewFeatures @OutboundMonitoring
+@OperatorV2 @Core @RouteLogs @OutboundBreakroute
 Feature: Route Logs - Outbound Breakroute
 
   Background:
