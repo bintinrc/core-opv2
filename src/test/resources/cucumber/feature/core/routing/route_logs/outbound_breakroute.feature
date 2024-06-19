@@ -35,7 +35,7 @@ Feature: Route Logs - Outbound Breakroute
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
     When Operator go to menu Routing -> Route Logs
     And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id}" Route ID on Route Logs page
-    And Operator selects 'Pull out parcels from selected' on Route Logs page:
+    And Operator clicks 'Pull out parcels from route' button on Route Logs page:
       | routeIds | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verifies 1 total selected Route IDs shown on Outbound Breakroute V2 page
     And Operator verifies "{date: 0 days next, YYYY-MM-dd}" date shown on Outbound Breakroute V2 page

@@ -1355,13 +1355,25 @@ public class RouteLogsSteps extends AbstractSteps {
     var finalData = resolveKeyValues(data);
     routeLogsPage.inFrame(() -> {
       List<String> routeIds = splitAndNormalize(finalData.get("routeIds"));
-      boolean selectedOnly = Boolean.parseBoolean(finalData.getOrDefault("selectedOnly", "true"));
-
       routeIds.forEach(routeId -> {
         routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
         routeLogsPage.routesTable.selectRow(1);
       });
       routeLogsPage.actionsMenu.selectOption(ACTION_PULL_OUT_PARCELS_FROM_SELECTED);
+      routeLogsPage.switchToOtherWindowUrlContains("outbound-breakroute");
+    });
+  }
+
+  @When("Operator clicks 'Pull out parcels from route' button on Route Logs page:")
+  public void pullOutParcelsFromRouteButton(Map<String, String> data) {
+    var finalData = resolveKeyValues(data);
+    routeLogsPage.inFrame(() -> {
+      List<String> routeIds = splitAndNormalize(finalData.get("routeIds"));
+      routeIds.forEach(routeId -> {
+        routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+        routeLogsPage.routesTable.selectRow(1);
+      });
+      routeLogsPage.routeRowPullOutOfRouteButton.click();
       routeLogsPage.switchToOtherWindowUrlContains("outbound-breakroute");
     });
   }
