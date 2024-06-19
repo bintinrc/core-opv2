@@ -402,11 +402,9 @@ Feature: Route Logs - Outbound Breakroute
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId}}]} |
     When Operator go to menu Routing -> Route Logs
-    And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id},{KEY_LIST_OF_CREATED_ROUTES[2].id}" Route ID on Route Logs page
+    And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id}" Route ID on Route Logs page
     And Operator selects 'Pull out parcels from selected' on Route Logs page:
       | routeIds | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-    When Operator clicks Pull Out button for routes on Outbound Monitoring Page:
-      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verifies orders info on Outbound Breakroute V2 page:
       | trackingId                            | granularStatus          | lastScannedHub | routeId                            | routeDate                                | driverId          | driverName          | driverType                 | address                                              | lastScanType | orderDeliveryType |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | On Vehicle for Delivery | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | inbound_scan | STANDARD          |
