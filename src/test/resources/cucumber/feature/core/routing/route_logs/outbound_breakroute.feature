@@ -1,6 +1,6 @@
-@OperatorV2 @Core @NewFeatures @OutboundMonitoring @OutboundMonitoringPart2
-Feature: Outbound Monitoring
-# TODO : deprecte this page regarding this TDD https://ninjavan-tech.atlassian.net/wiki/spaces/SD/pages/107383921/Core+ADR+-+Redirect+outbound+break+route+to+route+logs+page
+@OperatorV2 @Core @NewFeatures @OutboundMonitoring
+Feature: Route Logs - Outbound Breakroute
+
   Background:
     Given Launch browser
     Given Operator login with username = "{operator-portal-uid}" and password = "{operator-portal-pwd}"
@@ -33,12 +33,10 @@ Feature: Outbound Monitoring
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                 |
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
-    Given Operator go to menu New Features -> Outbound Monitoring
-    When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
-      | zoneName | {zone-name-2} |
-      | hubName  | {hub-name}    |
-    When Operator clicks Pull Out button for routes on Outbound Monitoring Page:
-      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    When Operator go to menu Routing -> Route Logs
+    And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id}" Route ID on Route Logs page
+    And Operator selects 'Pull out parcels from selected' on Route Logs page:
+      | routeIds | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     Then Operator verifies 1 total selected Route IDs shown on Outbound Breakroute V2 page
     And Operator verifies "{date: 0 days next, YYYY-MM-dd}" date shown on Outbound Breakroute V2 page
     And Operator verifies orders info on Outbound Breakroute V2 page:
@@ -80,13 +78,10 @@ Feature: Outbound Monitoring
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[4].id}                                 |
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[2].id}, "type":"DELIVERY"} |
-    Given Operator go to menu New Features -> Outbound Monitoring
-    When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
-      | zoneName | {zone-name-2} |
-      | hubName  | {hub-name}    |
-    When Operator clicks Pull Out button for routes on Outbound Monitoring Page:
-      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
+    When Operator go to menu Routing -> Route Logs
+    And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id},{KEY_LIST_OF_CREATED_ROUTES[2].id}" Route ID on Route Logs page
+    And Operator selects 'Pull out parcels from selected' on Route Logs page:
+      | routeIds | {KEY_LIST_OF_CREATED_ROUTES[1].id},{KEY_LIST_OF_CREATED_ROUTES[2].id} |
     Then Operator verifies 2 total selected Route IDs shown on Outbound Breakroute V2 page
     And Operator verifies "{date: 0 days next, YYYY-MM-dd}" date shown on Outbound Breakroute V2 page
     When Operator filter orders table on Outbound Breakroute V2 page:
@@ -219,13 +214,10 @@ Feature: Outbound Monitoring
       | parcels         | [{ "tracking_id": "{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}", "action": "SUCCESS" }] |
       | routes          | KEY_DRIVER_ROUTES                                                                      |
       | globalShipperId | {shipper-v4-id}                                                                        |
-    When Operator go to menu New Features -> Outbound Monitoring
-    When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
-      | zoneName | {zone-name-2} |
-      | hubName  | {hub-name}    |
-    When Operator clicks Pull Out button for routes on Outbound Monitoring Page:
-      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
+    When Operator go to menu Routing -> Route Logs
+    And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id},{KEY_LIST_OF_CREATED_ROUTES[2].id}" Route ID on Route Logs page
+    And Operator selects 'Pull out parcels from selected' on Route Logs page:
+      | routeIds | {KEY_LIST_OF_CREATED_ROUTES[1].id},{KEY_LIST_OF_CREATED_ROUTES[2].id} |
     And Operator verifies orders info on Outbound Breakroute V2 page:
       | trackingId                            | granularStatus         | lastScannedHub | routeId                            | routeDate                                | driverId          | driverName          | driverType                 | address                                              | lastScanType | orderDeliveryType |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | Completed              | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | inbound_scan | STANDARD          |
@@ -270,13 +262,10 @@ Feature: Outbound Monitoring
       | jobAction       | SUCCESS                                                                          |
       | jobMode         | PICK_UP                                                                          |
       | globalShipperId | {shipper-v4-id}                                                                  |
-    When Operator go to menu New Features -> Outbound Monitoring
-    When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
-      | zoneName | {zone-name-2} |
-      | hubName  | {hub-name}    |
-    When Operator clicks Pull Out button for routes on Outbound Monitoring Page:
-      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
+    When Operator go to menu Routing -> Route Logs
+    And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id},{KEY_LIST_OF_CREATED_ROUTES[2].id}" Route ID on Route Logs page
+    And Operator selects 'Pull out parcels from selected' on Route Logs page:
+      | routeIds | {KEY_LIST_OF_CREATED_ROUTES[1].id},{KEY_LIST_OF_CREATED_ROUTES[2].id} |
     Then Operator verifies 2 total selected Route IDs shown on Outbound Breakroute V2 page
     And Operator verifies orders table is empty on Outbound Breakroute V2 page
 
@@ -293,13 +282,10 @@ Feature: Outbound Monitoring
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
-    When Operator go to menu New Features -> Outbound Monitoring
-    Then Operator verifies Date is "{date: 0 days next, YYYY-MM-dd}" on Outbound Monitoring Page
-    When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
-      | zoneName | {zone-name-2} |
-      | hubName  | {hub-name}    |
-    When Operator clicks Pull Out button for routes on Outbound Monitoring Page:
-      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    When Operator go to menu Routing -> Route Logs
+    And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id}" Route ID on Route Logs page
+    And Operator selects 'Pull out parcels from selected' on Route Logs page:
+      | routeIds | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator clicks Pull Out button for orders on Outbound Breakroute V2 page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies info in Confirm Pull Out modal on Outbound Breakroute V2 page:
@@ -374,14 +360,10 @@ Feature: Outbound Monitoring
     And API Driver - Driver van inbound:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[2].id}                                                                                                                                                |
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}}]} |
-    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[2].id}"
-    When Operator go to menu New Features -> Outbound Monitoring
-    When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
-      | zoneName | {zone-name-2} |
-      | hubName  | {hub-name}    |
-    And Operator clicks Pull Out button for routes on Outbound Monitoring Page:
-      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
+    When Operator go to menu Routing -> Route Logs
+    And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id},{KEY_LIST_OF_CREATED_ROUTES[2].id}" Route ID on Route Logs page
+    And Operator selects 'Pull out parcels from selected' on Route Logs page:
+      | routeIds | {KEY_LIST_OF_CREATED_ROUTES[1].id},{KEY_LIST_OF_CREATED_ROUTES[2].id} |
     And Operator verifies filter results on Outbound Breakroute V2 page:
       | trackingId                            | granularStatus          | lastScannedHub | routeId                            | routeDate                                | driverId          | driverName          | driverType                 | address                                              | lastScanType | orderDeliveryType |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} | On Vehicle for Delivery | {hub-name}     | {KEY_LIST_OF_CREATED_ROUTES[1].id} | {date: 0 days next, YYYY-MM-dd} 00:00:00 | {ninja-driver-id} | {ninja-driver-name} | {default-driver-type-name} | {KEY_LIST_OF_CREATED_ORDERS[1].buildToAddressString} | inbound_scan | STANDARD          |
@@ -419,11 +401,10 @@ Feature: Outbound Monitoring
     And API Driver - Driver van inbound:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId}}]} |
-    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
-    Given Operator go to menu New Features -> Outbound Monitoring
-    When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
-      | zoneName | {zone-name} |
-      | hubName  | {hub-name}  |
+    When Operator go to menu Routing -> Route Logs
+    And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id},{KEY_LIST_OF_CREATED_ROUTES[2].id}" Route ID on Route Logs page
+    And Operator selects 'Pull out parcels from selected' on Route Logs page:
+      | routeIds | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When Operator clicks Pull Out button for routes on Outbound Monitoring Page:
       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator verifies orders info on Outbound Breakroute V2 page:
@@ -452,13 +433,10 @@ Feature: Outbound Monitoring
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                 |
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[2].id}, "type":"DELIVERY"} |
-    When Operator go to menu New Features -> Outbound Monitoring
-    When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
-      | zoneName | {zone-name} |
-      | hubName  | {hub-name}  |
-    When Operator clicks Pull Out button for routes on Outbound Monitoring Page:
-      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
+    When Operator go to menu Routing -> Route Logs
+    And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id},{KEY_LIST_OF_CREATED_ROUTES[2].id}" Route ID on Route Logs page
+    And Operator selects 'Pull out parcels from selected' on Route Logs page:
+      | routeIds | {KEY_LIST_OF_CREATED_ROUTES[1].id},{KEY_LIST_OF_CREATED_ROUTES[2].id} |
     And Operator clicks Pull Out button for orders on Outbound Breakroute V2 page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
@@ -530,7 +508,6 @@ Feature: Outbound Monitoring
     And API Driver - Driver van inbound:
       | routeId | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                                                                                |
       | request | {"parcels":[{"inbound_type":"VAN_FROM_NINJAVAN","tracking_id":"{KEY_LIST_OF_CREATED_TRACKING_IDS[2]}","waypoint_id":{KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId}}]} |
-    And API Driver - Driver start route "{KEY_LIST_OF_CREATED_ROUTES[1].id}"
     And API Driver - Driver submit POD:
       | routeId         | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                |
       | waypointId      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId}                        |
@@ -547,12 +524,10 @@ Feature: Outbound Monitoring
       | jobMode         | DELIVERY                                                                                             |
       | failureReasonId | 139                                                                                                  |
       | globalShipperId | {shipper-v4-id}                                                                                      |
-    Given Operator go to menu New Features -> Outbound Monitoring
-    When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
-      | zoneName | {zone-name} |
-      | hubName  | {hub-name}  |
-    When Operator clicks Pull Out button for routes on Outbound Monitoring Page:
-      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    When Operator go to menu Routing -> Route Logs
+    And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id}" Route ID on Route Logs page
+    And Operator selects 'Pull out parcels from selected' on Route Logs page:
+      | routeIds | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator clicks Pull Out button for orders on Outbound Breakroute V2 page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
@@ -608,13 +583,10 @@ Feature: Outbound Monitoring
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                 |
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[2].id}, "type":"DELIVERY"} |
-    Given Operator go to menu New Features -> Outbound Monitoring
-    When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
-      | zoneName | {zone-name-2} |
-      | hubName  | {hub-name}    |
-    When Operator clicks Pull Out button for routes on Outbound Monitoring Page:
-      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
-      | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
+    When Operator go to menu Routing -> Route Logs
+    And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id},{KEY_LIST_OF_CREATED_ROUTES[2].id}" Route ID on Route Logs page
+    And Operator selects 'Pull out parcels from selected' on Route Logs page:
+      | routeIds | {KEY_LIST_OF_CREATED_ROUTES[1].id},{KEY_LIST_OF_CREATED_ROUTES[2].id} |
     And Operator clicks Pull Out button for orders on Outbound Breakroute V2 page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
@@ -666,12 +638,10 @@ Feature: Outbound Monitoring
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                 |
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
-    When Operator go to menu New Features -> Outbound Monitoring
-    When Operator select filter and click Load Selection on Outbound Monitoring page using data below:
-      | zoneName | {zone-name-2} |
-      | hubName  | {hub-name}    |
-    When Operator clicks Pull Out button for routes on Outbound Monitoring Page:
-      | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    When Operator go to menu Routing -> Route Logs
+    And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id}" Route ID on Route Logs page
+    And Operator selects 'Pull out parcels from selected' on Route Logs page:
+      | routeIds | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     And Operator clicks Pull Out button for orders on Outbound Breakroute V2 page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |

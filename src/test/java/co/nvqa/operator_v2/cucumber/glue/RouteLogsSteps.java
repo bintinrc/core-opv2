@@ -39,6 +39,7 @@ import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.ACTION_MERGE_TRANS
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.ACTION_OPTIMISE_SELECTED;
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.ACTION_PRINT_PASSWORDS_OF_SELECTED;
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.ACTION_PRINT_SELECTED;
+import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.ACTION_PULL_OUT_PARCELS_FROM_SELECTED;
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.ACTION_UNARCHIVE_SELECTED;
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.EDIT_ROUTES_OF_SELECTED;
 import static co.nvqa.operator_v2.selenium.page.RouteLogsPage.RoutesTable.ACTION_EDIT_DETAILS;
@@ -1348,4 +1349,20 @@ public class RouteLogsSteps extends AbstractSteps {
     });
   }
 
+
+  @When("Operator selects 'Pull out parcels from selected' on Route Logs page:")
+  public void pullOutParcelsFromSelected(Map<String, String> data) {
+    var finalData = resolveKeyValues(data);
+    routeLogsPage.inFrame(() -> {
+      List<String> routeIds = splitAndNormalize(finalData.get("routeIds"));
+      boolean selectedOnly = Boolean.parseBoolean(finalData.getOrDefault("selectedOnly", "true"));
+
+      routeIds.forEach(routeId -> {
+        routeLogsPage.routesTable.filterByColumn(COLUMN_ROUTE_ID, routeId);
+        routeLogsPage.routesTable.selectRow(1);
+      });
+      routeLogsPage.actionsMenu.selectOption(ACTION_PULL_OUT_PARCELS_FROM_SELECTED);
+      routeLogsPage.switchToOtherWindowUrlContains("outbound-breakroute");
+    });
+  }
 }

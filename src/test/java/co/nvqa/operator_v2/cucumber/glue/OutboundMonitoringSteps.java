@@ -164,6 +164,7 @@ public class OutboundMonitoringSteps extends AbstractSteps {
   @Then("Operator verifies filter results on Outbound Breakroute V2 page:")
   public void checkFilterResults(List<Map<String, String>> data) {
     page.outboundBreakrouteV2Page.inFrame(page -> {
+      this.page.waitUntilVisibilityOfElementLocated("//div[contains(text(), 'End of Table')]");
       Assertions.assertThat(
               this.page.outboundBreakrouteV2Page.ordersInRouteTable.getRowsCount())
           .as("Orders table rows count")
