@@ -20,7 +20,7 @@ Feature: All Orders - Mass-Revert RTS
       | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                         |
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     When Operator go to menu Order -> All Orders
-    And Operator find multiple orders below by uploading CSV on All Orders page
+    And Operator find multiple orders below by uploading CSV on All Orders V2 page
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
     And Operator Mass-Revert RTS orders on All Orders Page:
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
@@ -112,7 +112,7 @@ Feature: All Orders - Mass-Revert RTS
       | orderId    | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                                                         |
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     When Operator go to menu Order -> All Orders
-    And Operator find multiple orders below by uploading CSV on All Orders page
+    And Operator find multiple orders below by uploading CSV on All Orders V2 page
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
     And Operator Mass-Revert RTS orders on All Orders Page:
@@ -260,7 +260,7 @@ Feature: All Orders - Mass-Revert RTS
     And API Core - Operator force success order "{KEY_LIST_OF_CREATED_ORDERS[1].id}" with cod collected "false"
     And API Core - Operator force success order "{KEY_LIST_OF_CREATED_ORDERS[2].id}" with cod collected "false"
     When Operator go to menu Order -> All Orders
-    And Operator find multiple orders below by uploading CSV on All Orders page
+    And Operator find multiple orders below by uploading CSV on All Orders V2 page
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
     And Operator Mass-Revert RTS orders on All Orders Page:
@@ -287,7 +287,7 @@ Feature: All Orders - Mass-Revert RTS
       | trackingId           | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
       | globalInboundRequest | {"hubId":{hub-id}}                         |
     When Operator go to menu Order -> All Orders
-    And Operator find multiple orders below by uploading CSV on All Orders page
+    And Operator find multiple orders below by uploading CSV on All Orders V2 page
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
     And Operator Mass-Revert RTS orders on All Orders Page:
@@ -325,7 +325,7 @@ Feature: All Orders - Mass-Revert RTS
       | rtsRequest | {"reason":"Return to sender: Nobody at address","timewindow_id":1,"date":"{gradle-next-1-day-yyyy-MM-dd}"} |
     And API Core - Operator force success order "{KEY_LIST_OF_CREATED_ORDERS[2].id}" with cod collected "false"
     When Operator go to menu Order -> All Orders
-    And Operator find multiple orders below by uploading CSV on All Orders page
+    And Operator find multiple orders below by uploading CSV on All Orders V2 page
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |

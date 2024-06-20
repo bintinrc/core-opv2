@@ -43,14 +43,14 @@ Feature: All Orders - Pull From Route
       | routeId  | {KEY_LIST_OF_CREATED_ROUTES[1].id}                         |
       | status   | Routed                                                     |
     When Operator go to menu Order -> All Orders
-    And Operator find multiple orders below by uploading CSV on All Orders page
+    And Operator find multiple orders below by uploading CSV on All Orders V2 page
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
-    And Operator unmask All Orders page
+    And Operator unmask All Orders V2 page
     When API Core - Operator get multiple order details for tracking ids:
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
-    Then Operator verify all orders in CSV is found on All Orders page with correct info
+    Then Operator verify all orders in CSV is found on All Orders V2 page with correct info
     When Operator pull out multiple orders below from route on All Orders page:
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
@@ -77,11 +77,11 @@ Feature: All Orders - Pull From Route
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
     And Operator go to menu Order -> All Orders
-    And Operator find multiple orders below by uploading CSV on All Orders page
+    And Operator find multiple orders below by uploading CSV on All Orders V2 page
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
-    And Operator unmask All Orders page
-    Then Operator verify all orders in CSV is found on All Orders page with correct info
+    And Operator unmask All Orders V2 page
+    Then Operator verify all orders in CSV is found on All Orders V2 page with correct info
     When Operator apply "Pull From Route" action and expect to see "Selection Error"
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |

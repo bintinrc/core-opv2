@@ -44,10 +44,10 @@ Feature: All Orders - RTS & Resume
       | globalShipperId | {shipper-v4-id}                                                                                    |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     When Operator go to menu Order -> All Orders
-    And Operator find multiple orders below by uploading CSV on All Orders page
+    And Operator find multiple orders below by uploading CSV on All Orders V2 page
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
-    And Operator unmask All Orders page
-    Then Operator verify all orders in CSV is found on All Orders page with correct info
+    And Operator unmask All Orders V2 page
+    Then Operator verify all orders in CSV is found on All Orders V2 page with correct info
     And Operator RTS multiple orders on next day on All Orders Page:
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -101,7 +101,7 @@ Feature: All Orders - RTS & Resume
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
     When Operator go to menu Order -> All Orders
-    When Operator find orders by uploading CSV on All Orders page:
+    When Operator find orders by uploading CSV on All Orders V2 page:
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
     And Operator RTS multiple orders on next day on All Orders Page:
@@ -401,7 +401,7 @@ Feature: All Orders - RTS & Resume
       | orderId        | {KEY_LIST_OF_CREATED_ORDERS[3].id} |
       | granularStatus | Returned To Sender                 |
     When Operator go to menu Order -> All Orders
-    And Operator find orders by uploading CSV on All Orders page:
+    And Operator find orders by uploading CSV on All Orders V2 page:
       | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId} |
       | {KEY_LIST_OF_CREATED_ORDERS[3].trackingId} |

@@ -26,9 +26,9 @@ Feature: ID - Order COD Limit
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[1].id} } |
     And Operator go to menu Order -> All Orders
-    And Operator find multiple orders below by uploading CSV on All Orders page
+    And Operator find multiple orders below by uploading CSV on All Orders V2 page
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
-    When Operator add multiple orders to route on All Orders page:
+    When Operator add multiple orders to route on All Orders V2 page:
       | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}    |
       | trackingIds | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies that info toast displayed:
@@ -84,9 +84,9 @@ Feature: ID - Order COD Limit
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[1].id} } |
     And Operator go to menu Order -> All Orders
-    And Operator find multiple orders below by uploading CSV on All Orders page
+    And Operator find multiple orders below by uploading CSV on All Orders V2 page
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
-    When Operator add multiple orders to route on All Orders page:
+    When Operator add multiple orders to route on All Orders V2 page:
       | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}    |
       | trackingIds | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies error messages in dialog on All Orders page:
@@ -122,10 +122,10 @@ Feature: ID - Order COD Limit
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[1].id} } |
     And Operator go to menu Order -> All Orders
-    And Operator find multiple orders below by uploading CSV on All Orders page
+    And Operator find multiple orders below by uploading CSV on All Orders V2 page
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
-    When Operator add multiple orders to route on All Orders page:
+    When Operator add multiple orders to route on All Orders V2 page:
       | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                          |
       | trackingIds | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]},{KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
     Then Operator verifies that info toast displayed:
@@ -203,10 +203,10 @@ Feature: ID - Order COD Limit
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[1].id} } |
     And Operator go to menu Order -> All Orders
-    And Operator find multiple orders below by uploading CSV on All Orders page
+    And Operator find multiple orders below by uploading CSV on All Orders V2 page
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
-    When Operator add multiple orders to route on All Orders page:
+    When Operator add multiple orders to route on All Orders V2 page:
       | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                          |
       | trackingIds | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]},{KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
     Then Operator verifies error messages in dialog on All Orders page:
@@ -279,10 +279,10 @@ Feature: ID - Order COD Limit
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[1].id} } |
     And Operator go to menu Order -> All Orders
-    And Operator find multiple orders below by uploading CSV on All Orders page
+    And Operator find multiple orders below by uploading CSV on All Orders V2 page
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
-    When Operator add multiple orders to route on All Orders page:
+    When Operator add multiple orders to route on All Orders V2 page:
       | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id},{KEY_LIST_OF_CREATED_ROUTES[2].id}       |
       | trackingIds | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]},{KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
     Then Operator verifies that info toast displayed:
@@ -372,10 +372,10 @@ Feature: ID - Order COD Limit
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{KEY_DRIVER_LIST_OF_DRIVERS[1].id} } |
     And Operator go to menu Order -> All Orders
-    And Operator find multiple orders below by uploading CSV on All Orders page
+    And Operator find multiple orders below by uploading CSV on All Orders V2 page
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
-    When Operator add multiple orders to route on All Orders page:
+    When Operator add multiple orders to route on All Orders V2 page:
       | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id},{KEY_LIST_OF_CREATED_ROUTES[2].id}       |
       | trackingIds | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]},{KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
     Then Operator verifies error messages in dialog on All Orders page:
@@ -453,9 +453,9 @@ Feature: ID - Order COD Limit
     And API Core - Operator archives routes below:
       | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
     And Operator go to menu Order -> All Orders
-    And Operator find multiple orders below by uploading CSV on All Orders page
+    And Operator find multiple orders below by uploading CSV on All Orders V2 page
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
-    When Operator add multiple orders to route on All Orders page:
+    When Operator add multiple orders to route on All Orders V2 page:
       | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}    |
       | trackingIds | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies error messages in dialog on All Orders page:
@@ -498,9 +498,9 @@ Feature: ID - Order COD Limit
     And API Route - delete routes:
       | {KEY_LIST_OF_CREATED_ROUTES[2].id} |
     And Operator go to menu Order -> All Orders
-    And Operator find multiple orders below by uploading CSV on All Orders page
+    And Operator find multiple orders below by uploading CSV on All Orders V2 page
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
-    When Operator add multiple orders to route on All Orders page:
+    When Operator add multiple orders to route on All Orders V2 page:
       | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}    |
       | trackingIds | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
     Then Operator verifies that info toast displayed:
