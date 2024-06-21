@@ -126,6 +126,9 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
   @FindBy(css = "div.ant-modal-content")
   public OptimizeSelectedRouteDialog optimizeSelectedRouteDialog;
 
+  @FindBy(xpath = "//button[@data-pa-label='Pull Out Parcels From Route']")
+  public Button routeRowPullOutOfRouteButton;
+
   public RoutesTable routesTable;
 
   public static final String ACTION_ARCHIVE_SELECTED = "Archive selected";
@@ -137,6 +140,7 @@ public class RouteLogsPage extends SimpleReactPage<RouteLogsPage> {
   public static final String ACTION_PRINT_SELECTED = "Print selected";
   public static final String ACTION_DELETE_SELECTED = "Delete selected";
   public static final String EDIT_ROUTES_OF_SELECTED = "Edit routes of selected";
+  public static final String ACTION_PULL_OUT_PARCELS_FROM_SELECTED = "Pull out parcels from selected";
 
   public RouteLogsPage(WebDriver webDriver) {
     super(webDriver);
