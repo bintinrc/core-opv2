@@ -258,7 +258,7 @@ Feature: Add Order To Route
       | requestedTrackingId | {KEY_LIST_OF_CREATED_ORDERS[1].requestedTrackingId} |
     And Operator enters "{KEY_LIST_OF_CREATED_ORDERS[1].requestedTrackingId}" tracking id on Add Order to Route page
     Then Operator verifies that error notification displayed:
-      | bottom | [status=ARCHIVED]: cannot add waypoint if route not in [PENDING IN_PROGRESS] status |
+      | bottom | [status=ARCHIVED]: cannot add/remove waypoint if route not in [PENDING IN_PROGRESS] status |
     And Operator verifies the last scanned tracking id is "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
 
   @ArchiveRouteCommonV2 @MediumPriority
@@ -281,5 +281,5 @@ Feature: Add Order To Route
       | requestedTrackingId | {KEY_LIST_OF_CREATED_ORDERS[1].requestedTrackingId} |
     And Operator enters "{KEY_LIST_OF_CREATED_ORDERS[1].requestedTrackingId}" tracking id on Add Order to Route page
     Then Operator verifies that error notification displayed:
-      | bottom | [status=ARCHIVED]: cannot add waypoint if route not in [PENDING IN_PROGRESS] status |
+      | bottom | [status=ARCHIVED]: cannot add/remove waypoint if route not in [PENDING IN_PROGRESS] status |
     And Operator verifies the last scanned tracking id is "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
