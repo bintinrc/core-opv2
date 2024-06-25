@@ -61,7 +61,7 @@ dependencies {
 
     implementation "co.nvqa:common-auth:1.5.3"
     implementation "co.nvqa:common-base:1.5.3"
-    implementation "co.nvqa:common-core:1.5.4-RC10"
+    implementation "co.nvqa:common-core:1.5.4-RC13"
     implementation "co.nvqa:common-corev2:1.5.0"
     implementation "co.nvqa:common-dp:1.5.0"
     implementation "co.nvqa:common-driver:1.5.3-RC3"

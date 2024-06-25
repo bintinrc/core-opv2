@@ -39,9 +39,9 @@ Feature: Batch Order
     And DB Core - verify orders records are hard-deleted in transactions table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
-    And DB Core - verify orders from "KEY_LIST_OF_CREATED_ORDERS" records are hard-deleted in waypoints table:
-      | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-      | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+    And DB Route - verify waypoints records are hard-deleted
+      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
     And DB Core - verify orders records are hard-deleted in order_details table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
@@ -105,9 +105,11 @@ Feature: Batch Order
     And DB Core - verify orders records are hard-deleted in transactions table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
-    And DB Core - verify orders from "KEY_LIST_OF_CREATED_ORDERS" records are hard-deleted in waypoints table:
-      | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-      | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+    And DB Route - verify waypoints records are hard-deleted
+      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} |
+      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[1].waypointId} |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
     And DB Core - verify orders records are hard-deleted in order_details table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
@@ -198,9 +200,11 @@ Feature: Batch Order
     And DB Core - verify orders records are hard-deleted in transactions table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
-    And DB Core - verify orders from "KEY_LIST_OF_CREATED_ORDERS" records are hard-deleted in waypoints table:
-      | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-      | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+    And DB Route - verify waypoints records are hard-deleted
+      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[1].waypointId} |
+      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[1].waypointId} |
+      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
     And DB Core - verify orders records are hard-deleted in order_details table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
@@ -257,9 +261,9 @@ Feature: Batch Order
     And DB Core - verify orders records are hard-deleted in transactions table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
-    And DB Core - verify orders from "KEY_LIST_OF_CREATED_ORDERS" records are hard-deleted in waypoints table:
-      | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-      | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+    And DB Route - verify waypoints records are hard-deleted
+      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
     And DB Core - verify orders records are hard-deleted in order_details table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
@@ -331,9 +335,9 @@ Feature: Batch Order
     And DB Core - verify orders records are hard-deleted in transactions table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
-    And DB Core - verify orders from "KEY_LIST_OF_CREATED_ORDERS" records are hard-deleted in waypoints table:
-      | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
-      | {KEY_LIST_OF_CREATED_ORDERS[2].id} |
+    And DB Route - verify waypoints records are hard-deleted
+      | {KEY_LIST_OF_CREATED_ORDERS[1].transactions[2].waypointId} |
+      | {KEY_LIST_OF_CREATED_ORDERS[2].transactions[2].waypointId} |
     And DB Core - verify orders records are hard-deleted in order_details table:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].id} |

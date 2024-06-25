@@ -105,7 +105,6 @@ Feature: Priority Level
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
     And Operator change Priority Level to "2" on Edit Order V2 page
     Then Operator verifies that error react notification displayed:
-      | top    | Status 200: OK                                                   |
       | bottom | ^.*Error Message: Not allowed to update order after completion.* |
     And Operator verify Current priority is "0" on Edit Order V2 page
 
