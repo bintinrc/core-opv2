@@ -1,4 +1,4 @@
-@OperatorV2 @Core @AllOrders @RoutingModules @RoutingModulesAllOrders
+@OperatorV2 @Core @AllOrdersV2 @RoutingModules @RoutingModulesAllOrders
 Feature: All Orders - Add To Route
 
   Background:
@@ -20,16 +20,16 @@ Feature: All Orders - Add To Route
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
     And Operator go to menu Order -> All Orders
-    And Operator find multiple orders below by uploading CSV on All Orders page
+    And Operator find multiple orders below by uploading CSV on All Orders V2 page
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
-    And Operator unmask All Orders page
-    Then Operator verify all orders in CSV is found on All Orders page with correct info
-    When Operator add multiple orders to route on All Orders page:
+    And Operator unmask All Orders V2 page
+    Then Operator verify all orders in CSV is found on All Orders V2 page with correct info
+    When Operator add multiple orders to route on All Orders V2 page:
       | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                                                                |
       | trackingIds | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]},{KEY_LIST_OF_CREATED_TRACKING_IDS[2]},{KEY_LIST_OF_CREATED_TRACKING_IDS[3]} |
-    Then Operator verifies that info toast displayed:
+    Then Operator verifies that success react notification displayed:
       | top    | 3 order(s) updated |
       | bottom | add to route       |
     And DB Route - verify waypoints record:
@@ -71,22 +71,22 @@ Feature: All Orders - Add To Route
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                 |
       | addParcelToRouteRequest | {"route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id}, "type":"DELIVERY"} |
-    When Operator go to menu Order -> All Orders
-    And Operator find multiple orders below by uploading CSV on All Orders page
+    And Operator go to menu Order -> All Orders
+    And Operator find multiple orders below by uploading CSV on All Orders V2 page
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
-    And Operator unmask All Orders page
-    Then Operator verify all orders in CSV is found on All Orders page with correct info
-    When Operator add multiple orders to route on All Orders page:
+    And Operator unmask All Orders V2 page
+    Then Operator verify all orders in CSV is found on All Orders V2 page with correct info
+    When Operator add multiple orders to route on All Orders V2 page:
       | routeId     | {KEY_LIST_OF_CREATED_ROUTES[2].id}                                           |
       | trackingIds | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}, {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
     Then Operator verifies error messages in dialog on All Orders page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} \| Delivery is already routed to {KEY_LIST_OF_CREATED_ROUTES[1].id} |
     When Operator close Errors dialog on All Orders page
-    Then Operator verifies that warning toast displayed:
+    Then Operator verifies that success react notification displayed:
       | top    | 1 order(s) failed to update |
       | bottom | Add To Route                |
-    And Operator verifies that info toast displayed:
+    And Operator verifies that success react notification displayed:
       | top    | 1 order(s) updated |
       | bottom | Add To Route       |
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
@@ -132,19 +132,19 @@ Feature: All Orders - Add To Route
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     When Operator go to menu Order -> All Orders
-    And Operator find multiple orders below by uploading CSV on All Orders page
+    And Operator find multiple orders below by uploading CSV on All Orders V2 page
       | KEY_LIST_OF_CREATED_TRACKING_IDS[1] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[2] |
-    And Operator unmask All Orders page
-    Then Operator verify all orders in CSV is found on All Orders page with correct info
+    And Operator unmask All Orders V2 page
+    Then Operator verify all orders in CSV is found on All Orders V2 page with correct info
     And API Core - cancel order "{KEY_LIST_OF_CREATED_ORDERS[2].id}"
-    When Operator add multiple orders to route on All Orders page:
+    When Operator add multiple orders to route on All Orders V2 page:
       | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                           |
       | trackingIds | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}, {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
     Then Operator verifies error messages in dialog on All Orders page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} \| Order is Cancelled and cannot be added to route |
     When Operator close Errors dialog on All Orders page
-    Then Operator verifies that info toast displayed:
+    Then Operator verifies that success react notification displayed:
       | top    | 1 order(s) updated |
       | bottom | add to route       |
 
@@ -163,15 +163,15 @@ Feature: All Orders - Add To Route
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
     And API Recovery - Create ticket for tracking id: "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     When Operator go to menu Order -> All Orders
-    And Operator find orders by uploading CSV on All Orders page:
+    And Operator find orders by uploading CSV on All Orders V2 page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} |
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
-    And Operator add multiple orders to route on All Orders page:
+    And Operator add multiple orders to route on All Orders V2 page:
       | trackingIds | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]},{KEY_LIST_OF_CREATED_TRACKING_IDS[2]} |
       | routeId     | {KEY_LIST_OF_CREATED_ROUTES[1].id}                                          |
     Then Operator verifies error messages in dialog on All Orders page:
       | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} \| Order is On Hold and cannot be added to route |
     When Operator close Errors dialog on All Orders page
-    Then Operator verifies that info toast displayed:
+    Then Operator verifies that success react notification displayed:
       | top    | 1 order(s) updated |
       | bottom | add to route       |
