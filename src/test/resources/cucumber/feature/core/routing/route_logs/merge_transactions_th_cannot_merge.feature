@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RouteLogs @MergeTransactions @MergeTransactions @TH
+@OperatorV2 @Core @Routing @RouteLogs @MergeTransactions @MergeTransactions @TH @current
 Feature: Route Logs - Merge Transactions - TH - Cannot Merge
 
   Background:
@@ -92,7 +92,7 @@ Feature: Route Logs - Merge Transactions - TH - Cannot Merge
       | seqNo    | not null                                                   |
       | status   | Routed                                                     |
 
-  @ArchiveRouteCommonV2 @MediumPriority
+  @ArchiveRouteCommonV2 @MediumPriority @wip
   Scenario: Route Logs - Operator Merge Transactions of Multiple Routes from Route Logs Page - Delivery Transactions - Tagged with Same DP - Cannot Merge
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "driverId":{ninja-driver-id} } |
@@ -116,22 +116,14 @@ Feature: Route Logs - Merge Transactions - TH - Cannot Merge
       | KEY_LIST_OF_CREATED_TRACKING_IDS[3] |
       | KEY_LIST_OF_CREATED_TRACKING_IDS[4] |
     # Tag orders to different DP
-    And API Core - Operator tag to dp for the order:
-      | request    | { "add_to_route": null, "dp_tag": {"dp_id": {dp-1-id}, "authorized_by": "SYSTEM_CONFIRMED", "collect_by": "{date: 1 days next, yyyy-MM-dd}", "dp_service_type": "NORMAL", "drop_off_on": "{date: 1 days next, yyyy-MM-dd}", "end_date": "{date: 1 days next, yyyy-MM-dd}", "reason": "Automated Semi Tagging", "should_reserve_slot": false, "skip_ATL_validation": true, "start_date": "{date: 1 days next, yyyy-MM-dd}" } } |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                                                                                                                                                                                                                                                                                                                            |
-      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[1].trackingId}                                                                                                                                                                                                                                                                                                                                                                                    |
-    And API Core - Operator tag to dp for the order:
-      | request    | { "add_to_route": null, "dp_tag": {"dp_id": {dp-1-id}, "authorized_by": "SYSTEM_CONFIRMED", "collect_by": "{date: 1 days next, yyyy-MM-dd}", "dp_service_type": "NORMAL", "drop_off_on": "{date: 1 days next, yyyy-MM-dd}", "end_date": "{date: 1 days next, yyyy-MM-dd}", "reason": "Automated Semi Tagging", "should_reserve_slot": false, "skip_ATL_validation": true, "start_date": "{date: 1 days next, yyyy-MM-dd}" } } |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[2].id}                                                                                                                                                                                                                                                                                                                                                                                            |
-      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[2].trackingId}                                                                                                                                                                                                                                                                                                                                                                                    |
-    And API Core - Operator tag to dp for the order:
-      | request    | { "add_to_route": null, "dp_tag": {"dp_id": {dp-2-id}, "authorized_by": "SYSTEM_CONFIRMED", "collect_by": "{date: 1 days next, yyyy-MM-dd}", "dp_service_type": "NORMAL", "drop_off_on": "{date: 1 days next, yyyy-MM-dd}", "end_date": "{date: 1 days next, yyyy-MM-dd}", "reason": "Automated Semi Tagging", "should_reserve_slot": false, "skip_ATL_validation": true, "start_date": "{date: 1 days next, yyyy-MM-dd}" } } |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[3].id}                                                                                                                                                                                                                                                                                                                                                                                            |
-      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[3].trackingId}                                                                                                                                                                                                                                                                                                                                                                                    |
-    And API Core - Operator tag to dp for the order:
-      | request    | { "add_to_route": null, "dp_tag": {"dp_id": {dp-2-id}, "authorized_by": "SYSTEM_CONFIRMED", "collect_by": "{date: 1 days next, yyyy-MM-dd}", "dp_service_type": "NORMAL", "drop_off_on": "{date: 1 days next, yyyy-MM-dd}", "end_date": "{date: 1 days next, yyyy-MM-dd}", "reason": "Automated Semi Tagging", "should_reserve_slot": false, "skip_ATL_validation": true, "start_date": "{date: 1 days next, yyyy-MM-dd}" } } |
-      | orderId    | {KEY_LIST_OF_CREATED_ORDERS[4].id}                                                                                                                                                                                                                                                                                                                                                                                            |
-      | trackingId | {KEY_LIST_OF_CREATED_ORDERS[4].trackingId}                                                                                                                                                                                                                                                                                                                                                                                    |
+    And API DP - Operator tag order to DP:
+      | request | {"order_id":{KEY_LIST_OF_CREATED_ORDERS[1].id},"dp_id":{dp-1-id},"drop_off_date":"{date: 0 days next, yyyy-MM-dd}"} |
+    And API DP - Operator tag order to DP:
+      | request | {"order_id":{KEY_LIST_OF_CREATED_ORDERS[2].id},"dp_id":{dp-1-id},"drop_off_date":"{date: 0 days next, yyyy-MM-dd}"} |
+    And API DP - Operator tag order to DP:
+      | request | {"order_id":{KEY_LIST_OF_CREATED_ORDERS[3].id},"dp_id":{dp-2-id},"drop_off_date":"{date: 0 days next, yyyy-MM-dd}"} |
+    And API DP - Operator tag order to DP:
+      | request | {"order_id":{KEY_LIST_OF_CREATED_ORDERS[4].id},"dp_id":{dp-2-id},"drop_off_date":"{date: 0 days next, yyyy-MM-dd}"} |
     And API Core - Operator add multiple parcels to route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" with type "DELIVERY" using data below:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
       | {KEY_LIST_OF_CREATED_ORDERS[2].id} |

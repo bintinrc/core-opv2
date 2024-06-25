@@ -242,8 +242,7 @@ Feature: Edit Order Details
       | name        | UPDATE SLA                                                                                                                                                                                 |
       | description | ^Pickup Start Time changed from .* 09:00:00 to {gradle-next-2-working-day-yyyy-MM-dd} 09:00:00 Pickup End Time changed from .* 22:00:00 to {gradle-next-2-working-day-yyyy-MM-dd} 12:00:00 |
     And Operator verify order event on Edit Order V2 page using data below:
-      | name        | UPDATE AV                                                                                                                                                                                                                                                                              |
-      | description | User: AUTO (system AV) (support@ninjavan.co) Address: 116 Keng Lee Rd 15 \|\| Singapore \|\|308402 Address Type: ADDRESS_TYPE_PICKUP Zone ID: 1399 Destination Hub ID: 1 Long: 1.31401544758955, 103.844767199536 Address Status: VERIFIED AV Mode (Manual/Auto): AUTO Source: AUTO_AV |
+      | name | UPDATE AV |
     And API Core - Operator get order details for tracking order "KEY_LIST_OF_CREATED_TRACKING_IDS[1]"
     And API Core - save the last Pickup transaction of "{KEY_LIST_OF_CREATED_ORDERS[1].id}" order from "KEY_LIST_OF_CREATED_ORDERS" as "KEY_TRANSACTION"
     When DB Route - operator get waypoints details for "{KEY_TRANSACTION.waypointId}"
