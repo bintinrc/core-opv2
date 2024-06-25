@@ -155,15 +155,13 @@ public class AntSelect3 extends PageElement {
   }
 
   public void clearValue() {
-    if (StringUtils.isNotBlank(getValue())) {
-      openMenu();
-      if (clearIcon.waitUntilVisible(1)) {
-        clearIcon.click();
-      } else {
-        searchInput.forceClear();
-      }
-      closeMenu();
+    openMenu();
+    if (clearIcon.waitUntilVisible(1)) {
+      clearIcon.click();
+    } else {
+      searchInput.forceClear();
     }
+    closeMenu();
   }
 
   public void removeSelected(List<String> items) {
