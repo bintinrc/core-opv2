@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @RouteLogs @MergeTransactions @MergeTransactions @TH @current
+@OperatorV2 @Core @Routing @RouteLogs @MergeTransactions @MergeTransactions @TH
 Feature: Route Logs - Merge Transactions - TH - Cannot Merge
 
   Background:
@@ -92,7 +92,7 @@ Feature: Route Logs - Merge Transactions - TH - Cannot Merge
       | seqNo    | not null                                                   |
       | status   | Routed                                                     |
 
-  @ArchiveRouteCommonV2 @MediumPriority @wip
+  @ArchiveRouteCommonV2 @MediumPriority
   Scenario: Route Logs - Operator Merge Transactions of Multiple Routes from Route Logs Page - Delivery Transactions - Tagged with Same DP - Cannot Merge
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "driverId":{ninja-driver-id} } |
