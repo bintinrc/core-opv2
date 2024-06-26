@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @MaskRouteManifestInfo @current
+@OperatorV2 @Core @Routing @MaskRouteManifestInfo
 Feature: Mask Route Manifest Info
 
   Background:
