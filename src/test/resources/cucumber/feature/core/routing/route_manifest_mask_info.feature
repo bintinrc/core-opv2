@@ -1,4 +1,4 @@
-@OperatorV2 @Core @Routing @MaskRouteManifestInfo
+@OperatorV2 @Core @Routing @MaskRouteManifestInfo @current
 Feature: Mask Route Manifest Info
 
   Background:
@@ -34,7 +34,7 @@ Feature: Mask Route Manifest Info
       | contact     | +9727894435                                               |
       | address     | 49 MANDALAY ROAD MANDAI SQUARE 116 Kilang Timur 308412 SG |
 
-  @DeleteOrArchiveRoute @MediumPriority
+  @DeleteOrArchiveRoute @MediumPriority @wip
   Scenario: Operator View Mask Order for DP Delivery on Route Manifest
     Given API Order - Shipper create multiple V4 orders using data below:
       | shipperClientId     | {shipper-v4-client-id}                                                                                                                                                                                                                                                                                                                                        |

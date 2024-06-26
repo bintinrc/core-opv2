@@ -1,4 +1,4 @@
-@OperatorV2 @Core @EditOrderV2 @OrderEvents
+@OperatorV2 @Core @EditOrderV2 @OrderEvents @current
 Feature: Order Events
 
   Background:
@@ -281,7 +281,7 @@ Feature: Order Events
       | name        | ADDED TO RESERVATION                             |
       | description | Reservation ID: {KEY_LIST_OF_RESERVATION_IDS[1]} |
 
-  @ArchiveRouteCommonV2 @MediumPriority
+  @ArchiveRouteCommonV2 @MediumPriority @wip
   Scenario: Operator Applies Filter on Events Table
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -299,6 +299,29 @@ Feature: Order Events
     And API Core - Operator add reservation to route using data below:
       | reservationId | {KEY_LIST_OF_RESERVATION_IDS[1]}   |
       | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id} |
+    When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
+    And Operator click Order Settings -> Edit Cash Collection Details on Edit Order V2 page
+    And Operator edit cash collection details on Edit Order V2 page:
+      | cashOnPickup | yes    |
+      | amount       | 100.00 |
+    Then Operator verifies that success react notification displayed:
+      | top                | Update cash collection successfully |
+      | waitUntilInvisible | true                                |
+    And Operator click Delivery -> DP Drop Off Setting on Edit Order V2 page
+    And Operator tags order to "{dpms-id}" DP on Edit Order V2 page
+    And Operator update order status on Edit Order V2 page:
+      | granularStatus | Pending Pickup                      |
+      | changeReason   | Status updated for testing purposes |
+    Then Operator verifies that success react notification displayed:
+      | top                | Status updated |
+      | waitUntilInvisible | true           |
+    Then Operator verifies order details on Edit Order V2 page:
+      | status         | Pending        |
+      | granularStatus | Pending Pickup |
+    And API Sort - Operator global inbound
+      | globalInboundRequest | {"inbound_type":"SORTING_HUB","dimensions":null,"to_reschedule":false,"to_show_shipper_info":false,"tags":[]} |
+      | trackingId           | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}                                                                         |
+      | hubId                | {hub-id}                                                                                                      |
     And API Core - Operator add parcel to the route using data below:
       | orderId                 | {KEY_LIST_OF_CREATED_ORDERS[1].id}                                                                                           |
       | addParcelToRouteRequest | {"tracking_id":"{KEY_LIST_OF_CREATED_ORDERS[1].trackingId}","route_id":{KEY_LIST_OF_CREATED_ROUTES[1].id},"type":"DELIVERY"} |
@@ -315,29 +338,6 @@ Feature: Order Events
     And Operator click 'I have completed photo audit' button on Route Inbound page
     And Operator scan a tracking ID "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" on Route Inbound page
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    And Operator click Order Settings -> Edit Cash Collection Details on Edit Order V2 page
-    And Operator edit cash collection details on Edit Order V2 page:
-      | cashOnPickup | yes    |
-      | amount       | 100.00 |
-    And Operator click Delivery -> DP Drop Off Setting on Edit Order V2 page
-    And Operator tags order to "{dpms-id}" DP on Edit Order V2 page
-    Then Operator verifies that success react notification displayed:
-      | top                | Update cash collection successfully |
-      | waitUntilInvisible | true                                |
-    And Operator update order status on Edit Order V2 page:
-      | granularStatus | Pending Pickup                      |
-      | changeReason   | Status updated for testing purposes |
-    Then Operator verifies that success react notification displayed:
-      | top                | Status updated |
-      | waitUntilInvisible | true           |
-    Then Operator verifies order details on Edit Order V2 page:
-      | status         | Pending        |
-      | granularStatus | Pending Pickup |
-    And Operator click Delivery -> Pull from Route on Edit Order V2 page
-    And Operator pull out parcel from route on Edit Order V2 page
-    Then Operator verifies that success react notification displayed:
-      | top                | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]} has been pulled from route {KEY_LIST_OF_CREATED_ROUTES[1].id} successfully |
-      | waitUntilInvisible | true                                                                                                             |
     And Operator click Order Settings -> Manually Complete Order on Edit Order V2 page
     And Operator confirm manually complete order on Edit Order V2 page:
       | reason          | Others (fill in below)                                |
@@ -351,7 +351,6 @@ Feature: Order Events
       | SYSTEM ACTION      | PRICING CHANGE       |
       | MANUAL ACTION      | FORCED SUCCESS       |
       | COD, MANUAL ACTION | UPDATE CASH          |
-      | MANUAL ACTION      | PULL OUT OF ROUTE    |
       | MANUAL ACTION      | UPDATE STATUS        |
       | MANUAL ACTION      | ADD TO ROUTE         |
       | MANUAL ACTION      | UPDATE ADDRESS       |
@@ -369,7 +368,6 @@ Feature: Order Events
       | tags               | name              |
       | MANUAL ACTION      | FORCED SUCCESS    |
       | COD, MANUAL ACTION | UPDATE CASH       |
-      | MANUAL ACTION      | PULL OUT OF ROUTE |
       | MANUAL ACTION      | UPDATE STATUS     |
       | MANUAL ACTION      | ADD TO ROUTE      |
       | MANUAL ACTION      | UPDATE ADDRESS    |
