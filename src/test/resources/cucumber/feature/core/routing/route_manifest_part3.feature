@@ -158,13 +158,12 @@ Feature: Route Manifest
       | trackingIds    | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}         |
     And Operator is able to download signature in POP details dialog on Route Manifest page
 
-  @MediumPriority
+  @MediumPriority @DeletePickupAppointmentJob @ReleaseShipperAddress
   Scenario: Operator View POP for Pending Pickup Appointment Job on Route Manifest
-    Given API Shipper - Operator create new shipper address using data below:
-      | shipperId       | {shipper-v4-paj-id} |
-      | generateAddress | RANDOM              |
+    Given DB Shipper - get unique shipper address for shipper id: "{shipper-v4-paj-id}"
+    # PICKUP APPOINTMENT JOB
     And API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId": {KEY_LIST_OF_CREATED_ADDRESSES[1].id} }, "pickupService":{ "level":"Standard", "type":"Scheduled"}, "pickupTimeslot":{ "ready":"{date: 1 days next, YYYY-MM-dd}T09:00:00+08:00", "latest":"{date: 1 days next, YYYY-MM-dd}T12:00:00+08:00"}, "pickupApproxVolume":"Less than 10 Parcels"} |
+      | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId": {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id} }, "pickupService":{ "level":"Standard", "type":"Scheduled"}, "pickupTimeslot":{ "ready":"{date: 1 days next, YYYY-MM-dd}T09:00:00+08:00", "latest":"{date: 1 days next, YYYY-MM-dd}T12:00:00+08:00"}, "pickupApproxVolume":"Less than 10 Parcels"} |
     And DB Route - wait until job_waypoints table is populated for job id "{KEY_CONTROL_CREATED_PA_JOBS[1].id}"
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -192,13 +191,12 @@ Feature: Route Manifest
       | failureReason | -                                                   |
     And Operator verify 'View POP' button is disabled for "{KEY_CONTROL_CREATED_PA_JOBS[1].id}" pickup appointment job in Waypoint Details dialog on Route Manifest page
 
-  @HighPriority
+  @HighPriority @DeletePickupAppointmentJob @ReleaseShipperAddress
   Scenario: Operator View POP for Success Pickup Appointment Job on Route Manifest
-    Given API Shipper - Operator create new shipper address using data below:
-      | shipperId       | {shipper-v4-paj-id} |
-      | generateAddress | RANDOM              |
+    Given DB Shipper - get unique shipper address for shipper id: "{shipper-v4-paj-id}"
+    # PICKUP APPOINTMENT JOB
     And API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId": {KEY_LIST_OF_CREATED_ADDRESSES[1].id} }, "pickupService":{ "level":"Standard", "type":"Scheduled"}, "pickupTimeslot":{ "ready":"{date: 1 days next, YYYY-MM-dd}T09:00:00+08:00", "latest":"{date: 1 days next, YYYY-MM-dd}T12:00:00+08:00"}, "pickupApproxVolume":"Less than 10 Parcels"} |
+      | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId": {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id} }, "pickupService":{ "level":"Standard", "type":"Scheduled"}, "pickupTimeslot":{ "ready":"{date: 1 days next, YYYY-MM-dd}T09:00:00+08:00", "latest":"{date: 1 days next, YYYY-MM-dd}T12:00:00+08:00"}, "pickupApproxVolume":"Less than 10 Parcels"} |
     And DB Route - wait until job_waypoints table is populated for job id "{KEY_CONTROL_CREATED_PA_JOBS[1].id}"
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -254,13 +252,12 @@ Feature: Route Manifest
       | trackingIds            | {KEY_LIST_OF_CREATED_TRACKING_IDS[1]}    |
     And Operator is able to download signature in POP details dialog on Route Manifest page
 
-  @HighPriority
+  @HighPriority @DeletePickupAppointmentJob @ReleaseShipperAddress
   Scenario: Operator View POP for Fail Pickup Appointment Job on Route Manifest
-    Given API Shipper - Operator create new shipper address using data below:
-      | shipperId       | {shipper-v4-paj-id} |
-      | generateAddress | RANDOM              |
+    Given DB Shipper - get unique shipper address for shipper id: "{shipper-v4-paj-id}"
+    # PICKUP APPOINTMENT JOB
     And API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId": {KEY_LIST_OF_CREATED_ADDRESSES[1].id} }, "pickupService":{ "level":"Standard", "type":"Scheduled"}, "pickupTimeslot":{ "ready":"{date: 1 days next, YYYY-MM-dd}T09:00:00+08:00", "latest":"{date: 1 days next, YYYY-MM-dd}T12:00:00+08:00"}, "pickupApproxVolume":"Less than 10 Parcels"} |
+      | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId": {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id} }, "pickupService":{ "level":"Standard", "type":"Scheduled"}, "pickupTimeslot":{ "ready":"{date: 1 days next, YYYY-MM-dd}T09:00:00+08:00", "latest":"{date: 1 days next, YYYY-MM-dd}T12:00:00+08:00"}, "pickupApproxVolume":"Less than 10 Parcels"} |
     And DB Route - wait until job_waypoints table is populated for job id "{KEY_CONTROL_CREATED_PA_JOBS[1].id}"
     And API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |

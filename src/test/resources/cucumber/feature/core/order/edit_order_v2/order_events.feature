@@ -315,12 +315,12 @@ Feature: Order Events
     And Operator click 'I have completed photo audit' button on Route Inbound page
     And Operator scan a tracking ID "{KEY_LIST_OF_CREATED_TRACKING_IDS[1]}" on Route Inbound page
     When Operator open Edit Order V2 page for order ID "{KEY_LIST_OF_CREATED_ORDERS[1].id}"
-    And Operator click Delivery -> DP Drop Off Setting on Edit Order V2 page
-    And Operator tags order to "{dpms-id}" DP on Edit Order V2 page
     And Operator click Order Settings -> Edit Cash Collection Details on Edit Order V2 page
     And Operator edit cash collection details on Edit Order V2 page:
       | cashOnPickup | yes    |
       | amount       | 100.00 |
+    And Operator click Delivery -> DP Drop Off Setting on Edit Order V2 page
+    And Operator tags order to "{dpms-id}" DP on Edit Order V2 page
     Then Operator verifies that success react notification displayed:
       | top                | Update cash collection successfully |
       | waitUntilInvisible | true                                |

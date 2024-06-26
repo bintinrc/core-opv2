@@ -72,7 +72,7 @@ Feature: Route Logs
       | top | Downloaded file route_printout.pdf... |
     And Operator verifies created routes are printed successfully
 
-  @ArchiveRouteCommonV2 @DeletePickupAppointmentJob @HighPriority
+  @ArchiveRouteCommonV2 @DeletePickupAppointmentJob @HighPriority @ReleaseShipperAddress
   Scenario: Operator Delete Routes with Reservation & PA Job on Route Logs
     Given API Core - Operator create new route using data below:
       | createRouteRequest | { "zoneId":{zone-id}, "hubId":{hub-id}, "vehicleId":{vehicle-id}, "driverId":{ninja-driver-id} } |
@@ -83,12 +83,10 @@ Feature: Route Logs
       | shipperAddressRequest | {"name":"{shipper-v4-name}","contact":"{shipper-v4-contact}","email":"{shipper-v4-email}","address1":"address1","address2":"address2","country":"SG","latitude":1.27,"longitude":103.27,"postcode":"159363","milkrun_settings":[],"no_of_reservation":1}],"is_milk_run":false} |
     And API Core - Operator create reservation using data below:
       | reservationRequest | {"global_shipper_id":{shipper-v4-id}, "pickup_address_id":{KEY_LIST_OF_CREATED_ADDRESSES[1].id}, "pickup_start_time":"{gradle-current-date-yyyy-MM-dd}T15:00:00{gradle-timezone-XXX}","pickup_end_time":"{gradle-current-date-yyyy-MM-dd}T18:00:00{gradle-timezone-XXX}" } |
-    Given API Shipper - Operator create new shipper address using data below:
-      | shipperId       | {shipper-v4-paj-id} |
-      | generateAddress | RANDOM              |
+    Given DB Shipper - get unique shipper address for shipper id: "{shipper-v4-paj-id}"
     # PICKUP APPOINTMENT JOB
     And API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId": {KEY_LIST_OF_CREATED_ADDRESSES[2].id} }, "pickupService":{ "level":"Standard", "type":"Scheduled"}, "pickupTimeslot":{ "ready":"{date: 1 days next, YYYY-MM-dd}T09:00:00+08:00", "latest":"{date: 1 days next, YYYY-MM-dd}T12:00:00+08:00"}, "pickupApproxVolume":"Less than 10 Parcels"} |
+      | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId": {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id} }, "pickupService":{ "level":"Standard", "type":"Scheduled"}, "pickupTimeslot":{ "ready":"{date: 1 days next, YYYY-MM-dd}T09:00:00+08:00", "latest":"{date: 1 days next, YYYY-MM-dd}T12:00:00+08:00"}, "pickupApproxVolume":"Less than 10 Parcels"} |
     And DB Route - wait until job_waypoints table is populated for job id "{KEY_CONTROL_CREATED_PA_JOBS[1].id}"
     When API Core - Operator add pickup job to the route using data below:
       | jobId                      | {KEY_CONTROL_CREATED_PA_JOBS[1].id}                                   |
@@ -97,10 +95,7 @@ Feature: Route Logs
       | reservationId | {KEY_LIST_OF_CREATED_RESERVATIONS[1].id} |
       | routeId       | {KEY_LIST_OF_CREATED_ROUTES[1].id}       |
     When Operator go to menu Routing -> Route Logs
-    And Operator set filter using data below and click 'Load Selection'
-      | routeDateFrom | YESTERDAY  |
-      | routeDateTo   | TODAY      |
-      | hubName       | {hub-name} |
+    And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id}" Route ID on Route Logs page
     And Operator deletes created route id "{KEY_LIST_OF_CREATED_ROUTES[1].id}" on Route Logs page
     Then Operator verifies that success react notification displayed:
       | top    | 1 Route(s) Deleted                       |

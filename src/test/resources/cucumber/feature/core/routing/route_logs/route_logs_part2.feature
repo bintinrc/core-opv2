@@ -92,10 +92,7 @@ Feature: Route Logs
     And API Core - Operator add multiple parcels to route "{KEY_LIST_OF_CREATED_ROUTES[1].id}" with type "DELIVERY" using data below:
       | {KEY_LIST_OF_CREATED_ORDERS[1].id} |
     When Operator go to menu Routing -> Route Logs
-    And Operator set filter using data below and click 'Load Selection'
-      | routeDateFrom | YESTERDAY  |
-      | routeDateTo   | TODAY      |
-      | hubName       | {hub-name} |
+    And Operator filters route by "{KEY_LIST_OF_CREATED_ROUTES[1].id}" Route ID on Route Logs page
     And Operator verifies address of "{KEY_LIST_OF_CREATED_ROUTES[1].id}" route on Route Logs page
     Then Operator verifies that success react notification displayed:
       | top | Address verification successful for selected route |

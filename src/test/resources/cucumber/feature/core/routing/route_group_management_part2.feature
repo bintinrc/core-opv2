@@ -223,13 +223,12 @@ Feature: Route Group Management
       | {tag-name-1} |
       | {tag-name-2} |
 
-  @DeleteRouteGroupsV2 @DeletePickupAppointmentJob @MediumPriority
+  @DeleteRouteGroupsV2 @DeletePickupAppointmentJob @ReleaseShipperAddress @MediumPriority
   Scenario: Operator Filters Total PA Job of Route Groups
-    Given API Shipper - Operator create new shipper address using data below:
-      | shipperId       | {shipper-v4-paj-id} |
-      | generateAddress | RANDOM              |
-    When API Control - Operator create pickup appointment job with data below:
-      | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId": {KEY_LIST_OF_CREATED_ADDRESSES[1].id} }, "pickupService":{ "level":"Standard", "type":"Scheduled"}, "pickupTimeslot":{ "ready":"{date: 1 days next, YYYY-MM-dd}T09:00:00+08:00", "latest":"{date: 1 days next, YYYY-MM-dd}T12:00:00+08:00"}, "pickupApproxVolume":"Less than 10 Parcels"} |
+    Given DB Shipper - get unique shipper address for shipper id: "{shipper-v4-paj-id}"
+    # PICKUP APPOINTMENT JOB
+    And API Control - Operator create pickup appointment job with data below:
+      | createPickupJobRequest | { "shipperId":{shipper-v4-paj-id}, "from":{ "addressId": {KEY_SHIPPER_LIST_OF_SHIPPER_ADDRESSES[1].id} }, "pickupService":{ "level":"Standard", "type":"Scheduled"}, "pickupTimeslot":{ "ready":"{date: 1 days next, YYYY-MM-dd}T09:00:00+08:00", "latest":"{date: 1 days next, YYYY-MM-dd}T12:00:00+08:00"}, "pickupApproxVolume":"Less than 10 Parcels"} |
     Given API Shipper - Operator create new shipper address using data below:
       | shipperId       | {shipper-v4-paj-id} |
       | generateAddress | RANDOM              |

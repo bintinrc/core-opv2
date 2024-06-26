@@ -72,7 +72,7 @@ dependencies {
     implementation "co.nvqa:common-ordercreate:1.5.0"
     implementation "co.nvqa:common-pricing:1.5.0"
     implementation "co.nvqa:common-recovery:1.5.2-RC5"
-    implementation "co.nvqa:common-shipper:1.5.2"
+    implementation "co.nvqa:common-shipper:1.5.2-RC9"
     implementation "co.nvqa:common-sns:1.5.1"
     implementation "co.nvqa:common-sort:1.5.1"
     implementation "co.nvqa:common-station:1.5.0"
